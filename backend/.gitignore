@@ -1,0 +1,30 @@
+.env
+migrations
+/node_modules
+
+
+   "name": "The Monk Who Sold His Ferrari",
+  "subject": "self-help",
+  "price": "1050",
+  "image": "lelann_bookshop/backend/uploads/the monk who sold his ferrari.png",
+  "categoryId":"72bd4c47-30ba-4835-afbb-f8666acb56de",
+  "subcategoryId": "35b7696f-8f37-4c55-a842-5ada1eee6630",
+  "publisherId": "855d0caa-5895-4ca7-99ff-d7b878a36dce",
+  "authorId": "5831bc2c-d59c-4cad-a809-8bf58f36be16"
+  
+  "email": "cassandra18@gmail.com",
+  "password: "password1"
+
+    "name": "John Doe",
+  "email": "johndoes@example.com",
+  "password": "johNNY@exampl3"
+
+    "name": "Jane Dee",
+  "email": "janedee@example.com",
+  "password": "jaNE@example3"
+
+  {
+  "name": "John Test",
+  "email": "johntest@example.com",
+  "password": "johnny$yyY3"
+}

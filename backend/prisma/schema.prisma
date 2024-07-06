@@ -1,0 +1,95 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// generate admin model
+model Admin {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  name     String
+  role     String @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// user model
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  name     String
+  role     String @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id            String          @id @default(uuid())
+  name          String         @unique 
+  description   String?
+  subcategories Subcategory[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subcategory {
+  id            String         @id @default(uuid())
+  name          String          @unique
+  parent_id     String?
+  parent        Subcategory?  @relation("SubcategorySelfRelation", fields: [parent_id], references: [id])
+  subcategories Subcategory[] @relation("SubcategorySelfRelation")
+  products      Product[]
+  category_id   String
+  category      Category      @relation(fields: [category_id], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id             String         @id @default(uuid())
+  name           String
+  price          Float
+  condition      String       @default("NEW")
+  subject   String
+  author_id      String
+  author         Author    @relation(fields: [author_id], references: [id])
+  publisher_id   String
+  publisher      Publisher  @relation(fields: [publisher_id], references: [id])
+  subcategory_id String
+  subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
+  image      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Condition {
+  NEW
+  USED
+  USED_GOOD
+  USED_VERY_GOOD
+  USED_ACCEPTABLE
+}
+
+model Author {
+  id    String      @id @default(uuid())
+  name  String
+ email String    @unique
+  books Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Publisher {
+  id    String       @id @default(uuid())
+  name  String
+  email String     @unique
+  books Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
