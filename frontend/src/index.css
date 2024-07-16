@@ -52,12 +52,28 @@ CD7304 ochre
 FFD399 sunset
 */
 .nav-link {
-  font-weight: 400;
+  font-weight: 500;
   color: #ffffff;
   text-decoration: inherit;
 }
+.active-link {
+  font-weight: 500;
+  color: #FFD399;
+  border-bottom: solid #FFD399;
+}
 .navbar a:hover {
   color: #FFD399;
+}
+.menu-button {
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+}
+
+.menu-button:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 h1 {
