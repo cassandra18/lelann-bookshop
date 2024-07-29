@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { IoMdCart } from "react-icons/io";
+import { FaUserCircle } from "react-icons/fa";
+
 interface NavItem {
   name: string;
   link: string;
@@ -32,6 +34,8 @@ const Navbar: React.FC = () => {
     >
       <div className="container flex justify-between items-center">
         <div className="text-2xl font-bold text-[#FFD399]">Lelann Bookshop</div>
+        
+        {/* Desktop navigation */}
         <div className="hidden lg:flex space-x-4">
           {NavItems.map((item) => (
             <NavLink
@@ -45,6 +49,8 @@ const Navbar: React.FC = () => {
             </NavLink>
           ))}
         </div>
+
+        {/* Small devices */}
         <div className="lg:hidden">
           <button className="menu-button" onClick={toggleMenu}>
             {isMenuOpen ? (
@@ -101,7 +107,7 @@ const Navbar: React.FC = () => {
 
         {/* Account Link */}
         <NavLink to="/account" className="ml-4">
-          My Account
+        <FaUserCircle size={24} />
         </NavLink>
       </div>
       {isMenuOpen && (

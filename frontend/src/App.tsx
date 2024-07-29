@@ -1,9 +1,12 @@
-import Navbar from './components/navbar'
+import Navbar from './components/navbar';
+import Footer from './components/footer.';
+
 
 function App() {
   return (
     <>
       <Navbar />
+      <Footer />
     </>
   )
 }
