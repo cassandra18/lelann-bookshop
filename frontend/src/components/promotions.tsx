@@ -6,25 +6,26 @@ interface PromotionCardProps {
 }
 
 const PromotionCard: React.FC<PromotionCardProps> = ({ image, title }) => (
-    <div className='border rounded-lg shadow-lg overflow-hidden w-auto md:w-28 lg:w-44'>
-        <img src={image} alt={title} className='w-full h-32 md:h-28 lg:h-36 object-cover' />
-        <div className='text-center bg-red-500 p-2 md:p-2 lg:p-4'>
-            <h2 className='text-sm lg:text-lg font-semibold'>{title}</h2>
+    <div className='border rounded-lg shadow-lg overflow-hidden w-36 md:w-36 lg:w-44 flex flex-col justify-between'>
+        <img src={image} alt={title} className='w-full h-32 md:h-36 lg:h-36 object-cover' />
+        <div className='text-center bg-red-500 p-2 mt-auto md:p-2 lg:p-4'>
+            <h2 className='text-sm lg:text-lg  font-semibold'>{title}</h2>
         </div>
     </div>
 )
 
 const Promotions: React.FC = () => {
     const promotions = [
-        { title: 'Discounts', image: '/images/discounts.jpeg' },
-        { title: 'Gift with purchase', image: '/images/gifts.jpeg' },
-        { title: 'SIgn up now!!!', image: '/images/lelann-kids-club.jpeg' },
+        { title: 'Discounts', image: '/images/notebook.jpg' },
+        { title: 'Gifts to give', image: '/images/stickynotes.jpg' },
+        { title: 'Sign up now!!!', image: '/images/lelann-kids-club.jpeg' },
         { title: 'Sign up now!!!', image: '/images/lelann-membership.jpeg' },
     ];
 
     return (
         <>
-        <div className='flex flex-wrap justify-center w-3/4 gap-4 mt-10  mb-10'>
+        <h1 className='text-3xl font-bold text-center mt-10 text-sunset'>Promotions</h1>
+        <div className='flex flex-wrap justify-center  gap-4 mt-10  mb-10'>
             {promotions.map((promotion) => (
                 <PromotionCard
                 key={promotion.title}

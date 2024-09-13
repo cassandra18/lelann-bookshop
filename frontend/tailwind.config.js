@@ -4,7 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        'sunset': '#FFD399'
+        'sunset': '#FFD399',
+        'prussian-blue': "#00293B ",
+        'lapis': '#01597C',
+        'ochre': '#CD7304',
+        'selective-yellow': '#F8B300',
+        'oxford-blue': '#001D29',
       }
     },
   },

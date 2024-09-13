@@ -6,9 +6,9 @@ interface CategoryCardProps {
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ image, title }) => (
-    <div className='border rounded-lg shadow-lg overflow-hidden w-36 md:w-28 lg:w-44'>
+    <div className='border rounded-lg shadow-lg bg-white  text-oxford-blue overflow-hidden w-36 md:w-28 lg:w-44 flex flex-col justify-between'>
         <img src={image} alt={title} className='w-full h-32 md:h-28 lg:h-36 object-cover' />
-        <div className='text-center p-2 md:p-2 lg:p-4'>
+        <div className='text-center  p-2 md:p-2 lg:p-4'>
             <h2 className='text-sm lg:text-lg font-semibold'>{title}</h2>
         </div>
     </div>
@@ -17,10 +17,10 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ image, title }) => (
 const Categories: React.FC = () => {
     const categories = [
         { title: 'Stationaries', image: '/images/stationaries.jpeg' },
-        { title: 'Cirriculum Books', image: '/images/educational-books.jpeg' },
+        { title: 'School Books', image: '/images/educational-books.jpeg' },
         { title: 'Other books', image: '/images/other-books.jpeg' },
         { title: 'Art Supplies', image: '/images/art-supplies.jpeg' },
-        { title: 'Toys & Board games', image: '/images/toys.jpeg' },
+        { title: 'Toys & games', image: '/images/toys.jpeg' },
         { title: 'Electronics', image: '/images/electronics.jpeg' },
         { title: 'Uniforms', image: '/images/uniforms.jpeg' },
     ];

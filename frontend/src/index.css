@@ -31,7 +31,7 @@ html, body {
   overflow-x: hidden;
 }
 /* background color
-00293B prussian blue
+00293B prussian blue 
 001D29 oxford blue
 8EC3D5 sky blue
 1C4672 indigo dye
@@ -87,7 +87,7 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
+/* 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -105,7 +105,7 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -124,3 +124,4 @@ navbar {
   margin-top: 0;
   width: 100%;
 }
+
