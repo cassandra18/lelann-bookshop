@@ -10,15 +10,15 @@ interface Uniform {
 const uniforms: Uniform[] = [
   {
     school: 'Greenfield High',
-    imageUrl: '/images/greenfield-small.jpg',
+    imageUrl: '/images/greenfield-uniform.jpeg',
   },
   {
     school: 'Blue Valley School',
-    imageUrl: '/images/bluevalley-large.jpg',
+    imageUrl: '/images/bluevalley-pekit.jpeg',
   },
   {
-    school: 'Sunrise Academy',
-    imageUrl: '/images/sunrise-small.jpg',
+    school: 'School back-pack',
+    imageUrl: '/images/back-pack.jpeg',
   },
 ];
 
@@ -28,13 +28,15 @@ const UniformCarousel: React.FC = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
           infinite: true,
           dots: true,
@@ -53,11 +55,10 @@ const UniformCarousel: React.FC = () => {
   return (
     <div className="uniform-carousel">
       <h2>School Uniforms</h2>
-      <Slider {...settings}>
+      <Slider {...settings} className=' w-3/4 mt-10 mx-auto'>
         {uniforms.map((uniform, index) => (
           <div key={index} className="uniform-card">
-            <img src={uniform.imageUrl} alt={`${uniform.school}`} />
-            <h3>{uniform.school}</h3>
+            <img src={uniform.imageUrl} alt={`${uniform.school}`} className='w-full h-32 object-cover'/>
           </div>
         ))}
       </Slider>

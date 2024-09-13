@@ -10,6 +10,7 @@ export default {
         'ochre': '#CD7304',
         'selective-yellow': '#F8B300',
         'oxford-blue': '#001D29',
+        'linen': '#FFF6EB'
       }
     },
   },

@@ -38,13 +38,13 @@ const HeroSection: React.FC = () => {
     <div className='relative'>
       
         <Slider {...settings} className='relative flex w-3/4 mt-10 mx-auto text-yellow-400 items-center'>
-          <div className='mx-auto ' >
+          <div className='' >
             <img src={'/images/notebook.jpg'} alt="notebook" className='w-full h-64 object-cover' />
           </div>
-          <div className='mx-auto'>
+          <div className=''>
             <img src={'/images/stickynotes.jpg'} alt="stickynotes" className='w-full h-64 object-cover'  />
           </div>
-          <div className='mx-auto' >
+          <div className='' >
             <img src={'/images/back-to-school.jpg'} alt="back-to-school" className='w-full h-64 object-cover' />
           </div>
         </Slider>

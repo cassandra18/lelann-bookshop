@@ -16,7 +16,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, title,
             <p className='text-sm text-prussian-blue lg:text-lg font-semibold'>{price}</p>
             </div>
             <div className='mt-auto w-full'>
-            <button className='bg-red-500 text-white w-full p-2'>
+            <button className='bg-gray-400 text-white w-full p-2'>
                 {cta}
             </button>
         </div>
