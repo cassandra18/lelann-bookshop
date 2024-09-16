@@ -53,8 +53,9 @@ const UniformCarousel: React.FC = () => {
   };
 
   return (
-    <div className="uniform-carousel">
-      <h2>School Uniforms</h2>
+    <>
+    <div className="uniform-carousel mb-10">
+      <h2 className="text-3xl font-bold text-center mt-10 text-sunset">School Uniforms</h2>
       <Slider {...settings} className=' w-3/4 mt-10 mx-auto'>
         {uniforms.map((uniform, index) => (
           <div key={index} className="uniform-card">
@@ -62,7 +63,10 @@ const UniformCarousel: React.FC = () => {
           </div>
         ))}
       </Slider>
+      
     </div>
+    <div className="border-b  border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20"></div>
+    </>
   );
 };
 

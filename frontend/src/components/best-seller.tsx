@@ -19,10 +19,11 @@ const BestSellerCard: React.FC<BestSellerCardProps> = ({
   rating,
   cta,
 }) => (
-  <div className="border rounded-lg hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between">
+  <div className="border rounded-lg hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-105">
 
-    <img src={imageUrl} alt={title} className="w-full h-38 md:h-42 lg:h-42 p-2" />
-    
+    <div className="flex justify-center items-center p-2">
+      <img src={imageUrl} alt={title} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
+    </div>
     <div className="text-left ">
       <div className="px-2">
         <h3 className=" text-black font-semibold">{title}</h3>
@@ -42,7 +43,7 @@ const BestSellerCard: React.FC<BestSellerCardProps> = ({
       </div>
 
       <div className="mt-auto w-full">
-        <button className="bg-gray-400 text-white w-full p-2">{cta}</button>
+        <button className="bg-gray-400 text-white lg:text-lg   w-full p-2">{cta}</button>
       </div>
     </div>
   </div>

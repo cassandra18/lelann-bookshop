@@ -8,6 +8,8 @@ import FeaturedProducts from '../components/featured-products';
 import UniformCarousel from '../components/carouselb';
 import BestSeller from '../components/best-seller';
 import NewArrival from '../components/new-arrivals';
+import WishList from '../components/wishlist';
+import Newsletter from '../components/newsletter';
 
 const Homepage: React.FC = () => {
   return (
@@ -21,6 +23,8 @@ const Homepage: React.FC = () => {
         <UniformCarousel />
         <BestSeller />
         <NewArrival />
+        <WishList />
+        <Newsletter />
     </div>
   )
 }

@@ -21,7 +21,7 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
   discountPercentage,
   cta,
 }) => (
-  <div className="relative border rounded-md hover:border-sunset shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between">
+  <div className="relative border rounded-md hover:border-sunset shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-105">
     {discountPercentage && (
       <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1  mt-2 text-sm font-bold">
         {discountPercentage}% OFF
@@ -34,8 +34,9 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
       </div>
     )}
 
-    <img src={imageUrl} alt={title} className="w-full h-38 md:h-42 lg:h-42 p-3" />
-    
+    <div className="flex justify-center items-center p-2">
+      <img src={imageUrl} alt={title} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
+    </div>
     <div className="text-left ">
       <div className="px-2">
         <h3 className=" text-black font-semibold">{title}</h3>
@@ -54,7 +55,7 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
       </div>
 
       <div className="mt-auto w-full">
-        <button className="bg-gray-400 text-white w-full p-2">{cta}</button>
+        <button className="bg-gray-400 text-white lg:text-lg  w-full p-2">{cta}</button>
       </div>
     </div>
   </div>
@@ -100,7 +101,7 @@ const NewArrival: React.FC = () => {
   return (
     <>
       <h1 className="text-3xl font-bold text-center mt-10 text-sunset">
-        New Arrivals
+        Exciting New Arrivals
       </h1>
       <div className="flex flex-wrap justify-center  gap-4 mt-10  mb-10">
         {newArrivals.map((product) => (
