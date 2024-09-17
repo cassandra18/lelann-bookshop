@@ -55,7 +55,7 @@ const UniformCarousel: React.FC = () => {
   return (
     <>
     <div className="uniform-carousel mb-10">
-      <h2 className="text-3xl font-bold text-center mt-10 text-sunset">School Uniforms</h2>
+      <h2 className="text-4xl font-bold text-center mt-10 text-sunset">School Uniforms</h2>
       <Slider {...settings} className=' w-3/4 mt-10 mx-auto'>
         {uniforms.map((uniform, index) => (
           <div key={index} className="uniform-card">

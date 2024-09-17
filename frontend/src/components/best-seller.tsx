@@ -26,13 +26,13 @@ const BestSellerCard: React.FC<BestSellerCardProps> = ({
     </div>
     <div className="text-left ">
       <div className="px-2">
-        <h3 className=" text-black font-semibold">{title}</h3>
-        <p className="text-gray-500 font-serif">{author}</p>
+        <h3 className=" text-selective-yellow font-semibold">{title}</h3>
+        <p className="text-gray-500 ">{author}</p>
         
         <div className="flex justify-between my-2">
-          <p className="text-sm text-prussian-blue lg:text-lg font-semibold">
+          <h4 className="text-md text-prussian-blue lg:text-lg font-semibold">
             KES {price}
-          </p>
+          </h4>
           <div className="rating text-right ">
             <span className=" text-gray-400 text-lg font-semibold">
               {rating}
@@ -87,7 +87,7 @@ const BestSeller: React.FC = () => {
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-center mt-10 text-sunset">
+      <h1 className="text-4xl font-bold text-center mt-10 text-sunset">
         Best Sellers
       </h1>
       <div className="flex flex-wrap justify-center  gap-4 mt-10  mb-10">

@@ -39,18 +39,18 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
     </div>
     <div className="text-left ">
       <div className="px-2">
-        <h3 className=" text-black font-semibold">{title}</h3>
-        <p className="text-gray-500 font-serif">{author}</p>
+        <h3 className=" text-selective-yellow font-semibold">{title}</h3>
+        <p className="text-gray-500 ">{author}</p>
         
         {originalPrice ? (
             <div className="flex flex-col mt-2">
-                <p className="text-sm text-gray-400 line-through">KES {originalPrice}</p>
-                <p className="text-prussian-blue text-sm lg:text-lg font-semibold ">KES {price}</p>
+                <h4 className="text-sm text-gray-400 line-through">KES {originalPrice}</h4>
+                <h4 className="text-prussian-blue text-md lg:text-lg font-semibold ">KES {price}</h4>
             </div>
         ) : (
-            <p className="text-sm text-prussian-blue lg:text-lg font-semibold mt-2">
+            <h4 className="text-md text-prussian-blue lg:text-lg font-semibold mt-2">
                 KES {price}
-            </p>
+            </h4>
         )}
       </div>
 
@@ -100,7 +100,7 @@ const NewArrival: React.FC = () => {
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-center mt-10 text-sunset">
+      <h1 className="text-4xl font-bold text-center mt-10 text-sunset">
         Exciting New Arrivals
       </h1>
       <div className="flex flex-wrap justify-center  gap-4 mt-10  mb-10">

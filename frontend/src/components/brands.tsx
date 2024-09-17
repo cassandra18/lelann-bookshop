@@ -28,8 +28,8 @@ const Brands: React.FC = () => {
 
     return (
         <>
-        <h1 className='text-3xl font-bold text-center mt-10 text-sunset'>Trusted Brands</h1>
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8  gap-4 mt-10  mb-10 justify-items-center max-w-full lg:max-w-7xl mx-auto'>
+        <h1 className='text-4xl font-bold text-center mt-10 text-sunset'>Trusted Brands</h1>
+        <div className='grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-8  gap-4 mt-10  mb-10 justify-items-center max-w-full lg:max-w-7xl mx-auto'>
             {brands.map((brand) => (
                 <BrandCard
                 key={brand.image}

@@ -27,9 +27,9 @@ const WishListCard: React.FC<WishListCardProps> = ({
     <div className="flex flex-col text-left">
       <h5 className="text-lg md:text-xl font-bold text-gray-900">{title}</h5>
       {owner && <p className="text-sm text-gray-600">{owner}</p>}
-      <p className="text-base md:text-lg font-semibold text-gray-800 mt-2">
+      <h4 className="text-base md:text-lg font-semibold text-gray-800 mt-2">
         KES {price}
-      </p>
+      </h4>
     </div>
   </div>
 );
@@ -82,7 +82,7 @@ const WishList: React.FC = () => {
 
   return (
     <>
-    <h1 className="text-3xl font-bold text-center mt-10 text-sunset">Your WishList</h1>
+    <h1 className="text-4xl font-bold text-center mt-10 text-sunset">Your WishList</h1>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 mt-20 justify-items-center max-w-full lg:max-w-7xl mx-auto">
       {wishList.map((item, index) => (
         <WishListCard
