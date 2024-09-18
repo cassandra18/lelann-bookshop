@@ -2,23 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { IoMdCart } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
-
-interface NavItem {
-  name: string;
-  link: string;
-}
-const NavItems: NavItem[] = [
-  { name: "Home", link: "/" },
-  { name: "Educational Books", link: "/educational-books" },
-  { name: "Other Books", link: "/other-books" },
-  { name: "Uniforms", link: "/uniforms" },
-  { name: "Stationary", link: "/stationary" },
-  { name: "Electronics", link: "/electronics" },
-  { name: "Art Supplies", link: "/art-supplies" },
-  { name: "Toys & Games", link: "/toys-games" },
-  { name: "About Us", link: "/about-us" },
-  { name: "Contact Us", link: "/contact-us" },
-];
+import { NavItems } from "./navItems";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,24 +13,42 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className=" text-white p-4 navbar shadow-md"
+      className="text-white p-4 navbar shadow-md"
       style={{ background: "rgba(0, 0, 0, 0.2)", backdropFilter: "blur" }}
     >
       <div className="container flex justify-between items-center">
         <div className="text-2xl font-bold text-[#FFD399]">Lelann Bookshop</div>
         
         {/* Desktop navigation */}
-        <div className="hidden lg:flex space-x-4">
+        <div className="hidden lg:flex space-4">
           {NavItems.map((item) => (
-            <NavLink
-              to={item.link}
-              key={item.name}
-              className={({ isActive }) =>
-                isActive ? "nav-link active-link" : "nav-link"
-              }
-            >
-              {item.name}
-            </NavLink>
+            <div key={item.name} className="relative group">
+              <NavLink
+                to={item.link}
+                className={({ isActive }) =>
+                  isActive ? "nav-link active-link" : "nav-link"
+                }
+              >
+                {item.name}
+              </NavLink>
+              {item.subLinks && (
+                <div
+                  className="absolute hidden group-hover:flex flex-wrap gap-4 p-4 shadow-md rounded-sm top-full left-0 z-20"
+                  style={{ background: "rgba(0, 0, 0, 0.6)", backdropFilter: "blur", minWidth: "300px", maxWidth: "700px" }}
+                >
+                    {item.subLinks.map((subItem) => (
+                      <NavLink
+                        to={subItem.link}
+                        key={subItem.name}
+                        className="block px-4 py-2 hover:bg-gray-800 w-1/3"
+                      >
+                        {subItem.name}
+                      </NavLink>
+                    ))}
+                  
+                </div>
+              )}
+            </div>
           ))}
         </div>
 
@@ -97,8 +99,8 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Cart Icon */}
-        <NavLink to="/cart" className="relative" style={{fontSize: "32px"}}>
-        <IoMdCart />
+        <NavLink to="/cart" className="relative" style={{ fontSize: "32px" }}>
+          <IoMdCart />
           {/* Example item count badge */}
           <div className="absolute -top-1 -right-1 bg-red-500 rounded-full h-4 w-4 text-xs flex items-center justify-center text-white">
             2
@@ -107,22 +109,39 @@ const Navbar: React.FC = () => {
 
         {/* Account Link */}
         <NavLink to="/account" className="ml-4">
-        <FaUserCircle size={24} />
+          <FaUserCircle size={24} />
         </NavLink>
       </div>
+
+      {/* Mobile navigation */}
       {isMenuOpen && (
         <div className="lg:hidden flex flex-col space-y-4 mt-2 items-center">
           {NavItems.map((item) => (
-            <NavLink
-              to={item.link}
-              key={item.name}
-              className={({ isActive }) =>
-                isActive ? "nav-link active-link" : "nav-link"
-              }
-              onClick={toggleMenu}
-            >
-              {item.name}
-            </NavLink>
+            <div key={item.name}>
+              <NavLink
+                to={item.link}
+                className={({ isActive }) =>
+                  isActive ? "nav-link active-link" : "nav-link"
+                }
+                onClick={toggleMenu}
+              >
+                {item.name}
+              </NavLink>
+              {item.subLinks && (
+                <div className="space-y-2 mt-1">
+                  {item.subLinks.map((subItem) => (
+                    <NavLink
+                      to={subItem.link}
+                      key={subItem.name}
+                      className="block px-4 py-2 hover:bg-gray-800"
+                      onClick={toggleMenu}
+                    >
+                      {subItem.name}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       )}

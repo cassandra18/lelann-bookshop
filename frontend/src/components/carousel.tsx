@@ -13,7 +13,7 @@ interface ArrowProps {
 const Arrow: React.FC<ArrowProps> = ({ className, style, onClick, icon }) => (
   <div
     className={`absolute top-1/2 transform -translate-y-1/2 text-4xl cursor-pointer ${className}`}
-    style={{ ...style, display: "block", zIndex: 10 }}
+    style={{ ...style, display: "block" }}
     onClick={onClick}
   >
     {icon}
