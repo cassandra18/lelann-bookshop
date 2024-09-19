@@ -115,3 +115,23 @@ navbar {
   width: 100%;
 }
 
+.nav-link {
+  padding-bottom: 4px;
+  transition: color 0.3s, border-bottom 0.1s ease;
+}
+
+.nav-link:hover {
+  color: #FFD399;
+  border-bottom: 2px solid #FFD399;
+}
+
+.active-link {
+  color: #FFD399;
+  border-bottom: 2px solid #FFD399;
+}
+
+.group:hover .nav-link {
+  color: #FFD399;
+  border-bottom: 2px solid #FFD399;
+}
+

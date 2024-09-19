@@ -3,22 +3,22 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-interface ArrowProps {
-  className?: string;
-  style?: React.CSSProperties;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-  icon: string;
-}
+// interface ArrowProps {
+//   className?: string;
+//   style?: React.CSSProperties;
+//   onClick?: React.MouseEventHandler<HTMLDivElement>;
+//   icon: string;
+// }
 
-const Arrow: React.FC<ArrowProps> = ({ className, style, onClick, icon }) => (
-  <div
-    className={`absolute top-1/2 transform -translate-y-1/2 text-4xl cursor-pointer ${className}`}
-    style={{ ...style, display: "block" }}
-    onClick={onClick}
-  >
-    {icon}
-  </div>
-);
+// const Arrow: React.FC<ArrowProps> = ({ className, style, onClick, icon }) => (
+//   <div
+//     className={`absolute top-1/2 transform -translate-y-1/2 text-4xl cursor-pointer ${className}`}
+//     style={{ ...style, display: "block" }}
+//     onClick={onClick}
+//   >
+//     {icon}
+//   </div>
+// );
 
 const HeroSection: React.FC = () => {
   const settings = { 
@@ -29,8 +29,8 @@ const HeroSection: React.FC = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
-    nextArrow: <Arrow icon=">" className="right-0 mr-2"/>,
-    prevArrow: <Arrow icon="<" className="left-0 ml-2"/>,
+    // nextArrow: <Arrow icon=">" className="right-0 mr-2"/>,
+    // prevArrow: <Arrow icon="<" className="left-0 ml-2"/>,
   };
 
 
