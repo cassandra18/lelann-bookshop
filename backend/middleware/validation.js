@@ -19,4 +19,4 @@ const validateRegisterInput = [
     }
 ];
 
-module.exports = { validateRegisterInput };
+module.exports = validateRegisterInput;

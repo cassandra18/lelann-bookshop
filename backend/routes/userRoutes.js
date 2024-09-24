@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const UserControllers = require('../controllers/userController');
+const { UserControllers } = require('../controllers/userController');
 const authenticateAdmin = require('../middleware/authenticateAdmin');
 const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
-const {validateRegisterInput } = require('../middleware/validation');
+const validateRegisterInput  = require('../middleware/validation');
 const authenticateJWT = require('../middleware/authenticateUser');
 
 // User routes

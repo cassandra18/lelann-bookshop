@@ -28,3 +28,9 @@ migrations
   "email": "johntest@example.com",
   "password": "johnny$yyY3"
 }
+
+{
+  "name": "John Doe",
+  "email": "johny@doe.com",
+  "password": "Johny@Doe1"
+}

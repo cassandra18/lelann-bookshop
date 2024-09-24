@@ -5,26 +5,27 @@ const prisma = new PrismaClient();
 // Add a new product
 const addProduct = async (req, res) => {
     try {
-        const { name, price, condition = 'NEW', authorId, publisherId, subcategoryId, subject} = req.body;
+        const { name, price, condition = 'NEW', authorId, publisherId, subcategoryId, subject, featured = false, company} = req.body;
         
-        const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategoryId } });
-        const author = await prisma.author.findUnique({ where: { id: authorId } });
-        const publisher = await prisma.publisher.findUnique({ where: { id: publisherId } });
+        const isFeatured = featured === 'true' ? true : false;
+        // const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategoryId } });
+        // const author = await prisma.author.findUnique({ where: { id: authorId } });
+        // const publisher = await prisma.publisher.findUnique({ where: { id: publisherId } });
 
-        // Validate existence of subcategory, author, and publisher
-        if (!subcategory) {
-            return res.status(400).json({ message: 'Invalid subcategory ID' });
-        }
-        if (!author) {
-            return res.status(400).json({ message: 'Invalid author ID' });
-        }
-        if (!publisher) {
-            return res.status(400).json({ message: 'Invalid publisher ID' });
-        }
+        // // Validate existence of subcategory, author, and publisher
+        // if (!subcategory) {
+        //     return res.status(400).json({ message: 'Invalid subcategory ID' });
+        // }
+        // if (!author) {
+        //     return res.status(400).json({ message: 'Invalid author ID' });
+        // }
+        // if (!publisher) {
+        //     return res.status(400).json({ message: 'Invalid publisher ID' });
+        // }
 
         // Validate required fields
-        if (!name || !price || !authorId || !publisherId || !subcategoryId) {
-            return res.status(400).json({ message: 'Name, price, author ID, publisher ID, and subcategory ID are required fields' });
+        if (!name || !price ) {
+            return res.status(400).json({ message: 'Name and price are required fields' });
         }
 
         console.log(req.file);
@@ -47,6 +48,8 @@ const addProduct = async (req, res) => {
                 price: priceFloat,
                 condition,
                 subject,
+                featured: isFeatured,
+                company,
                 author: { connect: { id: authorId } },
                 publisher: { connect: { id: publisherId } },
                 subcategory: { connect: { id: subcategoryId } },
@@ -109,7 +112,9 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, condition, authorId, publisherId, subcategoryId, subject} = req.body;
+        const { name, price, condition, authorId, publisherId, subcategoryId, subject, featured, company} = req.body;
+
+        const isFeatured = featured !== undefined ? (featured === 'true') : undefined;
 
         // Check if the product exists
         const existingProduct = await prisma.product.findUnique({
@@ -152,6 +157,8 @@ const updateProduct = async (req, res) => {
                 price,
                 condition,
                 subject,
+                featured: isFeatured,
+                company,
                 image,
                 author: { connect: { id: authorId } },
                 publisher: { connect: { id: publisherId } },
@@ -192,4 +199,23 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct};
+const getFeaturedProducts = async (req, res) => {
+    try {
+        const featuredProducts = await prisma.product.findMany({
+            where: { featured: true },
+            include: {
+                author: true,
+                publisher: true,
+                subcategory: true,
+            },
+        });
+
+        res.status(200).json(featuredProducts);
+    
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal server error' });
+    };
+}
+
+module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct, getFeaturedProducts };

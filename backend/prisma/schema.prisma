@@ -56,14 +56,16 @@ model Product {
   name           String
   price          Float
   condition      String       @default("NEW")
-  subject   String
-  author_id      String
-  author         Author    @relation(fields: [author_id], references: [id])
-  publisher_id   String
-  publisher      Publisher  @relation(fields: [publisher_id], references: [id])
+  subject        String?
+  author_id      String?
+  author         Author?    @relation(fields: [author_id], references: [id])
+  publisher_id   String?
+  publisher      Publisher?  @relation(fields: [publisher_id], references: [id])
   subcategory_id String
   subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
-  image      String
+  image          String
+  company      String?
+  featured   Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

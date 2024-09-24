@@ -1,6 +1,6 @@
 const express = require('express');
 const authenticateAdmin = require('../middleware/authenticateAdmin');
-const { addProduct, getProductById, getProducts, deleteProduct, updateProduct} = require('../controllers/productController');
+const { addProduct, getProductById, getProducts, deleteProduct, updateProduct, getFeaturedProducts} = require('../controllers/productController');
 const upload = require('../middleware/uploadImage');
 const router = express.Router();
 
@@ -20,5 +20,7 @@ router.get('/product/:id', getProductById);
 
 // Route to get all products
 router.get('/products', getProducts);
+
+router.get('/products/featured', getFeaturedProducts);
 
 module.exports = router;

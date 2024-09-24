@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {validateRegisterInput } = require('../middleware/validation');
+const validateRegisterInput = require('../middleware/validation');
 const { registerAdmin, loginAdmin, updateAdmin, deleteAdmin } = require('../controllers/adminController');
 
 
