@@ -74,10 +74,10 @@ const Navbar: React.FC = () => {
       
       {/* Navigation Bar */}
       <nav className="text-white w-full"  style={{ background: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur", }}>
-        <div className="max-w-screen-xl mx-auto flex justify-between items-center py-2 px-4">
+        <div className="max-w-screen-xl mx-auto flex justify-between items-center py-2 px-2">
           {/* Desktop navigation */}
           <div className="hidden lg:flex space-x-4">
-            {NavItems.map((item) => (
+            {NavItems.slice(0, NavItems.length - 4).map((item) => (
               <div key={item.name} className="relative group">
                 <NavLink
                   to={item.link}
@@ -92,7 +92,7 @@ const Navbar: React.FC = () => {
                   <div
                     className="absolute hidden group-hover:flex flex-wrap gap-4 p-4 shadow-md mt-2 rounded-sm top-full left-0 z-20"
                     style={{
-                      background: "rgba(0, 0, 0, 0.8)",
+                      background: "rgba(31, 41, 55, 0.8)",
                       backdropFilter: "blur",
                       minWidth: "500px",
                       maxWidth: "800px",
@@ -114,6 +114,23 @@ const Navbar: React.FC = () => {
                 )}
               </div>
             ))}
+
+            {/* Container with bg-gray-800 for the last 4 NavItems */}
+            <div className="bg-gray-800 w-full flex flex-row space-x-4 pl-2">
+              {NavItems.slice(NavItems.length - 4).map((item) => (
+                <div key={item.name} className="relative group">
+                  <NavLink
+                    to={item.link}
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active-link" : "nav-link"
+                    }
+                    onClick={toggleMenu}
+                  >
+                    {item.name}
+                  </NavLink>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Small devices */}
@@ -156,8 +173,8 @@ const Navbar: React.FC = () => {
 
         {/* Mobile navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden flex flex-col space-y-4 mt-2 items-center">
-            {NavItems.map((item) => (
+          <div className="lg:hidden flex flex-col space-y-4 my-4 mx-16 items-start">
+            {NavItems.slice(0, NavItems.length - 4).map((item) => (
               <div key={item.name} className="relative group">
                 <NavLink
                   to={item.link}
@@ -169,21 +186,40 @@ const Navbar: React.FC = () => {
                   {item.name}
                 </NavLink>
                 {item.subLinks && (
-                  <div className="space-y-2 mt-1">
+                  <div className="hidden space-y-2 mt-1 relative group-hover:flex flexwrap p-4 border-b-2 border-sunset bg-gray-800">
+                    <div className="grid grid-cols-2 gap-4">
                     {item.subLinks.map((subItem) => (
                       <NavLink
                         to={subItem.link}
                         key={subItem.name}
-                        className="absolute hidden group-hover:flex flex-wrap px-4 py-2 hover:bg-gray-800"
+                        className="block  px-4 py-2 hover:text-sunset whitespace-nowrap"
                         onClick={toggleMenu}
                       >
                         {subItem.name}
                       </NavLink>
                     ))}
+                    </div>
                   </div>
                 )}
               </div>
             ))}
+
+            {/* Container with bg-gray-800 for the last 4 NavItems */}
+            <div className="bg-gray-800 w-full flex flex-col space-y-4 py-4">
+              {NavItems.slice(NavItems.length - 4).map((item) => (
+                <div key={item.name} className="relative group">
+                  <NavLink
+                    to={item.link}
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active-link" : "nav-link"
+                    }
+                    onClick={toggleMenu}
+                  >
+                    {item.name}
+                  </NavLink>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </nav>
