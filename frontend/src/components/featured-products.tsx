@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
+import axios from 'axios';
 
 interface FeaturedProductCardProps {
     image: string;
-    title: string;
+    name: string;
     price: string;
     cta: string;
 }
 
-const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, title, price, cta }) => (
+const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, name, price, cta }) => (
     <div className='border rounded-sm hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-44 lg:w-44 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-95'>
-        <img src={image} alt={title} className='w-full h-32 md:h-36 lg:h-36 ' />
+        <img src={image} alt={name} className='w-full h-32 md:h-36 lg:h-36 ' />
         <div className='text-left  mt-auto'>
             <div className='p-2'>
-            <h2 className='text-lg text-selective-yellow font-semibold'>{title}</h2>
+            <h2 className='text-lg text-selective-yellow font-semibold'>{name}</h2>
             <h4 className='text-md text-prussian-blue lg:text-lg font-semibold'>{price}</h4>
             </div>
             <div className='mt-auto w-full'>
@@ -25,12 +26,21 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, title,
 )
 
 const FeaturedProducts: React.FC = () => {
-    const featuredProducts = [
-        { title: 'Laptop', price: 'KES 50,000', image: '/images/lenovo-laptop.jpeg', cta: 'Add to cart' },
-        { title: 'Sticky notes', price: 'KES 250', image: '/images/stickynotes.jpeg', cta: 'Add to cart' },
-        { title: 'Pelikan pencils', price: 'KES 600', image: '/images/pencils.png', cta: 'Add to cart' },
-        { title: 'Water colors', price: 'KES 1000', image: '/images/water-colors.png', cta: 'Add to cart' },
-    ];
+    const [featuredProducts, setFeaturedProducts] = useState<FeaturedProductCardProps[]>([]);
+
+    useEffect(() => {
+        const fetchFeaturedProducts = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/products?featured=true');
+                console.log('Fetched Products:', response.data); 
+                setFeaturedProducts(response.data);
+            } catch (error) {
+                console.error('Error fetching featured products:', error);
+            }
+        };
+
+        fetchFeaturedProducts();
+    }, []);
 
     return (
         <>
@@ -38,8 +48,8 @@ const FeaturedProducts: React.FC = () => {
         <div className='flex flex-wrap justify-center  gap-4 mt-10  mb-10'>
             {featuredProducts.map((product) => (
                 <FeaturedProductCard
-                key={product.title}
-                title={product.title}
+                key={product.name}
+                name={product.name}
                 price={product.price}
                 image={product.image}
                 cta={product.cta} />

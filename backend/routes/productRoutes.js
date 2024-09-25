@@ -21,6 +21,6 @@ router.get('/product/:id', getProductById);
 // Route to get all products
 router.get('/products', getProducts);
 
-router.get('/products/featured', getFeaturedProducts);
+router.get('/products/', getFeaturedProducts);
 
 module.exports = router;

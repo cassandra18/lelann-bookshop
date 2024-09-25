@@ -10,7 +10,10 @@ const errorHanlder = require('./middleware/errorHandler');
 // Middleware for parsing JSON bodies
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Routes
 //app.use('/api/auth', require('./routes/auth'));

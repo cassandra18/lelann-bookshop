@@ -130,7 +130,7 @@ export const NavItems: NavItem[] = [
         name: "Art Supplies",
         link: "/art-supplies",
         subLinks: [
-            { name: "Paints & Mediums", link: "/paints" },
+            { name: "Paint Mediums", link: "/paints" },
             { name: "Brushes", link: "/brushes" },
             { name: "Canvases", link: "/canvases" },
             { name: "Drawing books", link: "/drawing" },

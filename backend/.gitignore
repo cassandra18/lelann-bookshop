@@ -31,6 +31,6 @@ migrations
 
 {
   "name": "John Doe",
-  "email": "johny@doe.com",
-  "password": "Johny@Doe1"
+ "email": "johny@doe.com",
+  "password": "Johny@Doe1" 
 }

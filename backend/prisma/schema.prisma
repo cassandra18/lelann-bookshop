@@ -55,6 +55,7 @@ model Product {
   id             String         @id @default(uuid())
   name           String
   price          Float
+  cta            String?
   condition      String       @default("NEW")
   subject        String?
   author_id      String?
