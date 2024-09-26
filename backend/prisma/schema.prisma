@@ -65,10 +65,14 @@ model Product {
   subcategory_id String
   subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
   image          String
-  company      String?
-  featured   Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  company        String?
+  featured       Boolean @default(false)
+  bestseller     Boolean @default(false)
+  newarrival     Boolean @default(false)
+  wishlist       Boolean @default(false)
+  promotion      Boolean @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 enum Condition {

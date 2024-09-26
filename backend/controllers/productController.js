@@ -4,7 +4,9 @@ const prisma = new PrismaClient();
 // Add a new product
 const addProduct = async (req, res) => {
     try {
-        const { name, price, condition = 'NEW', authorId, publisherId, subcategoryId, subject, featured = false, company, cta } = req.body;
+        const { name, price, condition = 'NEW', authorId, publisherId, subcategoryId, subject, featured = false, company, cta,
+            wishlist = false, promotion = false, bestseller = false, newarrival = false
+         } = req.body;
         
         // Validate required fields
         if (!name || !price) {
@@ -36,6 +38,10 @@ const addProduct = async (req, res) => {
             subcategory: { connect: { id: subcategoryId } },
             image,
             cta,
+            promotion: promotion === 'true',
+            bestseller: bestseller === 'true',
+            newarrival: newarrival === 'true',
+            wishlist: wishlist === 'true',
         };
 
         // Conditionally add author and publisher if IDs are provided
@@ -56,16 +62,32 @@ const addProduct = async (req, res) => {
     }
 };
 
-// Get all products
+// Get all products with optional filters
 const getProducts = async (req, res) => {
     try {
+        // Extract query parameters from the request
+        const { featured, bestseller, promotion, newarrival, wishlist } = req.query;
+
+        // Build the `where` condition based on the query parameters
+        const whereCondition = {};
+
+        // Apply conditions only if the respective query parameters are present
+        if (featured === 'true') whereCondition.featured = true;
+        if (bestseller === 'true') whereCondition.bestseller = true;
+        if (promotion === 'true') whereCondition.promotion = true;
+        if (newarrival === 'true') whereCondition.newarrival = true;
+        if (wishlist === 'true') whereCondition.wishlist = true;
+
+        // Fetch products based on the built condition
         const products = await prisma.product.findMany({
+            where: whereCondition,
             include: {
                 author: true,
                 publisher: true,
                 subcategory: true,
             },
         });
+
         res.status(200).json(products);
     } catch (error) {
         console.error(error);
@@ -102,7 +124,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, condition, authorId, publisherId, subcategoryId, subject, featured, company, cta } = req.body;
+        const { name, price, condition, authorId, publisherId, subcategoryId, subject, featured, company, cta, promotion, bestseller, newarrival, wishlist } = req.body;
 
         // Check if the product exists
         const existingProduct = await prisma.product.findUnique({ where: { id } });
@@ -122,6 +144,10 @@ const updateProduct = async (req, res) => {
             subcategory: subcategoryId ? { connect: { id: subcategoryId } } : existingProduct.subcategory,
             image: req.file ? `http://localhost:5000/uploads/${req.file.filename}` : existingProduct.image,
             cta,
+            promotion: promotion !== undefined ? (promotion === 'true') : existingProduct.promotion,
+            bestseller: bestseller !== undefined ? (bestseller === 'true') : existingProduct.bestseller,
+            newarrival: newarrival !== undefined ? (newarrival === 'true') : existingProduct.newarrival,
+            wishlist: wishlist !== undefined ? (wishlist === 'true') : existingProduct.wishlist,
         };
 
         // Conditionally add author and publisher if IDs are provided
@@ -166,28 +192,7 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-// Get featured products
-const getFeaturedProducts = async (req, res) => {
-    const { featured } = req.query;
-    try {
-        const whereCondition = featured === 'true' ? { featured: true }: {};
-        const featuredProducts = await prisma.product.findMany({
-            where: whereCondition,
-            select: {
-                id: true,
-                name: true,
-                price: true,
-                image: true,
-                cta: true,
-            },
-        });
 
-        res.status(200).json(featuredProducts);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-};
 
 module.exports = {
     addProduct,
@@ -195,5 +200,4 @@ module.exports = {
     getProductById,
     updateProduct,
     deleteProduct,
-    getFeaturedProducts,
 };
