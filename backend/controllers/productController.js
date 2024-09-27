@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const addProduct = async (req, res) => {
     try {
         const { name, price, condition = 'NEW', authorId, publisherId, subcategoryId, subject, featured = false, company, cta,
-            wishlist = false, promotion = false, bestseller = false, newarrival = false
+            wishlist = false, promotion = false, bestseller = false, newarrival = false, oldPrice, discount
          } = req.body;
         
         // Validate required fields
@@ -24,6 +24,24 @@ const addProduct = async (req, res) => {
             return res.status(400).json({ message: 'Price must be a valid number' });
         }
 
+        // Convert oldPrice and discount to float if provided
+        let oldPriceFloat;
+        if (oldPrice) {
+            oldPriceFloat = parseFloat(oldPrice);
+            if (isNaN(oldPriceFloat)) {
+                return res.status(400).json({ message: 'oldPrice must be a valid number' });
+            }
+        }
+
+        let discountFloat;
+        if (discount) {
+            discountFloat = parseFloat(discount);
+            if (isNaN(discountFloat)) {
+                return res.status(400).json({ message: 'Discount must be a valid number' });
+            }
+        }
+        
+
         // Construct image URL
         const image = `http://localhost:5000/uploads/${req.file.filename}`;
 
@@ -38,6 +56,8 @@ const addProduct = async (req, res) => {
             subcategory: { connect: { id: subcategoryId } },
             image,
             cta,
+            oldPrice: oldPriceFloat,
+            discount: discountFloat,
             promotion: promotion === 'true',
             bestseller: bestseller === 'true',
             newarrival: newarrival === 'true',
@@ -124,7 +144,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, condition, authorId, publisherId, subcategoryId, subject, featured, company, cta, promotion, bestseller, newarrival, wishlist } = req.body;
+        const { name, price, condition, authorId, publisherId, subcategoryId, subject, featured, company, cta, promotion, bestseller, newarrival, wishlist, oldPrice, discount } = req.body;
 
         // Check if the product exists
         const existingProduct = await prisma.product.findUnique({ where: { id } });
@@ -144,6 +164,8 @@ const updateProduct = async (req, res) => {
             subcategory: subcategoryId ? { connect: { id: subcategoryId } } : existingProduct.subcategory,
             image: req.file ? `http://localhost:5000/uploads/${req.file.filename}` : existingProduct.image,
             cta,
+            oldPrice: oldPrice !== undefined ? parseFloat(oldPrice) : existingProduct.oldPrice,
+            discount: discount !== undefined ? parseFloat(discount) : existingProduct.discount,
             promotion: promotion !== undefined ? (promotion === 'true') : existingProduct.promotion,
             bestseller: bestseller !== undefined ? (bestseller === 'true') : existingProduct.bestseller,
             newarrival: newarrival !== undefined ? (newarrival === 'true') : existingProduct.newarrival,

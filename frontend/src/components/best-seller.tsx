@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
+import axios from "axios";
 
 interface BestSellerCardProps {
-  imageUrl: string;
-  title: string;
-  author: string;
+  image: string;
+  name: string;
+  author: { name: string};
   price: number;
   originalPrice?: number; // Optional for discounted products
   discountPercentage?: number; // Optional for discounted products
@@ -12,8 +13,8 @@ interface BestSellerCardProps {
 }
 
 const BestSellerCard: React.FC<BestSellerCardProps> = ({
-  imageUrl,
-  title,
+  image,
+  name,
   author,
   price,
   rating,
@@ -22,12 +23,12 @@ const BestSellerCard: React.FC<BestSellerCardProps> = ({
   <div className="border rounded-lg hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-105">
 
     <div className="flex justify-center items-center p-2">
-      <img src={imageUrl} alt={title} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
+      <img src={image} alt={name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
     </div>
     <div className="text-left ">
       <div className="px-2">
-        <h3 className=" text-selective-yellow font-semibold">{title}</h3>
-        <p className="text-gray-500 ">{author}</p>
+        <h3 className=" text-selective-yellow font-semibold">{name}</h3>
+        <p className="text-gray-500 ">{author.name}</p>
         
         <div className="flex justify-between my-2">
           <h4 className="text-md text-prussian-blue lg:text-lg font-semibold">
@@ -50,40 +51,21 @@ const BestSellerCard: React.FC<BestSellerCardProps> = ({
 );
 
 const BestSeller: React.FC = () => {
-  const bestSellers = [
-    {
-      title: "The Alchemist",
-      author: "Paulo Coelho",
-      imageUrl: "/images/alchemist.jpeg",
-      price: 2000,
-      rating: 5,
-      cta: "Add to cart",
-    },
-    {
-      title: "The Subtle Art of Not Giving a F*ck",
-      author: "Mark Manson",
-      imageUrl: "/images/subtle-art.jpeg",
-      price: 2500,
-      rating: 4,
-      cta: "Add to cart",
-    },
-    {
-      title: "The 7 Habits of Highly Effective People",
-      author: "Stephen R. Covey",
-      imageUrl: "/images/7-habits.jpeg",
-      price: 1500,
-      rating: 4,
-      cta: "Add to cart",
-    },
-    {
-      title: "The Lean Startup",
-      author: "Eric Ries",
-      imageUrl: "/images/lean-startup.jpeg",
-      price: 1800,
-      rating: 4,
-      cta: "Add to cart",
-    },
-  ];
+  const [bestSellers, setBestSellers] = useState<BestSellerCardProps[]>([]);
+
+  useEffect(() => {
+    const fetchBestSellers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/products?bestseller=true");
+        console.log("Fetched Best Sellers:", response.data);
+        setBestSellers(response.data);
+      } catch (error) {
+        console.error("Error fetching best sellers:", error);
+      }
+    };
+
+    fetchBestSellers();
+  }, []); // Empty dependency array to run once when the component mounts
 
   return (
     <>
@@ -93,12 +75,12 @@ const BestSeller: React.FC = () => {
       <div className="flex flex-wrap justify-center  gap-4 mt-10  mb-10">
         {bestSellers.map((product) => (
           <BestSellerCard
-            key={product.title}
-            title={product.title}
+            key={product.name}
+            name={product.name}
             author={product.author}
             price={product.price}
-            imageUrl={product.imageUrl}
-            rating={product.rating}
+            image={product.image}
+            rating={5}
             cta={product.cta}
           />
         ))}

@@ -1,50 +1,45 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
+import axios from "axios";
 
 interface NewArrivalCardProps {
-  imageUrl: string;
-  title: string;
-  author: string;
+  image: string;
+  name: string;
+  author: { name: string };
   price: number;
-  newProduct?: string;
-  originalPrice?: number; // Optional for discounted products
-  discountPercentage?: number;
+  oldPrice?: number; // Optional for discounted products
+  discount?: number;
   cta: string;
 }
 
 const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
-  imageUrl,
-  title,
+  image,
+  name,
   author,
   price,
-  newProduct,
-  originalPrice,
-  discountPercentage,
+  oldPrice,
+  discount,
   cta,
 }) => (
   <div className="relative border rounded-md hover:border-sunset shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-105">
-    {discountPercentage && (
+    {discount && (
       <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1  mt-2 text-sm font-bold">
-        {discountPercentage}% OFF
+        {discount}% OFF
       </div>
     )}
 
-    {newProduct && (
-      <div className="absolute top-0 right-0 bg-blue-950 text-white px-4 py-1 mt-2 text-sm font-regular shadow-md">
-        {newProduct}
-      </div>
-    )}
+
 
     <div className="flex justify-center items-center p-2">
-      <img src={imageUrl} alt={title} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
+      <img src={image} alt={name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
     </div>
     <div className="text-left ">
       <div className="px-2">
-        <h3 className=" text-selective-yellow font-semibold">{title}</h3>
-        <p className="text-gray-500 ">{author}</p>
+        <h3 className=" text-selective-yellow font-semibold">{name}</h3>
+        <p className="text-gray-500 ">{author.name}</p>
         
-        {originalPrice ? (
+        {oldPrice ? (
             <div className="flex flex-col mt-2">
-                <h4 className="text-sm text-gray-400 line-through">KES {originalPrice}</h4>
+                <h4 className="text-sm text-gray-400 line-through">KES {oldPrice}</h4>
                 <h4 className="text-prussian-blue text-md lg:text-lg font-semibold ">KES {price}</h4>
             </div>
         ) : (
@@ -62,42 +57,23 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
 );
 
 const NewArrival: React.FC = () => {
-  const newArrivals = [
-    {
-      title: "The Monk Who Sold His Ferrari",
-      author: "Robin Sharma",
-      imageUrl: "/images/monk.jpeg",
-      newProduct: "New",
-      price: 2000,
-      cta: "Add to cart",
-    },
-    {
-      title: "The Game of Life and How to Play It",
-      author: "Florence Scovel Shinn",
-      imageUrl: "/images/game.jpeg",
-      price: 2000,
-      originalPrice: 2500,
-      discountPercentage: 20,
-      cta: "Add to cart",
-    },
-    {
-      title: "Feeling is the Secret",
-      author: "Neville Goddard",
-      imageUrl: "/images/feeling.jpeg",
-      newProduct: "New",
-      price: 1500,
-      cta: "Add to cart",
-    },
-    {
-      title: "Power of Positive Thinking",
-      author: "Norman Vincent Peale",
-      imageUrl: "/images/positive.jpeg",
-      newProduct: "New",
-      price: 1800,
-      cta: "Add to cart",
-    },
-  ];
+  const [newArrivals, setNewArrivals] = useState<NewArrivalCardProps[]>([]);
 
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/products?newarrival=true");
+        console.log("Fetched New Arrivals:", response.data);
+        setNewArrivals(response.data);
+      } catch (error) {
+        console.error("Error fetching New Arrivals:", error);
+      }
+    };
+
+    fetchNewArrivals();
+  }, []);
+
+  
   return (
     <>
       <h1 className="text-4xl font-bold text-center mt-10 text-sunset">
@@ -106,14 +82,13 @@ const NewArrival: React.FC = () => {
       <div className="flex flex-wrap justify-center  gap-4 mt-10  mb-10">
         {newArrivals.map((product) => (
           <NewArrivalCard
-            key={product.title}
-            title={product.title}
+            key={product.name}
+            name={product.name}
             author={product.author}
             price={product.price}
-            newProduct={product.newProduct}
-            originalPrice={product.originalPrice}
-            discountPercentage={product.discountPercentage}
-            imageUrl={product.imageUrl}
+            oldPrice={product.oldPrice}
+            discount={product.discount}
+            image={product.image}
             cta={product.cta}
           />
         ))}

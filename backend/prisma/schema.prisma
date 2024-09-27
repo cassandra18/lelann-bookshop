@@ -71,6 +71,8 @@ model Product {
   newarrival     Boolean @default(false)
   wishlist       Boolean @default(false)
   promotion      Boolean @default(false)
+  oldPrice       Float?
+  discount       Float?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
