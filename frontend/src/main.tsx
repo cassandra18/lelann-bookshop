@@ -18,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/other-books",
         element: <OtherBooksPage />,
+      },
+      {
+        path: "/other-books/:subcategoryId",
+        element: <OtherBooksPage />,
       }
     ]
   }
