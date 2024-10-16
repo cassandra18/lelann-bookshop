@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import "./index.css";
 import Homepage from "./pages/homepage.tsx";
 import OtherBooksPage from "./pages/other-books.tsx";
+import BookDetails from "./components/bookdetails.tsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/other-books/:subcategoryId",
         element: <OtherBooksPage />,
+      },
+      {
+        path: "/otherbooks/:bookId",
+        element: <BookDetails />,
       }
     ]
   }

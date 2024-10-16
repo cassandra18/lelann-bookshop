@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 // Add a new product
 const addProduct = async (req, res) => {
     try {
-        const { name, price, condition = 'NEW', authorId, publisherId, subcategoryId, subject, featured = false, company, cta,
+        const { name, price, condition = 'NEW', description, authorId, publisherId, subcategoryId, subject, featured = false, company, cta,
             wishlist = false, promotion = false, bestseller = false, newarrival = false, oldPrice, discount
          } = req.body;
         
@@ -55,6 +55,7 @@ const addProduct = async (req, res) => {
             company,
             subcategory: { connect: { id: subcategoryId } },
             image,
+            description,
             cta,
             oldPrice: oldPriceFloat,
             discount: discountFloat,
@@ -144,7 +145,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, condition, authorId, publisherId, subcategoryId, subject, featured, company, cta, promotion, bestseller, newarrival, wishlist, oldPrice, discount } = req.body;
+        const { name, price, condition, description, authorId, publisherId, subcategoryId, subject, featured, company, cta, promotion, bestseller, newarrival, wishlist, oldPrice, discount } = req.body;
 
         // Check if the product exists
         const existingProduct = await prisma.product.findUnique({ where: { id } });
@@ -158,6 +159,7 @@ const updateProduct = async (req, res) => {
             name,
             price: price !== undefined ? parseFloat(price) : existingProduct.price,
             condition,
+            description,
             subject,
             featured: featured !== undefined ? (featured === 'true') : existingProduct.featured,
             company,

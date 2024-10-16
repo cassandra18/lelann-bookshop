@@ -65,6 +65,7 @@ model Product {
   subcategory_id String
   subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
   image          String
+  description     String
   company        String?
   featured       Boolean @default(false)
   bestseller     Boolean @default(false)

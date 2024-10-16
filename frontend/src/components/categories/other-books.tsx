@@ -22,6 +22,7 @@ interface OtherBook {
   price: number;
   cta: string;
   subcategory: Subcategory;
+  popularity: number; // Assuming this property exists for sorting
 }
 
 const OtherBooks: React.FC = () => {
@@ -35,7 +36,8 @@ const OtherBooks: React.FC = () => {
 
   const categoryId = "3d6b891c-af05-44fa-8d39-a73cc9ce3164"; // Other Books Category ID
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 3;
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [sortOption, setSortOption] = useState<string>("relevance");
 
   useEffect(() => {
     // Fetch other books
@@ -89,22 +91,26 @@ const OtherBooks: React.FC = () => {
 
   useEffect(() => {
     // Filter books based on the selected subcategory
-    const filtered = subcategoryId
+    let filtered = subcategoryId
       ? otherBooks.filter((book) => book.subcategory.id === subcategoryId)
       : otherBooks;
+
+    // Sort the books based on the selected sort option
+    if (sortOption === "price-asc") {
+      filtered = filtered.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortOption === "price-desc") {
+      filtered = filtered.sort((a, b) => Number(b.price) - Number(a.price));
+    } else if (sortOption === "popularity") {
+      filtered = filtered.sort((a, b) => b.popularity - a.popularity); // Descending popularity
+    }
+
+    console.log("Sorted books:", filtered);
     setFilteredBooks(filtered);
-    setCurrentPage(1); // Reset to the first page when subcategory changes
-  }, [subcategoryId, otherBooks]);
-
-
+    setCurrentPage(1); 
+  }, [subcategoryId, otherBooks, sortOption]);
 
   // Page calculation
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
-
-  console.log("Total Pages:", totalPages);
-  console.log("Filtered Books Length:", filteredBooks.length);
-  console.log("Items Per Page:", itemsPerPage);
-  
   const displayedBooks = filteredBooks.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -154,17 +160,43 @@ const OtherBooks: React.FC = () => {
         <h1 className="text-4xl font-bold text-center my-10 text-sunset">
           {subcategoryId ? `${selectedSubcategoryName} Books` : "All Books"}
         </h1>
+
+        {/* Sort and Items Per Page Controls */}
+        <div className="flex justify-end gap-4 mb-4 rounded-md ">
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="border rounded-md bg-slate-200 text-prussian-blue p-1"
+          >
+            <option value="relevance">Relevance</option>
+            <option value="price-asc">Price (High to low)</option>
+            <option value="price-desc">Price (Low to high)</option>
+            <option value="popularity">Most Popular</option>
+          </select>
+
+          <select
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            className="border rounded-md bg-slate-200 text-prussian-blue p-1"
+          >
+            <option value={10}>10 per page</option>
+            <option value={20}>20 per page</option>
+            <option value={60}>60 per page</option>
+          </select>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 pl-4 pt-4">
           {displayedBooks.map((book) => (
+            <Link to={`/otherbooks/${book.id}`} key={book.id}>
             <div
               key={book.id}
-              className="rounded-sm shadow-lg bg-white w-36 md:w-44 lg:w-44 overflow-hidden flex flex-col transform transition-transform duration-300 hover:scale-95 hover:border-2 hover:border-sunset"
+              className="rounded-sm group hover:border-2 hover:border-sunset shadow-lg bg-white w-36 md:w-44 lg:w-44 overflow-hidden flex flex-col transform transition-transform duration-200 hover:scale-95"
             >
               <div className="flex justify-center items-center p-2">
                 <img src={book.image} alt={book.name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
               </div>
               <div className="p-2">
-                <h2 className="text-lg text-selective-yellow font-semibold">
+                <h2 className="text-lg text-prussian-blue font-semibold">
                   {book.name}
                 </h2>
                 <p className="text-gray-500">{book.author?.name || "Unknown Author"}</p>
@@ -173,11 +205,12 @@ const OtherBooks: React.FC = () => {
                 </h4>
               </div>
               <div className="mt-auto w-full">
-                <button className="bg-gray-400 text-white lg:text-lg w-full p-2">
+                <button className="bg-gray-400 group-hover:bg-sunset group-hover:text-prussian-blue text-white lg:text-lg w-full p-2">
                   {book.cta}
                 </button>
               </div>
             </div>
+            </Link>
           ))}
         </div>
 
