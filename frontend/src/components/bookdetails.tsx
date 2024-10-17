@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import ProductCard from './checkoutcard';
 
 const BookDetails: React.FC = () => {
     const { bookId } = useParams<{ bookId: string }>();
@@ -33,14 +34,19 @@ const BookDetails: React.FC = () => {
     if (!book) return <p>Book not found</p>;
 
     return (
-        <div className="flex flex-col items-center justify-center p-4">
+        
+        <div className='flex flex-col lg:flex-row'>
+        <div className="flex flex-col items-center lg:items-start lg:w-3/4 p-4 mb-36">
+            <img src={book.image} alt={book.name} className="w-64 h-64 md:w-96 md:h-96 object-contain my-10" />
+            <div className='lg:px-4'>
             <h1 className="text-3xl font-bold text-sunset">{book.name}</h1>
-            <img src={book.image} alt={book.name} className="w-64 h-64 object-contain mt-4" />
-            <div>
                 <p className="text-lg text-gray-400 mt-4"><strong>Author: </strong>{book.author?.name || "Unknown"}</p>
                 <p className="text-lg text-gray-400"><strong>Price:</strong> KES {book.price}</p>
             </div>
-            <p className="text-lg text-gray300 mt-4">{book.description}</p>
+            <p className="text-lg text-gray300 mt-4 lg:px-4">{book.description}</p>
+        </div>
+
+        <ProductCard  price={book.price}/>
         </div>
     );
 };
