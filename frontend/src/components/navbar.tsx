@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { IoMdCart } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { NavItems } from "./navItems";
 import { FaSearch } from "react-icons/fa";
+import { useCart } from "./cart-functionality";
 
 const Navbar: React.FC = () => {
   const [searchItem, setSearchItem] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { state } = useCart();
+  const totalItems = state.items.reduce((sum, item) => sum + item.quantity, 0);
+
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,9 +35,11 @@ const Navbar: React.FC = () => {
       >
         <div className="container flex justify-between items-center space-x-4">
           {/* Logo */}
-          <div className="text-2xl font-bold text-[#FFD399]">
+          <Link to="/">
+          <div className="text-2xl font-bold text-sunset">
             Lelann Bookshop
           </div>
+          </Link>
 
           {/* Search Bar */}
           <form className="flex-1 mx-4 flex items-center" onSubmit={handleSearch}>
@@ -55,11 +61,11 @@ const Navbar: React.FC = () => {
           </form>
 
           {/* Cart Icon */}
-          <NavLink to="/cart" className="relative" style={{ fontSize: "32px" }}>
+          <NavLink to="/checkout" className="relative" style={{ fontSize: "32px" }}>
             <IoMdCart />
             {/* Example item count badge */}
             <div className="absolute -top-1 -right-1 bg-red-500 rounded-full h-4 w-4 text-xs flex items-center justify-center text-white">
-              2
+              {totalItems}
             </div>
           </NavLink>
 

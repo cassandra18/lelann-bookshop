@@ -6,6 +6,7 @@ import "./index.css";
 import Homepage from "./pages/homepage.tsx";
 import OtherBooksPage from "./pages/other-books.tsx";
 import BookDetails from "./components/bookdetails.tsx";
+import Checkout from "./components/checkout.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/otherbooks/:bookId",
         element: <BookDetails />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
       }
     ]
   }

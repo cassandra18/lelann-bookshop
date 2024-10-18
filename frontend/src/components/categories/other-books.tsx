@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../pagination";
+import { useCart } from "../cart-functionality";
 
 interface Subcategory {
   id: string;
@@ -38,6 +39,21 @@ const OtherBooks: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [sortOption, setSortOption] = useState<string>("relevance");
+  const { dispatch } = useCart();
+
+  const handleAddToCart = (book: OtherBook) => {
+    dispatch({
+      type: "ADD_ITEM",
+      payload: {
+        id: book.id,
+        name: book.name,
+        price: book.price,
+        quantity: 1,
+        image: book.image,
+      }
+      });
+    alert(`Added ${book.name} to basket`);
+    };
 
   useEffect(() => {
     // Fetch other books
@@ -131,8 +147,8 @@ const OtherBooks: React.FC = () => {
   return (
     <div className="flex max-w-7xl mx-auto">
       {/* Sidebar */}
-      <div className="w-1/4 pl-4 border-r-[1px] border-sunset">
-        <h2 className="text-3xl font-bold mt-14 mb-7 pb-4 text-sunset border-b border-sunset">
+      <div className="w-1/4 pl-4 border-r-[1px] border-sunset-transparent">
+        <h2 className="text-3xl font-bold mt-14 mb-7 pb-4 text-sunset border-b border-sunset-transparent">
           Categories
         </h2>
         <ul className="space-y-2">
@@ -187,11 +203,12 @@ const OtherBooks: React.FC = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 pl-4 pt-4">
           {displayedBooks.map((book) => (
-            <Link to={`/otherbooks/${book.id}`} key={book.id}>
+            
             <div
               key={book.id}
               className="rounded-sm group hover:border-2 hover:border-sunset shadow-lg bg-white w-36 md:w-44 lg:w-44 overflow-hidden flex flex-col transform transition-transform duration-200 hover:scale-95"
             >
+              <Link to={`/otherbooks/${book.id}`} key={book.id}>
               <div className="flex justify-center items-center p-2">
                 <img src={book.image} alt={book.name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
               </div>
@@ -204,13 +221,16 @@ const OtherBooks: React.FC = () => {
                   KES {book.price}
                 </h4>
               </div>
+              </Link>
               <div className="mt-auto w-full">
-                <button className="bg-gray-400 group-hover:bg-sunset group-hover:text-prussian-blue text-white lg:text-lg w-full p-2">
+                <button
+                className="bg-gray-400 group-hover:bg-sunset group-hover:text-prussian-blue text-white lg:text-lg w-full p-2"
+                onClick={() => handleAddToCart(book)}>
                   {book.cta}
                 </button>
               </div>
             </div>
-            </Link>
+            
           ))}
         </div>
 

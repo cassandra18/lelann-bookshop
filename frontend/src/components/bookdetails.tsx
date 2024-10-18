@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import ProductCard from './checkoutcard';
+import ProductCard from './productcard';
+
 
 const BookDetails: React.FC = () => {
     const { bookId } = useParams<{ bookId: string }>();
     const [book, setBook] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
 
     useEffect(() => {
         // Fetch book details
@@ -46,7 +48,7 @@ const BookDetails: React.FC = () => {
             <p className="text-lg text-gray300 mt-4 lg:px-4">{book.description}</p>
         </div>
 
-        <ProductCard  price={book.price}/>
+        <ProductCard  id={book.id} name={book.name} price={book.price}/>
         </div>
     );
 };

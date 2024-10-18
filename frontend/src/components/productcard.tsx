@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
 import { FaWhatsapp } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { useCart } from './cart-functionality';
+
 
 interface ProductCardProps {
+    id: string;
     price: number;
+    name: string;
+    image: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ price}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ id, name, price, image}) => {
   const [quantity, setQuantity] = useState(1);
+  const { dispatch } = useCart();
+
+  const handleAddToCart = () => {
+      dispatch({
+          type: "ADD_ITEM",
+          payload: { id, name, price, quantity, image},
+      });
+      alert(`Added ${quantity} item(s) to basket`);
+  }
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setQuantity(Number(e.target.value));
-  };
-
-  const handleAddToBasket = () => {
-    alert(`Added ${quantity} item(s) to basket`);
   };
 
   const handleInquire = () => {
@@ -40,7 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ price}) => {
         </select>
       </div>
       <button
-        onClick={handleAddToBasket}
+        onClick={handleAddToCart}
         className="bg-[#2c1e7b] text-white py-2 px-4 rounded w-full mb-4"
       >
         <div className='flex items-center justify-center gap-8'>
