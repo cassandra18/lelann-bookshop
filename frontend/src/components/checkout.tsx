@@ -8,6 +8,7 @@ const Checkout: React.FC = () => {
         return <h2>Your cart is empty</h2>;
     }
     console.log(state.items);
+    console.log(state.items.map(item => item.image));
 
     return (
         <div className='max-w-4xl mx-auto p-4'>

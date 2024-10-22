@@ -23,6 +23,8 @@ const getCartItemsFromLocalStorage = (): CartItem[] => {
     const storedItems = localStorage.getItem('cartItems');
     return storedItems ? JSON.parse(storedItems) : [];
 };
+console.log(getCartItemsFromLocalStorage());
+
 
 // Initial state of the cart
 const initialState: CartState = {
@@ -87,8 +89,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Save cart to localStorage whenever it changes
     useEffect(() => {
-        console.log("Saving to localStorage:", state.items);
+        
         localStorage.setItem('cartItems', JSON.stringify(state.items));
+        console.log("Saved to localStorage:", state.items);
     }, [state.items]);
 
     return (
