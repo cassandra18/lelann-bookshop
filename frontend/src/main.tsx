@@ -6,7 +6,9 @@ import "./index.css";
 import Homepage from "./pages/homepage.tsx";
 import OtherBooksPage from "./pages/other-books.tsx";
 import BookDetails from "./components/bookdetails.tsx";
-import Checkout from "./components/checkout.tsx";
+import Basket from "./pages/basket.tsx";
+import CheckoutPage from "./pages/checkoutpage.tsx";
+import ShippingAddress from "./pages/shipping-address.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,8 +32,16 @@ const router = createBrowserRouter([
         element: <BookDetails />,
       },
       {
+        path: "/basket",
+        element: <Basket />,
+      },    
+      {
         path: "/checkout",
-        element: <Checkout />,
+        element: <CheckoutPage />,
+      }, 
+      {
+        path: "/checkout/shipping-address",
+        element: <ShippingAddress />,
       }
     ]
   }

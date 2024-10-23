@@ -1,7 +1,7 @@
 import React from 'react';
-import { useCart } from './cart-functionality';
+import { useCart } from '../components/cart-functionality';
 
-const Checkout: React.FC = () => {
+const  Basket: React.FC = () => {
     const { state } = useCart();
 
     if (state.items.length === 0) {
@@ -27,10 +27,10 @@ const Checkout: React.FC = () => {
             </div>
             <div className='mt-4 text-right'>
                 <h2 className='text-lg font-bold'>Total: KES {state.items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</h2>
-                <button className='bg-sunset text-white py-2 px-4 rounded mt-4'>Proceed to checkout</button>
+                <button className='bg-sunset text-prussian-blue py-2 px-4 rounded mt-4'>Proceed to checkout</button>
             </div>
         </div>
     );
 }
 
-export default Checkout;
+export default Basket;
