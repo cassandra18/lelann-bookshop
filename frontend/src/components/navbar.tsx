@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
           </form>
 
           {/* Cart Icon */}
-          <NavLink to="/checkout" className="relative" style={{ fontSize: "32px" }}>
+          <NavLink to="/basket" className="relative" style={{ fontSize: "32px" }}>
             <IoMdCart />
             {/* Example item count badge */}
             <div className="absolute -top-1 -right-1 bg-red-500 rounded-full h-4 w-4 text-xs flex items-center justify-center text-white">
