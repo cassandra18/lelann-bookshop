@@ -48,7 +48,7 @@ const BookDetails: React.FC = () => {
             <p className="text-lg text-gray300 mt-4 lg:px-4">{book.description}</p>
         </div>
 
-        <ProductCard  id={book.id} name={book.name} price={book.price}/>
+        <ProductCard  id={book.id} name={book.name} price={book.price} image={book.image}/>
         </div>
     );
 };

@@ -89,7 +89,7 @@ enum Condition {
 model Author {
   id    String      @id @default(uuid())
   name  String
- email String    @unique
+  email String    @unique
   books Product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
