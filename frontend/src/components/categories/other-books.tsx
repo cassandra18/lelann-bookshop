@@ -35,7 +35,7 @@ const OtherBooks: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { subcategoryId } = useParams<{ subcategoryId: string }>();
 
-  const categoryId = "3d6b891c-af05-44fa-8d39-a73cc9ce3164"; // Other Books Category ID
+  const categoryId = "c3c2f864-d7d8-44cc-a1cd-21237d8ad0d6"; // Other Books Category ID
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [sortOption, setSortOption] = useState<string>("relevance");
