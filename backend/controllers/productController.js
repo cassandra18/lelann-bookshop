@@ -72,6 +72,7 @@ const addProduct = async (req, res) => {
 
         if (publisherId) {
             productData.publisher = { connect: { id: publisherId } };
+            
         }
 
         // Create a new product
