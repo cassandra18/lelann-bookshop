@@ -18,6 +18,10 @@ const addProduct = async (req, res) => {
             return res.status(400).json({ message: 'Image file is required' });
         }
 
+                // Log the file path for debugging
+                console.log('Uploaded file:', req.file);
+
+
         // Convert price to float
         const priceFloat = parseFloat(price);
         if (isNaN(priceFloat)) {
