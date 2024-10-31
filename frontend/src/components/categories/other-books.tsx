@@ -23,8 +23,15 @@ interface OtherBook {
   price: number;
   cta: string;
   subcategory: Subcategory;
-  popularity: number; // Assuming this property exists for sorting
+  popularity: number;
 }
+// Define static images
+const staticImages: { [key: string]: string } = {
+  "The Alchemist": "/uploads/alchemist.jpeg",
+  "The Lean Startup": "/uploads/lean-startup.jpeg",
+  "The Subtle Art of Not Giving a F*ck": "/uploads/art.jpeg",
+};
+
 
 const OtherBooks: React.FC = () => {
   const [otherBooks, setOtherBooks] = useState<OtherBook[]>([]);
@@ -49,7 +56,7 @@ const OtherBooks: React.FC = () => {
         name: book.name,
         price: book.price,
         quantity: 1,
-        image: book.image,
+        image: staticImages[book.name] || book.image,
       }
       });
     alert(`Added ${book.name} to basket`);
@@ -210,7 +217,7 @@ const OtherBooks: React.FC = () => {
             >
               <Link to={`/otherbooks/${book.id}`} key={book.id}>
               <div className="flex justify-center items-center p-2">
-                <img src={book.image} alt={book.name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
+                <img src={staticImages[book.name] || book.image} alt={book.name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
               </div>
               <div className="p-2">
                 <h2 className="text-lg text-prussian-blue font-semibold">
