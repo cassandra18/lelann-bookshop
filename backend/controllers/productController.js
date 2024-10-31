@@ -43,7 +43,7 @@ const addProduct = async (req, res) => {
         
 
         // Construct image URL
-        const image = `http://localhost:5000/uploads/${req.file.filename}`;
+        const image = `https://lelann-bookshop.onrender.com/uploads/${req.file.filename}`;
 
         // Create product data object
         const productData = {
@@ -164,7 +164,7 @@ const updateProduct = async (req, res) => {
             featured: featured !== undefined ? (featured === 'true') : existingProduct.featured,
             company,
             subcategory: subcategoryId ? { connect: { id: subcategoryId } } : existingProduct.subcategory,
-            image: req.file ? `http://localhost:5000/uploads/${req.file.filename}` : existingProduct.image,
+            image: req.file ? `https://lelann-bookshop.onrender.com/uploads/${req.file.filename}` : existingProduct.image,
             cta,
             oldPrice: oldPrice !== undefined ? parseFloat(oldPrice) : existingProduct.oldPrice,
             discount: discount !== undefined ? parseFloat(discount) : existingProduct.discount,

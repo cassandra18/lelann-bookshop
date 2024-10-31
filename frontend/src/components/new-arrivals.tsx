@@ -62,7 +62,7 @@ const NewArrival: React.FC = () => {
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products?newarrival=true");
+        const response = await axios.get("https://lelann-bookshop.onrender.com/api/products?newarrival=true");
         console.log("Fetched New Arrivals:", response.data);
         setNewArrivals(response.data);
       } catch (error) {

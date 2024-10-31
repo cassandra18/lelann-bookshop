@@ -56,7 +56,7 @@ const BestSeller: React.FC = () => {
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products?bestseller=true");
+        const response = await axios.get("https://lelann-bookshop.onrender.com/api/products?bestseller=true");
         console.log("Fetched Best Sellers:", response.data);
         setBestSellers(response.data);
       } catch (error) {

@@ -31,7 +31,7 @@ const FeaturedProducts: React.FC = () => {
     useEffect(() => {
         const fetchFeaturedProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/products?featured=true');
+                const response = await axios.get('https://lelann-bookshop.onrender.com/api/products?featured=true');
                 console.log('Fetched Products:', response.data); 
                 setFeaturedProducts(response.data);
             } catch (error) {

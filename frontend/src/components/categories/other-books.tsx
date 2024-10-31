@@ -60,7 +60,7 @@ const OtherBooks: React.FC = () => {
     const fetchOtherBooks = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/products?category_id=${categoryId}`
+          `https://lelann-bookshop.onrender.com/api/products?category_id=${categoryId}`
         );
 
         // Filter books based on subcategory.category_id
@@ -82,7 +82,7 @@ const OtherBooks: React.FC = () => {
     const fetchSubcategories = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/subcategory?category_id=${categoryId}`
+          `https://lelann-bookshop.onrender.com/api/subcategory?category_id=${categoryId}`
         );
         console.log("Fetched Subcategories:", response.data);
         setSubcategories(response.data);
