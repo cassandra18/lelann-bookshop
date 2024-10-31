@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { UserControllers } = require('../controllers/userController');
 const authenticateAdmin = require('../middleware/authenticateAdmin');
-const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
+// const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
 const validateRegisterInput  = require('../middleware/validation');
 const authenticateJWT = require('../middleware/authenticateUser');
 
@@ -21,9 +21,9 @@ router.get('/get-user/:id',  authenticateAdmin, UserControllers.getUserById);
 router.delete('/delete-user/:id',  authenticateAdmin, UserControllers.deleteUserById);
 router.put('/update-user/:id',  authenticateAdmin, UserControllers.updateUserById);
 
-// Google OAuth routes
-router.get('/auth/google', authenticateGoogle);
-router.get('/auth/google/callback', handleGoogleCallback);
+// // Google OAuth routes
+// router.get('/auth/google', authenticateGoogle);
+// router.get('/auth/google/callback', handleGoogleCallback);
 
 
 module.exports = router;
