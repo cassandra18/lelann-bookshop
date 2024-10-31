@@ -35,7 +35,7 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
     <div className="text-left ">
       <div className="px-2">
         <h3 className=" text-selective-yellow font-semibold">{name}</h3>
-        <p className="text-gray-500 ">{author.name || " "}</p>
+        <p className="text-gray-500 ">{author?.name || ""}</p>
         
         {oldPrice ? (
             <div className="flex flex-col mt-2">
