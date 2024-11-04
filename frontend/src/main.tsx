@@ -9,6 +9,14 @@ import BookDetails from "./components/bookdetails.tsx";
 import Basket from "./pages/basket.tsx";
 import CheckoutPage from "./pages/checkoutpage.tsx";
 import ShippingAddress from "./pages/shipping-address.tsx";
+import ConfirmationPage from "./pages/confirmationPage.tsx";
+import MPesaPaymentPage from "./pages/mpesaPaymentPage.tsx";
+import GiftCardPaymentPage from "./pages/giftCardPaymentPage.tsx";
+import KCBPaymentPage from "./pages/kcbPaymentPage.tsx";
+import CreditCardPaymentPage from "./pages/creditCardPaymentPage.tsx";
+
+
+
 
 const router = createBrowserRouter([
   {
@@ -42,6 +50,26 @@ const router = createBrowserRouter([
       {
         path: "/checkout/shipping-address",
         element: <ShippingAddress />,
+      },
+      {
+        path: "checkout/confirmation",
+        element: <ConfirmationPage />,
+      },
+      {
+        path: "/checkout/mpesa",
+        element: <MPesaPaymentPage />,
+      },
+      {
+        path: "/checkout/gift-card",
+        element: <GiftCardPaymentPage />,
+      },
+      {
+        path: "/checkout/kcb",
+        element: <KCBPaymentPage />,
+      },
+      {
+        path: "/checkout/credit-card",
+        element: <CreditCardPaymentPage />,
       }
     ]
   }

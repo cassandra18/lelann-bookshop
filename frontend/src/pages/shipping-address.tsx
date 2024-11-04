@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useCart } from "../components/cart-functionality";
+import { useNavigate } from "react-router-dom";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaLocationArrow } from "react-icons/fa";
 
@@ -34,6 +35,13 @@ const ShippingAddress: React.FC = () => {
 
   const handleStoreSelect = (store: Store) => {
     setSelectedStore(store);
+  };
+
+  const navigate = useNavigate();
+
+  const handleContinue = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate("/checkout/confirmation");
   };
 
   return (
@@ -82,7 +90,7 @@ const ShippingAddress: React.FC = () => {
             {selectedStore && (
               <div>
                 <h2 className="text-xl font-bold mb-2 text-sunset">Who will collect the order?</h2>
-                <form>
+                <form onSubmit={handleContinue}>
                   <div className="mb-4">
                     <label className="block mb-1">KRA PIN</label>
                     <input type="text" className="w-full p-2 border rounded" />
