@@ -25,12 +25,6 @@ interface OtherBook {
   subcategory: Subcategory;
   popularity: number;
 }
-// Define static images
-const staticImages: { [key: string]: string } = {
-  "The Alchemist": "/uploads/alchemist.jpeg",
-  "The Lean Startup": "/uploads/lean-startup.jpeg",
-  "The Subtle Art of Not Giving a F*ck": "/uploads/art.jpeg",
-};
 
 
 const OtherBooks: React.FC = () => {
@@ -42,7 +36,7 @@ const OtherBooks: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { subcategoryId } = useParams<{ subcategoryId: string }>();
 
-  const categoryId = "c3c2f864-d7d8-44cc-a1cd-21237d8ad0d6"; // Other Books Category ID
+  const categoryId = "24884e1c-24bb-4e6b-9683-c44b79593a5a"; // Other Books Category ID
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [sortOption, setSortOption] = useState<string>("relevance");
@@ -56,7 +50,7 @@ const OtherBooks: React.FC = () => {
         name: book.name,
         price: book.price,
         quantity: 1,
-        image: staticImages[book.name] || book.image,
+        image: book.image,
       }
       });
     alert(`Added ${book.name} to basket`);
@@ -67,7 +61,7 @@ const OtherBooks: React.FC = () => {
     const fetchOtherBooks = async () => {
       try {
         const response = await axios.get(
-          `https://lelann-bookshop.onrender.com/api/products?category_id=${categoryId}`
+          `http://localhost:5000/api/products?category_id=${categoryId}`
         );
 
         // Filter books based on subcategory.category_id
@@ -89,7 +83,7 @@ const OtherBooks: React.FC = () => {
     const fetchSubcategories = async () => {
       try {
         const response = await axios.get(
-          `https://lelann-bookshop.onrender.com/api/subcategory?category_id=${categoryId}`
+          `http://localhost:5000/api/subcategory?category_id=${categoryId}`
         );
         console.log("Fetched Subcategories:", response.data);
         setSubcategories(response.data);
@@ -217,7 +211,7 @@ const OtherBooks: React.FC = () => {
             >
               <Link to={`/otherbooks/${book.id}`} key={book.id}>
               <div className="flex justify-center items-center p-2">
-                <img src={staticImages[book.name] || book.image} alt={book.name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
+                <img src={book.image} alt={book.name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
               </div>
               <div className="p-2">
                 <h2 className="text-lg text-prussian-blue font-semibold">

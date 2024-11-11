@@ -11,8 +11,8 @@ const errorHanlder = require('./middleware/errorHandler');
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the uploads folder
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve static files from the 'middleware/uploads' folder
+app.use('/uploads', express.static(path.join(__dirname, 'middleware', 'uploads')));
 
 
 // Routes
@@ -24,6 +24,8 @@ app.use('/api/publisher', require('./routes/publisherRoutes'));
 app.use('/api/category', require('./routes/categoryRoutes'));
 app.use('/api/subcategory', require('./routes/subcategoryRoutes'));
 app.use('/api/user', require('./routes/userRoutes'));
+app.use('/api/', require('./routes/paystackPaymentRoutes'));
+
 
 app.use(errorHanlder);
 

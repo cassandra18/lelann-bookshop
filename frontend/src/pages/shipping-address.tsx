@@ -3,6 +3,7 @@ import { useCart } from "../components/cart-functionality";
 import { useNavigate } from "react-router-dom";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaLocationArrow } from "react-icons/fa";
+import OrderSummary from "../components/orderSummary";
 
 interface Store {
   id: number;
@@ -13,18 +14,13 @@ interface Store {
 const storeLocations: Store[] = [
   {
     id: 1,
-    name: "TBC Ruiru",
-    address: "The Nord, Off Ruiru Kamiti Road, Ruiru Town, Kiambu, Kenya",
+    name: "Lelann Chokaa",
+    address: "Kang'undo Road, Chokaa Town, Embakasi East, Nairobi, Kenya",
   },
   {
     id: 2,
-    name: "TBC Kisumu",
-    address: "United Mall, Off Jomo Kenyatta Highway, Kisumu, Kenya",
-  },
-  {
-    id: 3,
-    name: "TBC Nairobi",
-    address: "Moi Avenue, Nairobi, Kenya",
+    name: "Lelann Kericho",
+    address: "Kericho Town, Kericho, Kenya",
   },
 ];
 
@@ -32,6 +28,11 @@ const ShippingAddress: React.FC = () => {
   const { state } = useCart();
   const [deliveryOption, setDeliveryOption] = useState<"pickup" | "deliver" | null>(null);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+  const [deliveryDetails, setDeliveryDetails] = useState({
+    name: "",
+    phone: "",
+    kraPin: "",
+  })
 
   const handleStoreSelect = (store: Store) => {
     setSelectedStore(store);
@@ -41,7 +42,15 @@ const ShippingAddress: React.FC = () => {
 
   const handleContinue = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate("/checkout/confirmation");
+    navigate("/checkout/confirmation",  { state: { items: state.items, deliveryDetails } });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setDeliveryDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -55,9 +64,14 @@ const ShippingAddress: React.FC = () => {
             name="delivery-option"
             value="pickup"
             checked={deliveryOption === "pickup"}
-            onChange={() => {setDeliveryOption((prev) => (prev === "pickup" ? null : "pickup"))
-              
-            }}
+            onChange={() => {
+              setDeliveryOption((prev) => {
+              if (prev === "pickup") {
+                setSelectedStore(null); // Clear selected store when unselecting "pickup"
+                return null;
+              }
+              return "pickup";
+            })}}
           />
           <label htmlFor="pick-up" className="ml-5 flex items-center gap-3"
           style={{ fontFamily: "Dosis, sans-serif", fontWeight: 500, fontStyle: "normal" }}>
@@ -66,7 +80,7 @@ const ShippingAddress: React.FC = () => {
         </div>
 
         {deliveryOption === "pickup" && (
-          <div className="mt-4 border rounded-md p-4 transition-all">
+          <div className="mt-4 border border-sunset-transparent  rounded-md p-4 transition-all">
             <h2 className="text-xl font-bold mb-2 text-sunset">Choose a store</h2>
             <div className="grid grid-cols-1 gap-4 mb-4">
               {storeLocations.map((store) => (
@@ -92,16 +106,34 @@ const ShippingAddress: React.FC = () => {
                 <h2 className="text-xl font-bold mb-2 text-sunset">Who will collect the order?</h2>
                 <form onSubmit={handleContinue}>
                   <div className="mb-4">
-                    <label className="block mb-1">KRA PIN</label>
-                    <input type="text" className="w-full p-2 border rounded" />
+                    <label className="block mb-1">KRA PIN *</label>
+                    <input type="text" name="kraPin" value={deliveryDetails.kraPin} onChange={handleInputChange}
+                    className="w-full p-2 border border-sunset-transparent  bg-gray-800 rounded focus:outline-none"
+                    pattern="[A-Z]\d{8}[A-Z]"
+                    title="KRA PIN should start with a capital letter, followed by 8 digits, and end with a capital letter"
+                    placeholder="e.g A12345678Z"
+                    required/>
                   </div>
                   <div className="mb-4">
-                    <label className="block mb-1">Name *</label>
-                    <input type="text" className="w-full p-2 border rounded" required />
+                    <label className="block mb-1">First and Last name *</label>
+                    <input type="text" name="name" value={deliveryDetails.name} onChange={handleInputChange}
+                    className="w-full p-2 border border-sunset-transparent  bg-gray-800 rounded focus:outline-none"
+                    required 
+                    pattern="[A-Za-z\s]+"
+                    minLength={2}
+                    maxLength={50}
+                    title="Name should contain letters only and be between 2 and 50 charaters long."
+                    placeholder="e.g,  John Doe"/>
                   </div>
                   <div className="mb-4">
                     <label className="block mb-1">Phone number *</label>
-                    <input type="text" className="w-full p-2 border rounded" required />
+                    <input type="text" name="phone" value={deliveryDetails.phone} onChange={handleInputChange}
+                    className="w-full p-2 border border-sunset-transparent  bg-gray-800 rounded focus:outline-none"
+                    required 
+                    pattern="(07|01)\d{8}"
+                    title="Phone number should start with '07' or '01' and be 10 digits long (e.g, 0712345678 or 0112345678)"
+                    maxLength={10}
+                    placeholder="e.g 0113120575"/>
                   </div>
                   <button type="submit" className="bg-blue-500 text-white p-2 rounded">Continue</button>
                 </form>
@@ -127,60 +159,7 @@ const ShippingAddress: React.FC = () => {
       </div>
 
       {/* Order Summary Section */}
-      <div className="w-full max-w-lg border mb-auto p-6 rounded-lg mt-12 border-sunset-transparent">
-        <button
-          className="w-full border border-red-500 text-red-500 p-2 rounded-sm mb-4"
-          style={{
-            fontFamily: "Dosis, sans-serif",
-            fontWeight: 500,
-            fontStyle: "normal",
-          }}
-        >
-          Add a voucher code
-        </button>
-        <div className="border-t pt-4">
-          <h2 className="text-2xl font-bold mb-4 text-sunset">Your order</h2>
-          {state.items.length === 0 ? (
-            <p>Your cart is empty</p>
-          ) : (
-            <div>
-              {state.items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between mb-4"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-16 w-16 object-cover"
-                  />
-                  <div className="flex-grow ml-4">
-                    <h2 className="text-blue-600" style={{ fontFamily: "Dosis, sans-serif", fontWeight: 500 }}>
-                      {item.name}
-                    </h2>
-                    <p>Qty: {item.quantity}</p>
-                  </div>
-                  <p className="text-lg font-bold">
-                    KES {item.price * item.quantity}
-                  </p>
-                </div>
-              ))}
-              <div className="border-t pt-4">
-                <div className="flex justify-between">
-                  <span className="text-lg font-bold text-sunset">Total:</span>
-                  <span className="text-lg font-bold">
-                    KES{" "}
-                    {state.items.reduce(
-                      (acc, item) => acc + item.price * item.quantity,
-                      0
-                    )}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+      <OrderSummary/>
     </div>
   );
 };

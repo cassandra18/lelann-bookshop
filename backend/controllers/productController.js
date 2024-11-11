@@ -47,7 +47,7 @@ const addProduct = async (req, res) => {
         
 
         // Construct image URL
-        const image = `https://lelann-bookshop.onrender.com/uploads/${req.file.filename}`;
+        const image = `http://localhost:5000/uploads/${req.file.filename}`;
 
         // Create product data object
         const productData = {

@@ -15,7 +15,7 @@ interface CartState {
 type CartAction =
     | { type: 'ADD_ITEM'; payload: CartItem }
     | { type: 'REMOVE_ITEM'; payload: string }
-    | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number} }
+    | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
     | { type: 'CLEAR_CART' };
 
 // Function to retrieve cart items from localStorage
@@ -23,8 +23,6 @@ const getCartItemsFromLocalStorage = (): CartItem[] => {
     const storedItems = localStorage.getItem('cartItems');
     return storedItems ? JSON.parse(storedItems) : [];
 };
-console.log(getCartItemsFromLocalStorage());
-
 
 // Initial state of the cart
 const initialState: CartState = {
@@ -46,7 +44,6 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
                     ),
                 };
             } else {
-                // Add new item to cart
                 return {
                     ...state,
                     items: [...state.items, { ...action.payload }],
@@ -68,7 +65,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
                 ),
             };
         case 'CLEAR_CART':
-            return initialState; // Reset to initial state
+            return { items: [] }; // Clears all items from the cart
         default:
             return state;
     }
@@ -78,9 +75,11 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 const CartContext = createContext<{
     state: CartState;
     dispatch: React.Dispatch<CartAction>;
+    updateQuantity: (id: string, quantity: number) => void;
 }>({
     state: initialState,
     dispatch: () => null,
+    updateQuantity: () => {},
 });
 
 // Cart context provider
@@ -89,13 +88,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Save cart to localStorage whenever it changes
     useEffect(() => {
-        
         localStorage.setItem('cartItems', JSON.stringify(state.items));
         console.log("Saved to localStorage:", state.items);
     }, [state.items]);
 
+    const updateQuantity = (id: string, quantity: number) => {
+        dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
+    };
+
     return (
-        <CartContext.Provider value={{ state, dispatch }}>
+        <CartContext.Provider value={{ state, dispatch, updateQuantity }}>
             {children}
         </CartContext.Provider>
     );

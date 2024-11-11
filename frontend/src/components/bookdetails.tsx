@@ -15,7 +15,7 @@ const BookDetails: React.FC = () => {
         // Fetch book details
         const fetchBookDetails = async () => {
             try {
-                const response = await axios.get(`https://lelann-bookshop.onrender.com/api/product/${bookId}`);
+                const response = await axios.get(`http://localhost:5000/api/product/${bookId}`);
                 console.log("Fetched Book Details:", response.data);
                 setBook(response.data);
             } catch (error) {
