@@ -1,46 +1,34 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-interface PaystackTransaction {
-  status: string;
-  message: string;
-  reference: string;
-  amount: number;
-  currency: string;
-}
-
 const CreditCardPayment: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { totalAmount } = location.state || {}; // Get totalAmount from location state
- 
-  // Simulate getting the user's email from local storage (or replace this with actual authentication state)
-  const userEmail = localStorage.getItem("userEmail") || "customer@example.com";  // Replace this with your method of fetching the logged-in user's email
+  const  userEmail  = localStorage.getItem("userEmail") || ""; 
 
   if (!totalAmount) {
     alert('Amount is missing, please go back to the order summary.');
     navigate('/order-summary');
-    return null;  // Prevent rendering if totalAmount is not available
+    return null;
   }
 
   const handlePaystackPayment = async () => {
     try {
       const requestBody = {
-        amount: totalAmount,  // Ensure this value is valid
-        email: userEmail,  // Replace with the customer's email dynamically
+        amount: totalAmount,
+        email: userEmail,
       };
-  
-      console.log('Request Body:', requestBody);  // Log request body for debugging
-      
+
       // Send request to backend to create payment
-      const response = await fetch('http://localhost:5000/api/initialize-payment', {
+      const response = await fetch('http://localhost:5000/api/paystack/initialize-payment', {
         method: 'POST',
         body: JSON.stringify(requestBody),
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+
       const data = await response.json();
   
       if (data.success) {
@@ -62,7 +50,7 @@ const CreditCardPayment: React.FC = () => {
     
     if (reference) {
       // Send request to backend to verify payment
-      fetch('http://localhost:5000/api/verify-payment', {
+      fetch('http://localhost:5000/api/paystackverify-payment', {
         method: 'POST',
         body: JSON.stringify({ reference }),
         headers: {
@@ -91,8 +79,6 @@ const CreditCardPayment: React.FC = () => {
       <div className="p-8 rounded-lg shadow-lg w-full max-w-md border">
         <h2 className="text-xl font-bold mb-4">Pay with Credit or Debit Card using Paystack</h2>
         <p className="font-semibold mb-1">Order Amount: Ksh {totalAmount}</p>
-        <p className="text-gray-400 mb-4">Enter your details below, and we will request payment.</p>
-
         <button 
           onClick={handlePaystackPayment} 
           className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-800"

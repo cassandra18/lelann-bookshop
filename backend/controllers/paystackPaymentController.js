@@ -15,18 +15,18 @@ const createPayment = async (req, res) => {
             {
                 amount: amount * 100, // amount in kobo
                 email: email,
-                currency: 'KES', 
+                reference: `paystack_ref_${Date.now()}`,
             },
             {
                 headers: {
                     Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+                    'Content-Type': 'application/json'
                 },
             },
         );
 
         const paymentData = response.data;
-
-        if(paymentData.data.status === 'success') {
+        if(paymentData.data) {
             // send the paystack transaction reference and URL to the frontend
             res.status(200).json({
                 success: true,
@@ -38,7 +38,7 @@ const createPayment = async (req, res) => {
             res.status(400).json({ success: false, message: 'Payment request creation failed' });
         }
     } catch (error) {
-        console.error('Error creating payment:', error);
+        console.error('Error creating payment:', error.response ? error.response.data : error.message);
 
         res.status(500).json({ success: false, message: 'Error creating payment' });
     }
@@ -58,20 +58,15 @@ const verifyPayment = async (req, res) => {
 
         const paymentData = response.data;
 
-        if (paymentData.status === 'success') {
+        if (paymentData) {
             // Handle successful payment
-            console.log('Payment verified:', paymentData);
             res.status(200).json({ message: 'Payment verified' });
 
         } else {
             // Handle failed payment
-            console.log('Payment verification failed:', paymentData);
-
             res.status(400).json({ message: 'Payment verification failed' });
         }
     } catch (error) {
-        console.error('Error verifying payment:', error);
-
         res.status(500).json({ success: false, message: 'Error verifying payment' });
     }
 };

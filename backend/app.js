@@ -24,7 +24,7 @@ app.use('/api/publisher', require('./routes/publisherRoutes'));
 app.use('/api/category', require('./routes/categoryRoutes'));
 app.use('/api/subcategory', require('./routes/subcategoryRoutes'));
 app.use('/api/user', require('./routes/userRoutes'));
-app.use('/api/', require('./routes/paystackPaymentRoutes'));
+app.use('/api/paystack', require('./routes/paystackPaymentRoutes'));
 
 
 app.use(errorHanlder);

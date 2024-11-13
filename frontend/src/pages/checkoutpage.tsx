@@ -1,9 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import OrderSummary from "../components/orderSummary";
 
 const CheckoutPage: React.FC = () => {
-  
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
+  const handleNewUserSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem("userEmail", email); // Save email to localStorage
+    navigate("/checkout/shipping-address"); // Navigate to the next step
+  };
+
 
   return (
     <div className="min-h-screen flex justify-center py-10">
@@ -13,34 +21,27 @@ const CheckoutPage: React.FC = () => {
           <div className="col-span-1 border border-sunset-transparent p-6 rounded-md ">
             <h2 className="text-2xl font-bold mb-4 text-sunset">New to Lelann bookshop</h2>
             <p className="mb-4">Just enter your email to get started</p>
-            <form>
-              <label className="block mb-2" htmlFor="new-email" style={{fontFamily: "Dosis, sans-serif", fontWeight: 500, fontStyle: "normal"}}>
+            <form onSubmit={handleNewUserSubmit}>
+              <label className="block mb-2" htmlFor="new-email" style={{ fontFamily: "Dosis, sans-serif", fontWeight: 500, fontStyle: "normal" }}>
                 Email address *
               </label>
               <input
                 type="email"
                 id="new-email"
-                className="w-full  p-2 rounded-sm mb-4 bg-gray-800 border border-sunset-transparent"
-                style={{ fontFamily: "Kanit, sans-serif", fontWeight: "200", }}
+                className="w-full p-2 rounded-sm mb-4 bg-gray-800 border border-sunset-transparent"
+                style={{ fontFamily: "Kanit, sans-serif", fontWeight: "200" }}
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <div className="flex items-start mb-4">
-                <input type="checkbox" id="privacy-checkbox" className="mr-2" />
-                <label htmlFor="privacy-checkbox" className="text-sm" style={{ fontFamily: "Dosis, sans-serif", fontWeight: 500, fontStyle: "normal"}}>
-                  We value your privacy. By checking this box, you agree to
-                  receive occasional emails about our products and services. You
-                  can unsubscribe at any time.
-                </label>
-              </div>
-              <Link to="/checkout/shipping-address">
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white p-2 rounded-md"
-                style={{ fontFamily: "Dosis, sans-serif", fontWeight: 500, fontStyle: "normal"}}
+                style={{ fontFamily: "Dosis, sans-serif", fontWeight: 500, fontStyle: "normal" }}
               >
                 Continue
               </button>
-              </Link>
             </form>
           </div>
 
