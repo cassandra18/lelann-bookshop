@@ -12,22 +12,15 @@ const addProduct = async (req, res) => {
         if (!name || !price) {
             return res.status(400).json({ message: 'Name and price are required fields' });
         }
-
         // Check if image file is uploaded
         if (!req.file) {
             return res.status(400).json({ message: 'Image file is required' });
         }
-
-                // Log the file path for debugging
-                console.log('Uploaded file:', req.file);
-
-
         // Convert price to float
         const priceFloat = parseFloat(price);
         if (isNaN(priceFloat)) {
             return res.status(400).json({ message: 'Price must be a valid number' });
         }
-
         // Convert oldPrice and discount to float if provided
         let oldPriceFloat;
         if (oldPrice) {
@@ -36,7 +29,6 @@ const addProduct = async (req, res) => {
                 return res.status(400).json({ message: 'oldPrice must be a valid number' });
             }
         }
-
         let discountFloat;
         if (discount) {
             discountFloat = parseFloat(discount);
@@ -44,8 +36,6 @@ const addProduct = async (req, res) => {
                 return res.status(400).json({ message: 'Discount must be a valid number' });
             }
         }
-        
-
         // Construct image URL
         const image = `http://localhost:5000/uploads/${req.file.filename}`;
 
