@@ -269,4 +269,4 @@ This project is licensed under the ISC License. See the LICENSE file for details
 
 ## Contact
 
-For any inquiries, please contact Cassandra Lelei at cassandralelei12@gmail.com
+For any inquiries, please contact Cassandra Lelei at cassandralelei12@gmail.com or Levis Mbiu at levymbiu@gmail.com
