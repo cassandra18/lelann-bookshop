@@ -1,5 +1,5 @@
 import React from 'react';
-import MPesaPayment from '../components/mpesaPayment';
+import MPesaPayment from '../components/paymentMethods/mpesaPayment';
 
 const MPesaPaymentPage: React.FC = () => {
   return (

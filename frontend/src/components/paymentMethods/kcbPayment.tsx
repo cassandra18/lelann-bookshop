@@ -1,5 +1,5 @@
 import React from 'react';
-import CountrySelector from './countrySelector';
+import CountrySelector from '../countrySelector';
 
 const KCBPayment: React.FC = () => {
   return (

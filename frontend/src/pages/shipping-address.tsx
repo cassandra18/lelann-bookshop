@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../components/cart-functionality";
 import { useNavigate } from "react-router-dom";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -34,6 +34,17 @@ const ShippingAddress: React.FC = () => {
     kraPin: "",
   })
 
+  // Effect to retrieve phone number from localStorage on component mount
+  useEffect(() => {
+    const savedPhone = localStorage.getItem("userPhoneNumber");
+    if (savedPhone) {
+      setDeliveryDetails((prev) => ({
+        ...prev,
+        phone: savedPhone,
+      }));
+    }
+  }, []);
+
   const handleStoreSelect = (store: Store) => {
     setSelectedStore(store);
   };
@@ -42,15 +53,26 @@ const ShippingAddress: React.FC = () => {
 
   const handleContinue = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    localStorage.setItem("userPhoneNumber", deliveryDetails.phone);
+    
     navigate("/checkout/confirmation",  { state: { items: state.items, deliveryDetails } });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setDeliveryDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setDeliveryDetails((prev) => {
+      const newDetails = {
+        ...prev,
+        [name]: value,
+      };
+
+      // Save the phone number to localStorage whenever it changes
+      if (name === "phone") {
+        localStorage.setItem("userPhoneNumber", value);
+      }
+
+      return newDetails;
+    });
   };
 
   return (

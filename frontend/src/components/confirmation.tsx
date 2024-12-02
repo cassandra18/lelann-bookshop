@@ -11,7 +11,7 @@ const Confirmation: React.FC = () => {
 
   //Get cart items from location state
   const cartItems = location.state?.items || [];
-  console.log("Cart itens in confirmation:", cartItems);
+  console.log("Cart items in confirmation:", cartItems);
 
   const handlePaymentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedPayment(event.target.value);
@@ -21,7 +21,9 @@ const Confirmation: React.FC = () => {
     // Redirect based on selected payment method
     switch (selectedPayment) {
       case "mpesa":
-        navigate("/checkout/mpesa");
+        navigate("/checkout/mpesa", {
+          state: { totalAmount },
+        });
         break;
       case "kcb":
         navigate("/checkout/kcb");

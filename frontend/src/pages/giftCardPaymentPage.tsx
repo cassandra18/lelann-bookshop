@@ -1,5 +1,5 @@
 import React from 'react';
-import GiftCardPayment from '../components/giftCardPayment';
+import GiftCardPayment from '../components/paymentMethods/giftCardPayment';
 
 const GiftCardPaymentPage: React.FC = () => {
   return <GiftCardPayment />;
