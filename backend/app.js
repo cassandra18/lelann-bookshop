@@ -5,19 +5,17 @@ require('colors');
 const path = require('path');
 const app = express();
 const errorHanlder = require('./middleware/errorHandler');
-const credentials = Buffer.from(`${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`).toString('base64');
-console.log(credentials);
-const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
-console.log(timestamp.yellow);
-const password = Buffer.from(`${process.env.MPESA_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`).toString('base64');
-console.log(password.green);
 // Middleware for parsing JSON bodies
 app.use(cors());
 app.use(express.json());
 
 // Serve static files from the 'middleware/uploads' folder
 app.use('/uploads', express.static(path.join(__dirname, 'middleware', 'uploads')));
-
+//
+const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
+const password = Buffer.from(`${process.env.MPESA_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`).toString('base64');
+console.log('Password:', password)
+console.log('Timestamp:', timestamp)
 
 // Routes
 //app.use('/api/auth', require('./routes/auth'));

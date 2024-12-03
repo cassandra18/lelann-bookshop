@@ -1,4 +1,5 @@
 const axios = require('axios');
+const util = require('util');
 
 // Get access token
 const getAccessToken = async () => {
@@ -22,11 +23,12 @@ const getAccessToken = async () => {
         return null;
     }
 };
-
 // Lipa Na M-Pesa Online Payment API
 const lipaNaMpesaOnline = async (phone, amount, callbackUrl) => {
     const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14);
     const password = Buffer.from(`${process.env.MPESA_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`).toString('base64');
+    
+    // Ensure getAccessToken is working correctly
     const accessToken = await getAccessToken();
 
     const payload = {
@@ -44,6 +46,16 @@ const lipaNaMpesaOnline = async (phone, amount, callbackUrl) => {
     };
 
     try {
+        // Optional: Mask sensitive data in logs
+        console.log('Payload:', JSON.stringify({
+            ...payload,
+            PhoneNumber: '***'  // Masked sensitive data
+        }, null, 2));
+
+        console.log('Headers:', {
+            Authorization: `Bearer ${accessToken}`,
+        });
+
         const response = await axios.post(
             'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest',
             payload,
@@ -51,25 +63,23 @@ const lipaNaMpesaOnline = async (phone, amount, callbackUrl) => {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
-            });
+            }
+        );
 
-            console.log('Payload:', payload);
-            console.log('Headers:', {
-                Authorization: `Bearer ${accessToken}`,
-            });
-
-        return response.data;
+       return response.data;
+        
     } catch (error) {
-        if (error.response) {
-            // Log Safaricom's error response
-            console.error('Error initiating M-Pesa payment:', error.response.data);
-        } else {
-            // Log other errors
-            console.error('Error initiating M-Pesa payment:', error.message);
-        }
-        throw new Error('Failed to initiate M-Pesa payment.');
+      // Avoid circular references in error logging
+      if (error.response) {
+        console.log('Error making STK push:', error.response.data);
+        return error.response.data;
+    } else {
+        console.log('Error message:', error.message);
+        return error.message;
+    }    
     }
 };
+
 
 const mpesaCallback = async (req, res) => {
     try {
@@ -85,14 +95,19 @@ const mpesaCallback = async (req, res) => {
 
             if (ResultCode === 0) {
                 // Payment was successful
-                const metadata = CallbackMetadata.Item;
-                const transactionData = metadata.reduce((acc, item) => {
-                    acc[item.Name] = item.Value;
-                    return acc;
-                }, {});
+                if (CallbackMetadata && CallbackMetadata.Item) {
+                    const metadata = CallbackMetadata.Item;
+                    const transactionData = metadata.reduce((acc, item) => {
+                        acc[item.Name] = item.Value;
+                        return acc;
+                    }, {});
 
-                console.log('Payment successful:', transactionData);
+                    console.log('Payment successful:', transactionData);
 
+                    // TODO: Save transactionData to database
+                } else {
+                    console.log('Payment successful but no metadata provided.');
+                }
                 // TODO: Save transactionData to database
             } else {
                 // Payment failed
