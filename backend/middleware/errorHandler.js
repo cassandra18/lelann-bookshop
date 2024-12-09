@@ -11,4 +11,17 @@ const errorHanlder = (err, req, res, next) => {
      });
 };
 
-module.exports = errorHanlder;
+// Additional error handling middleware
+function mpesaErrorHandler(err, req, res, next) {
+    console.error('M-Pesa Payment Error:', {
+      errorMessage: err.message,
+      timestamp: new Date().toISOString()
+    });
+  
+    res.status(500).json({
+      error: 'Payment processing failed',
+      message: err.message
+    });
+  }
+
+module.exports = { errorHanlder, mpesaErrorHandler };
