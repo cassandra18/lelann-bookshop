@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import Homepage from "./pages/homepage.tsx";
@@ -14,9 +14,9 @@ import MPesaPaymentPage from "./pages/mpesaPaymentPage.tsx";
 import GiftCardPaymentPage from "./pages/giftCardPaymentPage.tsx";
 import KCBPaymentPage from "./pages/kcbPaymentPage.tsx";
 import CreditCardPaymentPage from "./pages/creditCardPaymentPage.tsx";
-
-
-
+import AdminDashboard from "./pages/admin/dashbord.tsx";
+import ProtectedRoute from "./components/protectedRoute.tsx";
+import AccountPage from "./pages/accountPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -70,8 +70,20 @@ const router = createBrowserRouter([
       {
         path: "/checkout/credit-card",
         element: <CreditCardPaymentPage />,
+      },
+      {
+        path: "/account",
+        element: <AccountPage/>,
       }
-    ]
+    ],
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedRoute>
+        <AdminDashboard />
+      </ProtectedRoute>
+    ),
   }
 ]);
 

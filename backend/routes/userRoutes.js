@@ -5,6 +5,7 @@ const authenticateAdmin = require('../middleware/authenticateAdmin');
 // const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
 const validateRegisterInput  = require('../middleware/validation');
 const authenticateJWT = require('../middleware/authenticateUser');
+const authorizeRole = require('../middleware/authorizeRole');
 
 // User routes
 router.post('/register', validateRegisterInput, UserControllers.registerUser);
