@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 
 const UserControllers = {
   registerUser: async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
     try {
       // Check if user already exists
@@ -31,7 +31,7 @@ const UserControllers = {
 
       // Create a new user
       const user = await prisma.user.create({
-        data: { name, email, password: hashedPassword },
+        data: { name, email, password: hashedPassword, confirmPassword: hashedPassword },
       });
       console.log(user);
       res.status(201).json(user);

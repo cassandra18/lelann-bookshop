@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
           </NavLink>
 
           {/* Account Link */}
-          <NavLink to="/account" className="ml-4">
+          <NavLink to="/sign-up" className="ml-4">
             <FaUserCircle size={24} />
           </NavLink>
         </div>

@@ -16,7 +16,8 @@ import KCBPaymentPage from "./pages/kcbPaymentPage.tsx";
 import CreditCardPaymentPage from "./pages/creditCardPaymentPage.tsx";
 import AdminDashboard from "./pages/admin/dashbord.tsx";
 import ProtectedRoute from "./components/protectedRoute.tsx";
-import AccountPage from "./pages/accountPage.tsx";
+import SignUpPage from "./pages/signupPage.tsx";
+import SignInPage from "./components/signin.tsx";
 
 const router = createBrowserRouter([
   {
@@ -72,8 +73,12 @@ const router = createBrowserRouter([
         element: <CreditCardPaymentPage />,
       },
       {
-        path: "/account",
-        element: <AccountPage/>,
+        path: "/sign-up",
+        element: <SignUpPage/>,
+      },
+      {
+        path: "/sign-in",
+        element: <SignInPage/>,
       }
     ],
   },
