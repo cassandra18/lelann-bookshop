@@ -61,7 +61,7 @@ const SignUp: React.FC = () => {
     }
     return (
     <>
-      <div className="flex bg-slate-300 mt-10 ml-20 rounded-tl-lg w-full h-screen">
+      <div className="flex bg-slate-300 mt-10 lg:ml-20 ml-10 rounded-tl-lg w-full h-screen mb-28">
         <div className="w-1/2 p-8  max-w-md mx-auto ">
           <h1 className="text-2xl font-bold text-center mb-6 text-oxford-blue">
             Welcome to Lelann family
@@ -83,7 +83,7 @@ const SignUp: React.FC = () => {
                 id="name"
                 type="text"
                 placeholder="Your full name"
-                className="border border-gray-200 focus:border-none bg-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
+                className="border border-gray-200 text-gray-700 focus:border-none bg-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
                 value={formData.name}
                 onChange={handleChange}
               />
@@ -99,7 +99,7 @@ const SignUp: React.FC = () => {
               <input
                 id="email"
                 type="email"
-                className="border border-gray-200 focus:border-none bg-gray-300  rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
+                className="border border-gray-200 text-gray-700 focus:border-none bg-gray-300  rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -115,7 +115,7 @@ const SignUp: React.FC = () => {
               <input
                 id="password"
                 type="password"
-                className="border border-gray-200 focus:border-none bg-gray-300  rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
+                className="border border-gray-200 text-gray-700 focus:border-none bg-gray-300  rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -136,7 +136,7 @@ const SignUp: React.FC = () => {
               <input
                 id="confirmPassword"
                 type="password"
-                className="border border-gray-200 focus:border-none bg-gray-300  rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
+                className="border border-gray-200 text-gray-700 focus:border-none bg-gray-300  rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
@@ -144,14 +144,14 @@ const SignUp: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white rounded py-2 mt-4 hover:bg-indigo-700 transition duration-200"
+              className="w-full bg-indigo-600 text-white rounded py-2 hover:bg-indigo-600 transition duration-200"
             >
               Create Account
             </button>
           </form>
 
           {/* Sign up with Google */}
-          <button className="mt-4 w-full bg-white border border-gray-300 rounded py-2 flex items-center justify-center text-gray-700 hover:bg-gray-50 transition duration-200">
+          <button className="mt-12 w-full bg-white border border-gray-300 rounded py-2 flex items-center justify-center text-gray-700 hover:bg-gray-50 transition duration-200">
             <img
               src="images/google-logo.png"
               alt="google-logo"

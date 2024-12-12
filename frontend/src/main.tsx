@@ -14,7 +14,8 @@ import MPesaPaymentPage from "./pages/mpesaPaymentPage.tsx";
 import GiftCardPaymentPage from "./pages/giftCardPaymentPage.tsx";
 import KCBPaymentPage from "./pages/kcbPaymentPage.tsx";
 import CreditCardPaymentPage from "./pages/creditCardPaymentPage.tsx";
-import AdminDashboard from "./pages/admin/dashbord.tsx";
+import AdminDashboard from "./pages/admin/adminDashboard.tsx";
+import UserDashboard from "./pages/user/userDashboard.tsx";
 import ProtectedRoute from "./components/protectedRoute.tsx";
 import SignUpPage from "./pages/signupPage.tsx";
 import SignInPage from "./components/signin.tsx";
@@ -83,12 +84,20 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/admin',
+    path: '/admin-dashboard',
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute allowedRoles={['admin']}>
         <AdminDashboard />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/user-dashboard",
+    element: (
+      <ProtectedRoute allowedRoles={['user']}>
+        <UserDashboard />
+      </ProtectedRoute>
+    )
   }
 ]);
 

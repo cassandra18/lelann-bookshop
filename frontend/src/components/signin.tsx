@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const SignIn: React.FC = () => {
     // State to manage form inputs
@@ -38,26 +39,35 @@ const SignIn: React.FC = () => {
                     email: formData.email,
                     password: formData.password,
                 }),
+                credentials: 'include', // Include cookies in the request
             });
 
             // Handle response
             if (response.ok) {
-                const data = await response.json();
-                setMessage('Sign-in successful!');
+                const { token } = await response.json();
+                document.cookie = `jwt={token}; Path=/`; // Set cookie
+                const decodedToken: any = jwtDecode(token)
 
-                // Redirect the user to another page (e.g., dashboard)
-                navigate('/dashboard');
+                // Check the role and navigate accordingly
+                if (decodedToken.role === 'admin') {
+                    navigate('/admin-dashboard');
+                } else if (decodedToken.role === 'customer') {
+                    navigate('/user-dashboard')
+                } else {
+                    setMessage('Invalid role. Please contact the administrator.');
+                }
             } else {
                 const error = await response.json();
                 setMessage(error.message || 'Sign-in failed. Please check your credentials.');
             }
         } catch (error) {
+            console.error(error);
             setMessage('An error occurred. Please try again later.');
         }
     };
 
     return (
-        <div className="flex bg-slate-300 mt-10 ml-20 rounded-tl-lg w-full h-screen">
+        <div className="flex bg-slate-300 mt-10 lg:ml-20 sm:ml-10 mb-28 rounded-tl-lg w-full h-screen">
             <div className="w-1/2 p-8 max-w-md mx-auto">
                 <h1 className="text-2xl font-bold text-center mb-6 text-oxford-blue">Sign In to your Lelann account</h1>
 
@@ -72,7 +82,7 @@ const SignIn: React.FC = () => {
                         <input
                             id="email"
                             type="email"
-                            className="border bg-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
+                            className="border bg-gray-300 text-gray-700 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
@@ -86,7 +96,7 @@ const SignIn: React.FC = () => {
                         <input
                             id="password"
                             type="password"
-                            className="border bg-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
+                            className="border bg-gray-300 text-gray-700 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-300"
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Enter your password"

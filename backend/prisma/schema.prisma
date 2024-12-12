@@ -25,7 +25,7 @@ model User {
   password String
   confirmPassword String
   name     String
-  role     String @default("user")
+  role     String @default("customer")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

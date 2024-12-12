@@ -2,13 +2,12 @@ const jwt = require('jsonwebtoken');
 
 const authenticateAdmin = (req, res, next) => {
     try {
-        const authHeader = req.header('Authorization');
-        if (!authHeader) {
-            return res.status(403).json({ message: 'No token provided' });
+        const token = req.cookies.jwt;
+        
+        if (!token) {
+            return res.status(403).json({ message: "No token provided" });
         }
 
-        const token = authHeader.replace('Bearer ', '');
-        
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 console.error(err);

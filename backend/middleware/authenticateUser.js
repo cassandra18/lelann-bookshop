@@ -1,17 +1,24 @@
 const jwt = require('jsonwebtoken');
 
 const authenticateJWT = (req, res, next) => {
-    const token = req.header('Authorization').replace('Bearer ', '');
+    const token = req.cookies.jwt;
 
     if (!token) {
-        return res.status(401).json({ message: 'Access token is missing or invalid' });
+        return res.status(403).json({ message: 'No token provided' });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = { id: decoded.id };
-        next();
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                console.error(err);
+                return res.status(401).json({ message: 'Unauthorized' });
+            }
+
+            req.user = decoded; // Attach the decoded token to the request object
+            next()
+        }); 
     } catch (error) {
+        console.error(error);
         res.status(401).json({ message: 'Invalid token' });
     }
 };

@@ -1,12 +1,20 @@
 import { Navigate } from 'react-router-dom';
-import React from 'react';
+import { jwtDecode } from 'jwt-decode';
 
-const ProtectedRoute:React.FC<{ children: React.ReactElement }> =({ children }) => {
-    const token = localStorage.getItem('authToken');
-    
-    const isAuthenticated = !!token;
-    return isAuthenticated ? children : <Navigate to="/login" />;
-  };
+const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles: string[] }) => {
+    const token = document.cookie.split('; ').find((row) => row.startsWith('jwt='))?.split('=')[1];
 
+    if (!token) {
+        return <Navigate to="/sign-in" />;
+    }
+
+    const decodedToken: any = jwtDecode(token);
+
+    if (!allowedRoles.includes(decodedToken.role)) {
+        return <Navigate to="/unauthorized" />;
+    }
+
+    return children;
+};
 
 export default ProtectedRoute;

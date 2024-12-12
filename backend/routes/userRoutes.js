@@ -15,12 +15,14 @@ router.put('/update-profile/:userId', authenticateJWT, UserControllers.updateUse
 router.delete('/delete-profile/:userId', authenticateJWT, UserControllers.deleteUserAccount);
 router.put('/update-password/:userId', authenticateJWT, UserControllers.updateUserPassword);
 
-
 // Admin routes
-router.get('/all-users',  authenticateAdmin, UserControllers.getAllUsers);
-router.get('/get-user/:id',  authenticateAdmin, UserControllers.getUserById);
-router.delete('/delete-user/:id',  authenticateAdmin, UserControllers.deleteUserById);
-router.put('/update-user/:id',  authenticateAdmin, UserControllers.updateUserById);
+router.use(authenticateAdmin);
+router.use(authorizeRole(['admin']));
+
+router.get('/all-users', UserControllers.getAllUsers);
+router.get('/get-user/:id', UserControllers.getUserById);
+router.delete('/delete-user/:id', UserControllers.deleteUserById);
+router.put('/update-user/:id', UserControllers.updateUserById);
 
 // // Google OAuth routes
 // router.get('/auth/google', authenticateGoogle);
