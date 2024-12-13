@@ -3,17 +3,16 @@ const authenticateAdmin = require('../middleware/authenticateAdmin');
 const { addProduct, getProductById, getProducts, deleteProduct, updateProduct} = require('../controllers/productController');
 const upload = require('../middleware/uploadImage');
 const router = express.Router();
-const authorizeRole = require('../middleware/authorizeRole');
 
 
 // Route to add a new product
-router.post('/product/add', authenticateAdmin, authorizeRole(['admin']), upload.single('image'), addProduct);
+router.post('/product/add', authenticateAdmin, upload.single('image'), addProduct);
 
 // Route to update an existing product
-router.put('/product/update/:id', authenticateAdmin, authorizeRole(['admin']), upload.single('image'), updateProduct);
+router.put('/product/update/:id', authenticateAdmin, upload.single('image'), updateProduct);
 
 // Route to delete a product
-router.delete('/product/delete/:id', authenticateAdmin, authorizeRole(['admin']), deleteProduct);
+router.delete('/product/delete/:id', authenticateAdmin, deleteProduct);
 
 // Route to get a product by id
 router.get('/product/:id', getProductById);

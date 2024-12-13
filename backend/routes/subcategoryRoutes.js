@@ -5,10 +5,10 @@ const authenticateAdmin = require('../middleware/authenticateAdmin');
 const authorizeRole = require('../middleware/authorizeRole');
 
 // Routes
-router.post('/add', authenticateAdmin, authorizeRole(['admin']), createSubcategory);
+router.post('/add', authenticateAdmin, createSubcategory);
 router.get('/', getSubcategories);
 router.get('/:id', getSubcategoryById);
-router.put('/update/:id',authenticateAdmin, authorizeRole(['admin']), updateSubcategory);
-router.delete('/delete/:id', authenticateAdmin, authorizeRole(['admin']), deleteSubcategory);
+router.put('/update/:id',authenticateAdmin, updateSubcategory);
+router.delete('/delete/:id', authenticateAdmin, deleteSubcategory);
 
 module.exports = router;

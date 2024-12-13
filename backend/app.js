@@ -7,9 +7,6 @@ const mongoose = require('mongoose');
 
 const app = express();
 const { mpesaErrorHandler, errorHanlder } = require('./middleware/errorHandler');
-const authorizeRole = require('./middleware/authorizeRole');
-const authenticateAdmin = require('./middleware/authenticateAdmin')
-
 
 // Middleware for parsing JSON bodies
 app.use(cors({
@@ -45,8 +42,6 @@ app.use('/api/subcategory', require('./routes/subcategoryRoutes'));
 app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/paystack', require('./routes/paystackPaymentRoutes'));
 app.use('/api/mpesa', require('./routes/mpesaPaymentRoutes'));
-app.post('/api/admin/elevate', authenticateAdmin, authorizeRole, elevateToAdmin);
-  
 app.use(mpesaErrorHandler, errorHanlder);
 
 const PORT = process.env.PORT || 3000;

@@ -5,7 +5,6 @@ const authenticateAdmin = require('../middleware/authenticateAdmin');
 // const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
 const validateRegisterInput  = require('../middleware/validation');
 const authenticateJWT = require('../middleware/authenticateUser');
-const authorizeRole = require('../middleware/authorizeRole');
 
 // User routes
 router.post('/register', validateRegisterInput, UserControllers.registerUser);
@@ -17,7 +16,6 @@ router.put('/update-password/:userId', authenticateJWT, UserControllers.updateUs
 
 // Admin routes
 router.use(authenticateAdmin);
-router.use(authorizeRole(['admin']));
 
 router.get('/all-users', UserControllers.getAllUsers);
 router.get('/get-user/:id', UserControllers.getUserById);
