@@ -28,4 +28,16 @@ const authorizeAdmin = (req, res, next) => {
     next();
 };
 
-module.exports = { authorize, authorizeAdmin };
+const verifyUserRole = (req, res) => {
+    const { role } = req.user; // From decoded JWT
+
+    if (role === 'customer') {
+        return res.status(200).json({ role });
+    }
+
+   return  res.status(403).json({ message: 'Access denied. Invalid role.' });
+};
+
+
+
+module.exports = { authorize, authorizeAdmin, verifyUserRole };

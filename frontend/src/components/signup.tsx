@@ -49,7 +49,7 @@ const SignUp: React.FC = () => {
             // Handle response
             if (response.ok) {
                 setMessage('SignUp created successfully!');
-                navigate('/dashborad'); // Redirect to dashborad
+                navigate('/user-dashboard'); // Redirect to dashborad
                 setFormData({ name: '', email: '', password: '', confirmPassword: '' }); // Reset form
             } else {
                 const error = await response.json();

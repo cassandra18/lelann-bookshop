@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+
+
 
 const SignIn: React.FC = () => {
     // State to manage form inputs
@@ -29,7 +30,6 @@ const SignIn: React.FC = () => {
         e.preventDefault();
 
         try {
-            // Send data to the backend API
             const response = await fetch('http://localhost:5000/api/user/login', {
                 method: 'POST',
                 headers: {
@@ -42,19 +42,25 @@ const SignIn: React.FC = () => {
                 credentials: 'include', // Include cookies in the request
             });
 
-            // Handle response
             if (response.ok) {
                 const { token } = await response.json();
-                document.cookie = `jwt={token}; Path=/`; // Set cookie
-                const decodedToken: any = jwtDecode(token)
+                document.cookie = `jwt=${token}; Path=/`; // Set JWT in cookies
 
-                // Check the role and navigate accordingly
-                if (decodedToken.role === 'admin') {
-                    navigate('/admin-dashboard');
-                } else if (decodedToken.role === 'customer') {
-                    navigate('/user-dashboard')
+                // After login, verify user role on the backend if necessary
+                const roleResponse = await fetch('http://localhost:5000/api/user/verify', {
+                    method: 'GET',
+                    credentials: 'include', // Send JWT cookie with the request
+                });
+
+                if (roleResponse.ok) {
+                    const { role } = await roleResponse.json();
+                    if (role === 'customer') {
+                        navigate('/user-dashboard');
+                    } else {
+                        setMessage('Invalid role. Please contact the administrator.');
+                    }
                 } else {
-                    setMessage('Invalid role. Please contact the administrator.');
+                    setMessage('Error verifying role.');
                 }
             } else {
                 const error = await response.json();
@@ -65,6 +71,7 @@ const SignIn: React.FC = () => {
             setMessage('An error occurred. Please try again later.');
         }
     };
+
 
     return (
         <div className="flex bg-slate-300 mt-10 lg:ml-20 sm:ml-10 mb-28 rounded-tl-lg w-full h-screen">

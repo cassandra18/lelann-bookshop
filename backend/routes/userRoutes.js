@@ -5,10 +5,13 @@ const authenticateAdmin = require('../middleware/authenticateAdmin');
 // const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
 const validateRegisterInput  = require('../middleware/validation');
 const authenticateJWT = require('../middleware/authenticateUser');
+const { verifyUserRole  }= require('../middleware/authorizeRole');
+
 
 // User routes
 router.post('/register', validateRegisterInput, UserControllers.registerUser);
 router.post('/login', UserControllers.loginUser);
+router.get('/verify', authenticateJWT, verifyUserRole);
 router.get('/see-profile/:userId', authenticateJWT, UserControllers.getUserProfile);
 router.put('/update-profile/:userId', authenticateJWT, UserControllers.updateUserProfile);
 router.delete('/delete-profile/:userId', authenticateJWT, UserControllers.deleteUserAccount);
