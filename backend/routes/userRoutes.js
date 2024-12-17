@@ -6,12 +6,13 @@ const authenticateAdmin = require('../middleware/authenticateAdmin');
 const validateRegisterInput  = require('../middleware/validation');
 const authenticateJWT = require('../middleware/authenticateUser');
 const { verifyUserRole  }= require('../middleware/authorizeRole');
+const { createUserDashboard } = require('../controllers/userDashboardController');
 
 
 // User routes
 router.post('/register', validateRegisterInput, UserControllers.registerUser);
 router.post('/login', UserControllers.loginUser);
-router.get('/verify', authenticateJWT, verifyUserRole(['customer']));
+router.get('/verify', authenticateJWT, verifyUserRole(['customer']), createUserDashboard);
 router.get('/see-profile/:userId', authenticateJWT, UserControllers.getUserProfile);
 router.put('/update-profile/:userId', authenticateJWT, UserControllers.updateUserProfile);
 router.delete('/delete-profile/:userId', authenticateJWT, UserControllers.deleteUserAccount);

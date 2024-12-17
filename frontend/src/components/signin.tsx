@@ -50,8 +50,10 @@ const SignIn: React.FC = () => {
                 });
 
                 if (roleResponse.ok) {
-                    const { role } = await roleResponse.json();
-                    
+                    const roleData = await roleResponse.json();
+                    console.log('Role data:', roleData);
+
+                    const { role } = roleData;
                     if (role === 'customer') {
                         navigate('/user-dashboard');
                     } else {
