@@ -1,17 +1,43 @@
 import { Navigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { useEffect, useState } from 'react';
+
 
 const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles: string[] }) => {
-    const token = document.cookie.split('; ').find((row) => row.startsWith('jwt='))?.split('=')[1];
+    const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
-    if (!token) {
-        return <Navigate to="/sign-in" />;
+    useEffect(() => {
+        const checkRole = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/user/verify', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const { role } = await response.json();
+                    if (allowedRoles.includes(role)) {
+                        setIsAuthorized(true);
+                    } else {
+                        setIsAuthorized(false);
+                    }
+                } else {
+                    setIsAuthorized(false);
+                }
+            } catch (error) {
+                console.error('Error verifying role:', error);
+                setIsAuthorized(false);
+            }
+        };
+
+        checkRole();
+    }, [allowedRoles]);
+
+    if (isAuthorized === null) {
+        return <div>Loading...</div>;  // Loading state until the role is verified
     }
 
-    const decodedToken: any = jwtDecode(token);
-
-    if (!allowedRoles.includes(decodedToken.role)) {
-        return <Navigate to="/unauthorized" />;
+    if (!isAuthorized) {
+        return <Navigate to="/sign-in" />;  // Redirect to login if unauthorized
     }
 
     return children;

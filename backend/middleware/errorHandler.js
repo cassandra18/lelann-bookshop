@@ -9,6 +9,8 @@ const errorHanlder = (err, req, res, next) => {
         statusCode,
         message,
      });
+
+    next();
 };
 
 // Additional error handling middleware
@@ -22,6 +24,8 @@ function mpesaErrorHandler(err, req, res, next) {
       error: 'Payment processing failed',
       message: err.message
     });
+
+    next();
   }
 
 module.exports = { errorHanlder, mpesaErrorHandler };

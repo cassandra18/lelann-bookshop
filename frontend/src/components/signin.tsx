@@ -43,10 +43,7 @@ const SignIn: React.FC = () => {
             });
 
             if (response.ok) {
-                const { token } = await response.json();
-                document.cookie = `jwt=${token}; Path=/`; // Set JWT in cookies
-
-                // After login, verify user role on the backend if necessary
+                // After login, verify user role on the backend
                 const roleResponse = await fetch('http://localhost:5000/api/user/verify', {
                     method: 'GET',
                     credentials: 'include', // Send JWT cookie with the request
@@ -54,6 +51,7 @@ const SignIn: React.FC = () => {
 
                 if (roleResponse.ok) {
                     const { role } = await roleResponse.json();
+                    
                     if (role === 'customer') {
                         navigate('/user-dashboard');
                     } else {

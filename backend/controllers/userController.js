@@ -72,8 +72,9 @@ const UserControllers = {
       res.cookie('jwt', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'None',
+        sameSite: 'Lax',
         maxAge: 24 * 60 * 60 * 1000,
+        path: '/'
       });
 
       res.status(200).json({ message: 'Logged in successfully'});

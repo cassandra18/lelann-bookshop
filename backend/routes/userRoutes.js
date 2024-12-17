@@ -11,7 +11,7 @@ const { verifyUserRole  }= require('../middleware/authorizeRole');
 // User routes
 router.post('/register', validateRegisterInput, UserControllers.registerUser);
 router.post('/login', UserControllers.loginUser);
-router.get('/verify', authenticateJWT, verifyUserRole);
+router.get('/verify', authenticateJWT, verifyUserRole(['customer']));
 router.get('/see-profile/:userId', authenticateJWT, UserControllers.getUserProfile);
 router.put('/update-profile/:userId', authenticateJWT, UserControllers.updateUserProfile);
 router.delete('/delete-profile/:userId', authenticateJWT, UserControllers.deleteUserAccount);
