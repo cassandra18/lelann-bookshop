@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
                 </NavLink>
                 {item.subLinks && (
                   <div
-                    className="absolute hidden group-hover:flex flex-wrap gap-4 p-4 shadow-md mt-2 rounded-sm top-full left-0 z-20"
+                    className="absolute hidden group-hover:flex flex-wrap gap-4 p-4 shadow-md  rounded-sm top-full left-0 z-20"
                     style={{
                       background: "rgba(31, 41, 55, 0.8)",
                       backdropFilter: "blur",
