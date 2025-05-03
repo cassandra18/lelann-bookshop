@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { IoMdCart } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
-import { NavItems } from "./navItems";
+import { NavItems } from "../assets/navItems";
 import { FaSearch } from "react-icons/fa";
 import { useCart } from "./cart-functionality";
 

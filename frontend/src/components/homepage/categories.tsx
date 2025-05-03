@@ -20,7 +20,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ image, title, link, emoji }
     <Link to={link}>
       <div className="overflow-hidden rounded-2xl shadow-xl bg-white text-center w-36 md:w-40 lg:w-48 transform transition duration-300 hover:shadow-2xl">
         <img src={image} alt={title} className="w-full h-32 md:h-36 lg:h-40 object-cover" />
-        <div className="bg-sunset-dark text-white p-2 lg:p-3">
+        <div className="bg-yellow-100 text-slate-700 p-2 lg:p-3">
           <h2 className="font-semibold text-sm md:text-base">
             {emoji} {title}
           </h2>
@@ -42,10 +42,24 @@ const Categories: React.FC = () => {
 
   return (
     <>
-      <h1 className="text-3xl md:text-4xl font-bold text-center mt-10 text-sunset">🛍️ Shop by Category</h1>
+      <motion.h1 
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ duration: 0.6 }}
+      className="text-3xl md:text-5xl font-bold text-center my-10 text-yellow-300">🛍️ Shop by Category</motion.h1>
 
+      <motion.p
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-center text-white max-w-xl mx-auto my-4 px-4"
+        >
+          Browse our wide range of products tailored for school, art, play, and tech—organized into easy-to-shop categories.
+        </motion.p>
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-wrap justify-center gap-4 mt-10 mb-10">
+        <div className="flex flex-wrap justify-center gap-4 my-10">
           {categories.map((category) => (
             <CategoryCard
               key={category.title}
@@ -57,7 +71,7 @@ const Categories: React.FC = () => {
           ))}
         </div>
       </div>
- </>
+  </>
   );
 };
 

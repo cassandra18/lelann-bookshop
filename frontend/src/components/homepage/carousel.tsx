@@ -75,7 +75,7 @@ const HeroSection: React.FC = () => {
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-full shadow-lg"
+                      className="bg-yellow-300 hover:bg-yellow-300 text-black font-semibold px-6 py-3 rounded-full shadow-lg"
                     >
                       Shop Now
                     </motion.button>

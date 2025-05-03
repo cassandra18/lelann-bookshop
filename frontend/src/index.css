@@ -39,11 +39,12 @@ body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 .scrollbar-hide {
-  scrollbar-width: thin;
+  scrollbar-width: none; /* Firefox */
   scrollbar-color: #FFD399 transparent;
+
 }
 .scrollbar-hide::-webkit-scrollbar {
-  height: 8px;
+  height: 0px; /* Chrome, Safari, Opera */
 }
 .scrollbar-hide::-webkit-scrollbar-track {
   background: transparent;
@@ -58,7 +59,7 @@ body::-webkit-scrollbar {
 1C4672 indigo dye
 A6C4CB light steel blue
 245990 lapis lazuli
-
+bg-[#1e87b5] shade of blue
 */
 
 

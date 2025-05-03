@@ -1,42 +1,82 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface PromotionCardProps {
-    image: string;
-    title: string;
+  image: string;
+  title: string;
 }
 
-const PromotionCard: React.FC<PromotionCardProps> = ({ image, title }) => (
-    <div className=' rounded-sm overflow-hidden w-36 md:w-36 lg:w-44 flex flex-col justify-between transform transition-transform duration-300 hover:scale-95'>
-        <img src={image} alt={title} className='w-full h-32 md:h-36 lg:h-36  object-cover' />
-        <div className='text-center p-2 mt-auto md:p-2 lg:p-4' style={{background: "#B52717"}}>
-            <h2 className='text-md lg:text-lg  font-semibold'>{title}</h2>
-        </div>
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.2,
+      duration: 0.6,
+      ease: 'easeOut',
+    },
+  }),
+};
+
+const PromotionCard: React.FC<PromotionCardProps & { index: number }> = ({ image, title, index }) => (
+  <motion.div
+    custom={index}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    variants={cardVariants}
+    whileHover={{ scale: 1.05 }}
+    className="relative w-64 h-72 rounded-3xl bg-white/10 backdrop-blur-md overflow-hidden shadow-xl flex-shrink-0 border border-yellow-100  transition-shadow duration-300"
+  >
+    <img src={image} alt={title} className="w-full h-full object-cover opacity-90" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-slate-800 px-3 py-1 rounded-full text-sm font-semibold shadow-md backdrop-blur-sm whitespace-nowrap">
+      {title}
     </div>
-)
+  </motion.div>
+);
 
 const Promotions: React.FC = () => {
-    const promotions = [
-        { title: 'Discounts', image: '/images/notebook.jpg' },
-        { title: 'Gifts to give', image: '/images/stickynotes.jpg' },
-        { title: 'Sign up now!!!', image: '/images/lelann-kids-club.jpeg' },
-        { title: 'Sign up now!!!', image: '/images/lelann-membership.jpeg' },
-    ];
+  const promotions = [
+    { title: 'Discounts', image: '/images/notebook.jpg' },
+    { title: 'Gifts to give', image: '/images/stickynotes.jpg' },
+    { title: 'Sign up now!!!', image: '/images/lelann-kids-club.jpeg' },
+    { title: 'Lelann Membership', image: '/images/lelann-membership.jpeg' },
+  ];
 
-    return (
-        <>
-        <h1 className='text-4xl font-bold text-center mt-10 text-sunset'>Promotions</h1>
-        <div className='flex flex-wrap justify-center  gap-4 mt-10  mb-10'>
-            {promotions.map((promotion) => (
-                <PromotionCard
-                key={promotion.title}
-                title={promotion.title}
-                image={promotion.image} />
-            ))}
+  return (
+    <section className=" text-white py-16 px-4">
+      <motion.h1
+        initial={{ opacity: 0, y: -30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-3xl md:text-5xl font-bold text-center text-yellow-300 mb-4"
+      >
+        🎁 Promotions
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: -10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="text-center text-gray-200 max-w-xl mx-auto mb-12"
+      >
+        Don’t miss out on exciting deals, giveaways, and club perks — made just for our awesome Lelann customers.
+      </motion.p>
+
+      <div className="overflow-x-auto overflow-y-hidden scrollbar-hide scroll-smooth snap-x snap-mandatory py-5">
+        <div className="flex gap-6 w-max md:justify-center md:w-full px-4">
+          {promotions.map((promo, idx) => (
+            <PromotionCard key={idx} index={idx} {...promo} />
+          ))}
         </div>
-        <div className='border-b  border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20'>
-        </div>
-        </>
-    )
-}
+      </div>
+
+    </section>
+  );
+};
 
 export default Promotions;
