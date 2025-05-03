@@ -5,7 +5,6 @@ import DeliveryOptions from '../components/delivery';
 import Promotions from '../components/promotions';
 import Brands from '../components/brands';
 import FeaturedProducts from '../components/featured-products';
-import UniformCarousel from '../components/carouselb';
 import BestSeller from '../components/best-seller';
 import NewArrival from '../components/new-arrivals';
 import WishList from '../components/wishlist';
@@ -20,7 +19,6 @@ const Homepage: React.FC = () => {
         <Promotions />
         <Brands />
         <FeaturedProducts />
-        <UniformCarousel />
         <BestSeller />
         <NewArrival />
         <WishList />

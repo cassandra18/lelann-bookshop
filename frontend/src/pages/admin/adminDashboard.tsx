@@ -1,4 +1,4 @@
-import AdminLayout from "../../components/adminLayout";
+import AdminLayout from "../../components/adminComponents/adminLayout";
 
 const AdminDashboard: React.FC = () => {
     return (
