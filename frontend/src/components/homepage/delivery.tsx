@@ -33,8 +33,11 @@ const DeliveryOptions: React.FC = () => {
     <section className="relative bg-[#1e87b5] py-20 overflow-hidden text-white">
       {/* Top wave */}
       <div className="absolute top-0 left-0 w-full">
-        <svg viewBox="0 0 1440 150" preserveAspectRatio="none" className="w-full">
-          <path fill="#001D29" d="M0,0 C300,100 1140,0 1440,100 L1440,0 L0,0 Z" />
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full">
+          <path
+            fill="#001D29"
+            d="M0,64L80,64C160,64,320,64,480,53.3C640,43,800,21,960,21.3C1120,21,1280,43,1360,53.3L1440,64L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"
+          />
         </svg>
       </div>
 
@@ -78,11 +81,20 @@ const DeliveryOptions: React.FC = () => {
       </div>
 
       {/* Bottom wave */}
-      <div className="absolute bottom-0 left-0 w-full">
-        <svg viewBox="0 0 1440 150" className="w-full">
-          <path fill="#001D29" d="M0,100 C300,0 1140,150 1440,50 L1440,150 L0,150 Z" />
-        </svg>
-      </div>
+{/* Bottom wave */}
+<div className="absolute bottom-0 left-0 w-full leading-none">
+  <svg
+    className="w-full h-[100px]"
+    viewBox="0 0 1440 100"
+    preserveAspectRatio="none"
+  >
+    <path
+      fill="#001D29"
+      d="M0,100 C480,0 960,100 1440,0 L1440,100 L0,100 Z"
+    />
+  </svg>
+</div>
+
     </section>
   );
 };

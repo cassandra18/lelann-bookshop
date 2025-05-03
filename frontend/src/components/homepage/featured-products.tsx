@@ -1,130 +1,104 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 
 interface FeaturedProductCardProps {
-    image: string;
-    name: string;
-    price: string;
-    cta: string;
+  image: string;
+  name: string;
+  price: string;
+  cta: string;
+  description?: string;
 }
 
-const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, name, price, cta }) => (
-    <div className='border rounded-sm hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-44 lg:w-44 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-95'>
-        <img src={image} alt={name} className='w-full h-32 md:h-36 lg:h-36 ' />
-        <div className='text-left  mt-auto'>
-            <div className='p-2'>
-            <h2 className='text-lg text-selective-yellow font-semibold'>{name}</h2>
-            <h4 className='text-md text-prussian-blue lg:text-lg font-semibold'>{price}</h4>
-            </div>
-            <div className='mt-auto w-full'>
-            <button className='bg-gray-400 text-white lg:text-lg  w-full p-2'>
-                {cta}
-            </button>
-        </div>
-        </div>
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  }),
+};
+
+const FeaturedProductCard: React.FC<FeaturedProductCardProps & { index: number }> = ({
+  image,
+  name,
+  price,
+  cta,
+  description,
+  index,
+}) => (
+  <motion.div
+    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-[1.02] flex flex-col"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, amount: 0.2 }}
+    variants={cardVariants}
+    custom={index}
+  >
+    <img
+      src={image}
+      alt={name}
+      className="w-full h-48 object-contain bg-white p-4"
+    />
+    <div className="p-4 flex flex-col justify-between h-full">
+      <div>
+        <h2 className="text-lg font-semibold text-selective-yellow">{name}</h2>
+        <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+          {description || 'Explore our curated collection of top-selling and trending items.'}
+        </p>
+        <p className="text-prussian-blue font-bold text-xl mt-2">{price}</p>
+      </div>
+      <button className="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full font-medium transition duration-300 w-full">
+        {cta}
+      </button>
     </div>
-)
+  </motion.div>
+);
 
 const FeaturedProducts: React.FC = () => {
-    const [featuredProducts, setFeaturedProducts] = useState<FeaturedProductCardProps[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<FeaturedProductCardProps[]>([]);
 
-    useEffect(() => {
-        const fetchFeaturedProducts = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/products?featured=true');
-                console.log('Fetched Products:', response.data); 
-                setFeaturedProducts(response.data);
-            } catch (error) {
-                console.error('Error fetching featured products:', error);
-            }
-        };
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/products?featured=true');
+        setFeaturedProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching featured products:', error);
+      }
+    };
 
-        fetchFeaturedProducts();
-    }, []);
+    fetchFeaturedProducts();
+  }, []);
 
-    return (
-        <>
-        <h1 className='text-4xl font-bold text-center mt-10 text-sunset'>Featured Products</h1>
-        <div className='flex flex-wrap justify-center  gap-4 mt-10  mb-10'>
-            {featuredProducts.map((product) => (
-                <FeaturedProductCard
-                key={product.name}
-                name={product.name}
-                price={product.price}
-                image={product.image}
-                cta={product.cta} />
-            ))}
-        </div>
-        <div className='border-b  border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20'>
-        </div>
-        </>
-    )
-}
+  return (
+    <section className="py-20 px-4">
+      <div className="max-w-5xl mx-auto text-center mb-12">
+        <h1 className="text-3xl md:text-5xl font-extrabold text-yellow-300 mb-4">🌟 Featured Products</h1>
+        <p className="text-white text-md md:text-lg">
+          Discover our handpicked selection of popular items loved by our customers. Whether you're shopping for school, home, or creative projects, these featured products are a great place to start.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
+        {featuredProducts.map((product, index) => (
+          <FeaturedProductCard
+            key={product.name}
+            index={index}
+            name={product.name}
+            price={product.price}
+            image={product.image}
+            cta={product.cta}
+            description={product.description}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export default FeaturedProducts;
-
-
-
-// import React from 'react';
-
-// interface FeaturedProductCardProps {
-//     image: string;
-//     name: string;
-//     price: string;
-//     cta: string;
-// }
-
-// const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, name, price, cta }) => (
-//     <div className='border rounded-sm hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-44 lg:w-44 flex flex-col justify-between transform transition-transform duration-300 hover:scale-95'>
-//         <img src={image} alt={name} className='w-full h-32 md:h-36 lg:h-36' />
-//         <div className='text-left mt-auto'>
-//             <div className='p-2'>
-//                 <h2 className='text-lg text-selective-yellow font-semibold'>{name}</h2>
-//                 <h4 className='text-md text-prussian-blue lg:text-lg font-semibold'>{price}</h4>
-//             </div>
-//             <div className='mt-auto w-full'>
-//                 <button className='bg-gray-400 text-white lg:text-lg w-full p-2'>
-//                     {cta}
-//                 </button>
-//             </div>
-//         </div>
-//     </div>
-// );
-
-// const FeaturedProducts: React.FC = () => {
-//     // Static data for featured products
-//     const featuredProducts: FeaturedProductCardProps[] = [
-//         {
-//             image: '/uploads/stickynotes.jpeg', // Ensure you have the correct image paths
-//             name: 'Sticky notes',
-//             price: '500',
-//             cta: 'Buy Now',
-//         },
-//         {
-//             image: '/uploads/lenovo-laptop.jpeg',
-//             name: 'Lenovo Laptop',
-//             price: 'KES 32,000',
-//             cta: 'Buy Now',
-//         },
-//     ];
-
-//     return (
-//         <>
-//             <h1 className='text-4xl font-bold text-center mt-10 text-sunset'>Featured Products</h1>
-//             <div className='flex flex-wrap justify-center gap-4 mt-10 mb-10'>
-//                 {featuredProducts.map((product) => (
-//                     <FeaturedProductCard
-//                         key={product.name}
-//                         name={product.name}
-//                         price={product.price}
-//                         image={product.image}
-//                         cta={product.cta} 
-//                     />
-//                 ))}
-//             </div>
-//             <div className='border-b border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20'></div>
-//         </>
-//     );
-// }
-
-// export default FeaturedProducts;

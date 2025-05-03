@@ -11,7 +11,8 @@ const HeroSection: React.FC = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 700,
+    cscEase: 'ease-in-out',
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
@@ -40,51 +41,50 @@ const HeroSection: React.FC = () => {
 
   return (
     <div className="relative mb-20 overflow-hidden barlow-bold">
-      <Slider {...settings} className="relative w-full h-60 md:h-80">
-        {slides.map((slide, index) => (
-          <div key={index} className="relative w-full h-60 md:h-80 overflow-hidden">
-            {/* Background Image */}
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="absolute w-full h-full object-cover"
-            />
+      <Slider {...settings} className="relative w-full h-60 md:h-96">
+      {slides.map((slide, index) => (
+  <div key={index} className="relative w-full h-60 md:h-96 overflow-hidden">
+    <img
+      src={slide.image}
+      alt={slide.title}
+      className="absolute w-full h-full object-cover"
+    />
 
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-center justify-center">
-              <div className="text-center max-w-xl px-4">
-                {/* Animated Text */}
-                <motion.h2
-                  key={`text-${activeSlide}`}
-                  initial={{ opacity: 0, y: -50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="text-white text-3xl md:text-5xl font-bold mb-6 drop-shadow-lg"
-                >
-                  {slide.title}
-                </motion.h2>
+    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-center justify-center">
+      <div className="text-center max-w-xl px-4">
+        {index === activeSlide && (
+          <>
+            <motion.h2
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-white text-3xl md:text-5xl font-bold mb-6 drop-shadow-lg"
+            >
+              {slide.title}
+            </motion.h2>
 
-                {/* Animated CTA Button */}
-                <motion.div
-                  key={`cta-${activeSlide}`}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              <Link to={slide.link}>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-yellow-300 hover:bg-yellow-300 text-black font-semibold px-6 py-3 rounded-full shadow-lg"
                 >
-                  <Link to={slide.link}>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="bg-yellow-300 hover:bg-yellow-300 text-black font-semibold px-6 py-3 rounded-full shadow-lg"
-                    >
-                      Shop Now
-                    </motion.button>
-                  </Link>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        ))}
+                  Shop Now
+                </motion.button>
+              </Link>
+            </motion.div>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+))}
+
       </Slider>
     </div>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import HeroSection from '../components/homepage/carousel';
 import Categories from '../components/homepage/categories';
 import DeliveryOptions from '../components/homepage/delivery';
-import Promotions from '../components/promotions';
+import Promotions from '../components/homepage/promotions';
 import Brands from '../components/homepage/brands';
 import FeaturedProducts from '../components/homepage/featured-products';
 import BestSeller from '../components/homepage/best-seller';
