@@ -8,30 +8,48 @@ interface NewsletterProps {
     buttonText: string;
 }
 
-const NewsletterCard: React.FC<NewsletterProps> = ({ image, title, description, inputPlaceholder, buttonText }) => (
-    <div className="relative max-w-full lg:max-w-7xl mx-auto mb-1">
-        {/* Background with opacity */}
-        <div className="absolute inset-0 bg-sunset opacity-10 z-0"></div>
+const NewsletterCard: React.FC<NewsletterProps> = ({
+    image,
+    title,
+    description,
+    inputPlaceholder,
+    buttonText
+}) => (
+    <div className="relative max-w-full lg:max-w-7xl mx-auto mb-16 px-4">
+        {/* Background Overlay */}
+        <div className="absolute inset-0 rounded-xl z-0 shadow-md backdrop-blur-10"></div>
 
         {/* Newsletter Content */}
-        <div className="newsletter-container flex md:flex-row flex-col gap-12 items-center p-8 relative z-10">
+        <div className="newsletter-container flex md:flex-row flex-col gap-8 items-center p-8 relative z-10 rounded-xl">
             {/* Newsletter Image */}
-            <img src={image} alt="Newsletter" className="w-64 h-64 mb-4 object-cover" />
+            {image && (
+                <img
+                    src={image}
+                    alt="Newsletter"
+                    className="w-64 h-64 mb-4 object-cover rounded-lg shadow-md"
+                />
+            )}
 
-            <div>
-                <h2 className="text-3xl font-bold mb-4" style={{color: "#B52717"}}>{title}</h2>
+            <div className="flex-1">
+                <h2 className="text-3xl font-bold mb-4 text-yellow-300">
+                    {title}
+                </h2>
 
                 {/* Newsletter Description */}
-                <p className=" mb-4" style={{color: "#FDFEEF"}}>{description}</p>
+                <p className="mb-4 text-white">
+                    {description}
+                </p>
 
                 {/* Email Input and Signup Button */}
                 <div className="flex w-full max-w-md">
                     <input
                         type="email"
                         placeholder={inputPlaceholder}
-                        className="flex-grow p-2 border bg-white text-gray-600 rounded-sm focus:border-gray-400 focus:outline-none"
+                        className="flex-grow p-2 rounded-l-md text-gray-800 focus:outline-1 focus:outline-yellow-100"
                     />
-                    <button className="p-2 text-white rounded-sm hover:bg-gray-600" style={{background: "#B52717"}}>
+                    <button
+                        className="p-2 px-4 bg-yellow-100 text-[#001D29] font-semibold rounded-r-md hover:bg-yellow-300 transition"
+                    >
                         {buttonText}
                     </button>
                 </div>
@@ -39,6 +57,7 @@ const NewsletterCard: React.FC<NewsletterProps> = ({ image, title, description, 
         </div>
     </div>
 );
+
 
 const Newsletter: React.FC = () => {
     return (

@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
         <div className="container flex justify-between items-center space-x-4">
           {/* Logo */}
           <Link to="/">
-          <div className="text-2xl font-bold text-sunset">
+          <div className="text-2xl font-bold text-[#ffea00]">
             Lelann Bookshop
           </div>
           </Link>
@@ -79,7 +79,7 @@ const Navbar: React.FC = () => {
 
       
       {/* Navigation Bar */}
-      <nav className="text-white w-full"  style={{ background: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur", }}>
+      <nav className="text-white w-full lg:pb-5"  style={{ background: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur", }}>
         <div className="max-w-screen-xl mx-auto flex justify-between items-center py-2 px-2">
           {/* Desktop navigation */}
           <div className="hidden lg:flex space-x-4">
@@ -90,7 +90,7 @@ const Navbar: React.FC = () => {
                   className={({ isActive }) =>
                     isActive ? "nav-link active-link" : "nav-link"
                   }
-                  style={{fontFamily:"Kanit, sans-serif", fontWeight: "600"}}
+                  style={{fontWeight: "600"}}
                 >
                   {item.name}
                 </NavLink>
@@ -110,7 +110,7 @@ const Navbar: React.FC = () => {
                       <NavLink
                         to={subItem.link}
                         key={subItem.name}
-                        className="block px-4 py-2 hover:text-sunset w-1/3 whitespace-nowrap"
+                        className="block px-4 py-2 hover:text-[#ffea00] w-1/3 whitespace-nowrap"
                         style={{flexBasis: "40%"}}
                       >
                         {subItem.name}
@@ -121,8 +121,8 @@ const Navbar: React.FC = () => {
               </div>
             ))}
 
-            {/* Container with bg-gray-800 for the last 4 NavItems */}
-            <div className="bg-gray-800 w-full flex flex-row space-x-4 pl-2">
+            {/* Container with the last 4 NavItems */}
+            <div className="bg-gray-700 w-full flex flex-row space-x-4 pl-2 rounded-xl">
               {NavItems.slice(NavItems.length - 4).map((item) => (
                 <div key={item.name} className="relative group">
                   <NavLink
@@ -211,7 +211,7 @@ const Navbar: React.FC = () => {
             ))}
 
             {/* Container with bg-gray-800 for the last 4 NavItems */}
-            <div className="bg-gray-800 w-full flex flex-col space-y-4 py-4">
+            <div className="bg-gray-800 w-full flex flex-col space-y-4 py-4 px-2 rounded-xl">
               {NavItems.slice(NavItems.length - 4).map((item) => (
                 <div key={item.name} className="relative group">
                   <NavLink

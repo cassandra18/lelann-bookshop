@@ -42,7 +42,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps & { index: number }
     <img
       src={image}
       alt={name}
-      className="w-full h-48 object-contain bg-white p-4"
+      className="w-full mt-2 md:h-32 object-contain bg-white p-4"
     />
     <div className="p-4 flex flex-col justify-between h-full">
       <div>
@@ -50,9 +50,9 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps & { index: number }
         <p className="text-sm text-gray-500 mt-1 line-clamp-2">
           {description || 'Explore our curated collection of top-selling and trending items.'}
         </p>
-        <p className="text-prussian-blue font-bold text-xl mt-2">{price}</p>
+        <p className="text-prussian-blue text-base md:text-lg font-semibold mt-2">KES {price}</p>
       </div>
-      <button className="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full font-medium transition duration-300 w-full">
+      <button className="mt-4 bg-yellow-100 hover:bg-yellow-300 text-prussian-blue px-4 py-2 rounded-full font-medium transition duration-300 w-full">
         {cta}
       </button>
     </div>
@@ -78,13 +78,13 @@ const FeaturedProducts: React.FC = () => {
   return (
     <section className="py-20 px-4">
       <div className="max-w-5xl mx-auto text-center mb-12">
-        <h1 className="text-3xl md:text-5xl font-extrabold text-yellow-300 mb-4">🌟 Featured Products</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-yellow-300 mb-6">🌟 Featured Products</h1>
         <p className="text-white text-md md:text-lg">
           Discover our handpicked selection of popular items loved by our customers. Whether you're shopping for school, home, or creative projects, these featured products are a great place to start.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
         {featuredProducts.map((product, index) => (
           <FeaturedProductCard
             key={product.name}

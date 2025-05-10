@@ -1,53 +1,74 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 interface BestSellerCardProps {
   image: string;
   name: string;
-  author: { name: string};
+  author: { name: string };
   price: number;
-  originalPrice?: number; // Optional for discounted products
-  discountPercentage?: number; // Optional for discounted products
+  originalPrice?: number;
+  discountPercentage?: number;
   rating: number;
   cta: string;
+  description?: string;
 }
 
-const BestSellerCard: React.FC<BestSellerCardProps> = ({
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  }),
+};
+
+const BestSellerCard: React.FC<BestSellerCardProps & { index: number }> = ({
   image,
   name,
   author,
   price,
   rating,
   cta,
+  description,
+  index,
 }) => (
-  <div className="border rounded-lg hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-105">
-
-    <div className="flex justify-center items-center p-2">
-      <img src={image} alt={name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
-    </div>
-    <div className="text-left ">
-      <div className="px-2">
-        <h3 className=" text-selective-yellow font-semibold">{name}</h3>
-        <p className="text-gray-500 ">{author.name}</p>
-        
-        <div className="flex justify-between my-2">
-          <h4 className="text-md text-prussian-blue lg:text-lg font-semibold">
-            KES {price}
-          </h4>
-          <div className="rating text-right ">
-            <span className=" text-gray-400 text-lg font-semibold">
-              {rating}
-            </span>
-            <span className="text-selective-yellow text-lg ml-1">&#9733;</span>
+  <motion.div
+    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-[1.02] flex flex-col"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, amount: 0.2 }}
+    variants={cardVariants}
+    custom={index}
+  >
+    <img
+      src={image}
+      alt={name}
+      className="w-full mt-2 md:h-32 object-contain bg-white p-4"
+    />
+    <div className="p-4 flex flex-col justify-between h-full">
+      <div>
+        <h2 className="text-lg font-semibold text-selective-yellow">{name}</h2>
+        <p className="text-sm text-gray-500">{author.name}</p>
+        <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+          {description || "One of our most popular picks!"}
+        </p>
+        <div className="flex items-center justify-between mt-2">
+          <p className="text-prussian-blue text-base md:text-lg font-semibold">KES {price}</p>
+          <div className="text-yellow-400 font-semibold text-sm flex items-center">
+            {rating} <span className="ml-1">&#9733;</span>
           </div>
         </div>
       </div>
-
-      <div className="mt-auto w-full">
-        <button className="bg-gray-400 text-white lg:text-lg   w-full p-2">{cta}</button>
-      </div>
+      <button className="mt-4 bg-yellow-100 hover:bg-yellow-300 text-prussian-blue px-4 py-2 rounded-full font-medium transition duration-300 w-full">
+        {cta}
+      </button>
     </div>
-  </div>
+  </motion.div>
 );
 
 const BestSeller: React.FC = () => {
@@ -57,7 +78,6 @@ const BestSeller: React.FC = () => {
     const fetchBestSellers = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/products?bestseller=true");
-        console.log("Fetched Best Sellers:", response.data);
         setBestSellers(response.data);
       } catch (error) {
         console.error("Error fetching best sellers:", error);
@@ -65,121 +85,34 @@ const BestSeller: React.FC = () => {
     };
 
     fetchBestSellers();
-  }, []); // Empty dependency array to run once when the component mounts
+  }, []);
 
   return (
-    <>
-      <h1 className="text-4xl font-bold text-center mt-10 text-sunset">
-        Best Sellers
-      </h1>
-      <div className="flex flex-wrap justify-center  gap-4 mt-10  mb-10">
-        {bestSellers.map((product) => (
+    <section className="py-10 px-4">
+      <div className="max-w-5xl mx-auto text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-yellow-300 mb-6">🔥 Best Sellers</h1>
+        <p className="text-white text-md md:text-lg">
+          Shop the books our customers can't get enough of! These best sellers are flying off the shelves.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
+        {bestSellers.map((product, index) => (
           <BestSellerCard
             key={product.name}
+            index={index}
             name={product.name}
             author={product.author}
             price={product.price}
             image={product.image}
-            rating={5}
+            rating={product.rating}
             cta={product.cta}
+            description={product.description}
           />
         ))}
       </div>
-      <div className="border-b  border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20"></div>
-    </>
+  </section>
   );
 };
 
 export default BestSeller;
-
-
-
-
-// import React from "react";
-
-// interface BestSellerCardProps {
-//   image: string;
-//   name: string;
-//   author: { name: string };
-//   price: number;
-//   originalPrice?: number; // Optional for discounted products
-//   discountPercentage?: number; // Optional for discounted products
-//   rating: number;
-//   cta: string;
-// }
-
-// const BestSellerCard: React.FC<BestSellerCardProps> = ({
-//   image,
-//   name,
-//   author,
-//   price,
-//   rating,
-//   cta,
-// }) => (
-//   <div className="border rounded-lg hover:border-selective-yellow shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between transform transition-transform duration-300 hover:scale-105">
-//     <div className="flex justify-center items-center p-2">
-//       <img src={image} alt={name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
-//     </div>
-//     <div className="text-left">
-//       <div className="px-2">
-//         <h3 className="text-selective-yellow font-semibold">{name}</h3>
-//         <p className="text-gray-500">{author.name}</p>
-//         <div className="flex justify-between my-2">
-//           <h4 className="text-md text-prussian-blue lg:text-lg font-semibold">
-//             KES {price}
-//           </h4>
-//           <div className="rating text-right">
-//             <span className="text-gray-400 text-lg font-semibold">{rating}</span>
-//             <span className="text-selective-yellow text-lg ml-1">&#9733;</span>
-//           </div>
-//         </div>
-//       </div>
-//       <div className="mt-auto w-full">
-//         <button className="bg-gray-400 text-white lg:text-lg w-full p-2">{cta}</button>
-//       </div>
-//     </div>
-//   </div>
-// );
-
-// const BestSeller: React.FC = () => {
-//   const bestSellers: BestSellerCardProps[] = [
-//     {
-//       image: '/uploads/alchemist.jpeg',
-//       name: 'The Alchemist',
-//       author: { name: 'Paulo Coelho' },
-//       price: 1500,
-//       rating: 5,
-//       cta: 'Buy Now',
-//     },
-//     {
-//       image: '/uploads/lean-startup.jpeg',
-//       name: 'The Lean Startup',
-//       author: { name: 'Eric Ries' },
-//       price: 2000,
-//       rating: 4.5,
-//       cta: 'Buy Now',
-//     },
-//   ];
-
-//   return (
-//     <>
-//       <h1 className="text-4xl font-bold text-center mt-10 text-sunset">Best Sellers</h1>
-//       <div className="flex flex-wrap justify-center gap-4 mt-10 mb-10">
-//         {bestSellers.map((product) => (
-//           <BestSellerCard
-//             key={product.name}
-//             name={product.name}
-//             author={product.author}
-//             price={product.price}
-//             image={product.image}
-//             rating={product.rating}
-//             cta={product.cta}
-//           />
-//         ))}
-//       </div>
-//       <div className="border-b border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20"></div>
-//     </>
-//   );
-// };
-
-// export default BestSeller;

@@ -1,17 +1,32 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 interface NewArrivalCardProps {
   image: string;
   name: string;
   author: { name: string };
   price: number;
-  oldPrice?: number; // Optional for discounted products
+  oldPrice?: number;
   discount?: number;
   cta: string;
+  description?: string;
 }
 
-const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  }),
+};
+
+const NewArrivalCard: React.FC<NewArrivalCardProps & { index: number }> = ({
   image,
   name,
   author,
@@ -19,41 +34,48 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
   oldPrice,
   discount,
   cta,
+  description,
+  index,
 }) => (
-  <div className="relative border rounded-md hover:border-sunset shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between  transform transition-transform duration-300 hover:scale-105">
+  <motion.div
+    className="relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-[1.02] flex flex-col"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, amount: 0.2 }}
+    variants={cardVariants}
+    custom={index}
+  >
     {discount && (
-      <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1  mt-2 text-sm font-bold">
+      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">
         {discount}% OFF
       </div>
     )}
-
-
-
-    <div className="flex justify-center items-center p-2">
-      <img src={image} alt={name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
-    </div>
-    <div className="text-left ">
-      <div className="px-2">
-        <h3 className=" text-selective-yellow font-semibold">{name}</h3>
-        <p className="text-gray-500 ">{author?.name || ""}</p>
-        
+    <img
+      src={image}
+      alt={name}
+      className="w-full mt-2 md:h-32 object-contain bg-white p-4"
+    />
+    <div className="p-4 flex flex-col justify-between h-full">
+      <div>
+        <h2 className="text-lg font-semibold text-selective-yellow">{name}</h2>
+        <p className="text-sm text-gray-500 mb-1">{author?.name}</p>
+        <p className="text-sm text-gray-500 line-clamp-2">
+          {description || "Discover our newest picks, just landed in our store."}
+        </p>
         {oldPrice ? (
-            <div className="flex flex-col mt-2">
-                <h4 className="text-sm text-gray-400 line-through">KES {oldPrice}</h4>
-                <h4 className="text-prussian-blue text-md lg:text-lg font-semibold ">KES {price}</h4>
-            </div>
+          <div className="mt-2">
+            <p className="text-sm text-gray-400 line-through">KES {oldPrice}</p>
+            <p className="text-prussian-blue text-base md:text-lg font-semibold">KES {price}</p>
+          </div>
         ) : (
-            <h4 className="text-md text-prussian-blue lg:text-lg font-semibold mt-2">
-                KES {price}
-            </h4>
+          <p className="text-prussian-blue text-base md:text-lg font-semibold mt-2">KES {price}</p>
         )}
       </div>
-
-      <div className="mt-auto w-full">
-        <button className="bg-gray-400 text-white lg:text-lg  w-full p-2">{cta}</button>
-      </div>
+      <button className="mt-4 bg-yellow-100 hover:bg-yellow-300 text-prussian-blue px-4 py-2 rounded-full font-medium transition duration-300 w-full">
+        {cta}
+      </button>
     </div>
-  </div>
+  </motion.div>
 );
 
 const NewArrival: React.FC = () => {
@@ -63,26 +85,29 @@ const NewArrival: React.FC = () => {
     const fetchNewArrivals = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/products?newarrival=true");
-        console.log("Fetched New Arrivals:", response.data);
         setNewArrivals(response.data);
       } catch (error) {
-        console.error("Error fetching New Arrivals:", error);
+        console.error("Error fetching new arrivals:", error);
       }
     };
 
     fetchNewArrivals();
   }, []);
 
-  
   return (
-    <>
-      <h1 className="text-4xl font-bold text-center mt-10 text-sunset">
-        Exciting New Arrivals
-      </h1>
-      <div className="flex flex-wrap justify-center  gap-4 mt-10  mb-10">
-        {newArrivals.map((product) => (
+    <section className="py-10 px-4">
+      <div className="max-w-5xl mx-auto text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-yellow-300 mb-6">✨ Exciting New Arrivals</h1>
+        <p className="text-white text-md md:text-lg">
+          Be the first to explore our freshest picks! These new arrivals are hot off the shelves and ready to inspire.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
+        {newArrivals.map((product, index) => (
           <NewArrivalCard
             key={product.name}
+            index={index}
             name={product.name}
             author={product.author}
             price={product.price}
@@ -90,121 +115,12 @@ const NewArrival: React.FC = () => {
             discount={product.discount}
             image={product.image}
             cta={product.cta}
+            description={product.description}
           />
         ))}
       </div>
-      <div className="border-b  border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20"></div>
-    </>
+    </section>
   );
 };
 
 export default NewArrival;
-
-// import React from "react";
-
-// interface NewArrivalCardProps {
-//   image: string;
-//   name: string;
-//   author: { name: string };
-//   price: number;
-//   oldPrice?: number; // Optional for discounted products
-//   discount?: number;
-//   cta: string;
-// }
-
-// const NewArrivalCard: React.FC<NewArrivalCardProps> = ({
-//   image,
-//   name,
-//   author,
-//   price,
-//   oldPrice,
-//   discount,
-//   cta,
-// }) => (
-//   <div className="relative border rounded-md hover:border-sunset shadow-lg overflow-hidden bg-white w-36 md:w-48 lg:w-48 flex flex-col justify-between transform transition-transform duration-300 hover:scale-105">
-//     {discount && (
-//       <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 mt-2 text-sm font-bold">
-//         {discount}% OFF
-//       </div>
-//     )}
-//     <div className="flex justify-center items-center p-2">
-//       <img src={image} alt={name} className="h-36 w-36 md:w-38 md:h-38 lg:h-38" />
-//     </div>
-//     <div className="text-left">
-//       <div className="px-2">
-//         <h3 className="text-selective-yellow font-semibold">{name}</h3>
-//         <p className="text-gray-500">{author?.name || ""}</p>
-        
-//         {oldPrice ? (
-//           <div className="flex flex-col mt-2">
-//             <h4 className="text-sm text-gray-400 line-through">KES {oldPrice}</h4>
-//             <h4 className="text-prussian-blue text-md lg:text-lg font-semibold">KES {price}</h4>
-//           </div>
-//         ) : (
-//           <h4 className="text-md text-prussian-blue lg:text-lg font-semibold mt-2">
-//             KES {price}
-//           </h4>
-//         )}
-//       </div>
-//       <div className="mt-auto w-full">
-//         <button className="bg-gray-400 text-white lg:text-lg w-full p-2">{cta}</button>
-//       </div>
-//     </div>
-//   </div>
-// );
-
-// const NewArrival: React.FC = () => {
-//   // Static data for new arrivals
-//   const newArrivals: NewArrivalCardProps[] = [
-//     {
-//       image: '/uploads/monk.jpeg',
-//       name: 'The Monk Who Sold His Ferrari',
-//       author: { name: 'Author One' },
-//       price: 1500,
-//       oldPrice: 2000, 
-//       discount: 25,
-//       cta: 'Buy Now',
-//     },
-//     {
-//       image: '/uploads/positive.jpeg',
-//       name: 'The Power of Positive Thinking',
-//       author: { name: 'Author Two' },
-//       price: 1800,
-//       cta: 'Buy Now',
-//     },
-//     {
-//       image: '/uploads/game.jpeg',
-//       name: 'The Game of Life and How to Play It',
-//       author: { name: 'Author Three' },
-//       price: 1200,
-//       oldPrice: 1500,
-//       discount: 20,
-//       cta: 'Buy Now',
-//     },
-//   ];
-
-//   return (
-//     <>
-//       <h1 className="text-4xl font-bold text-center mt-10 text-sunset">
-//         Exciting New Arrivals
-//       </h1>
-//       <div className="flex flex-wrap justify-center gap-4 mt-10 mb-10">
-//         {newArrivals.map((product) => (
-//           <NewArrivalCard
-//             key={product.name}
-//             name={product.name}
-//             author={product.author}
-//             price={product.price}
-//             oldPrice={product.oldPrice}
-//             discount={product.discount}
-//             image={product.image}
-//             cta={product.cta}
-//           />
-//         ))}
-//       </div>
-//       <div className="border-b border-b-yellow-200 mb-5 w-3/4 mx-auto opacity-20"></div>
-//     </>
-//   );
-// };
-
-// export default NewArrival;

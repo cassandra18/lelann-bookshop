@@ -30,6 +30,7 @@ html, body {
   margin: 0;
   width: 100%;
   height: 100%;
+  background-color: #001D29 ;
   overflow-x: hidden;
   overflow-y: scroll; /* ensures scrolling is active */
   scrollbar-width: none; /* Firefox */
@@ -142,18 +143,18 @@ navbar {
 }
 
 .nav-link:hover {
-  color: #FFD399;
-  border-bottom: 2px solid #FFD399;
+  color: #ffea00;
+  border-bottom: 2px solid #ffea00;
 }
 
 .active-link {
-  color: #FFD399;
-  border-bottom: 2px solid #FFD399;
+  color: #ffea00;
+  border-bottom: 2px solid #ffea00;
 }
 
 .group:hover .nav-link {
-  color: #FFD399;
-  border-bottom: 2px solid #FFD399;
+  color: #ffea00;
+  border-bottom: 2px solid #ffea00;
 }
 
 .slick-prev, .slick-next {

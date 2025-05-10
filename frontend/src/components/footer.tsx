@@ -14,11 +14,11 @@ const Footer: React.FC = () => {
     
     return (
         <>
-            <footer className="footer bg-gray-700 mt-auto ">
+            <footer className="footer mt-auto " style={{ background: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur" }}>
                 <div className="container">
                     <div className="flex justify-between mt-6 p-6 mx-auto">
                         <div className="col-md-4">
-                            <h2 style={{ color: '#FFD399',  fontWeight: "bolder", fontSize: "16px"}} >Quick Links</h2>
+                            <h2 className='text-yellow-300' style={{  fontWeight: "bolder", fontSize: "16px"}} >Quick Links</h2>
                             <ul className='pt-2'>
                                 <li><Link to="/faq">Frequently asked  questions</Link></li>
                                 <li><Link to="/">Home</Link></li>
@@ -27,15 +27,7 @@ const Footer: React.FC = () => {
                             </ul>
                         </div>
                         <div className="col-md-4">
-                            <h3  style={{ color: '#FFD399', fontWeight: "bolder", fontSize: "16px"}} >Follow Us</h3>
-                            <ul className='flex justify-center space-x-3 text-xl pt-2'>
-                                <li><a href="https://www.facebook.com"><FaFacebook /></a></li>
-                                <li><a href="https://www.twitter.com"><FaXTwitter /></a></li>
-                                <li><a href="https://www.instagram.com"><FaInstagram /></a></li>
-                            </ul>
-                        </div>
-                        <div className="col-md-4">
-                            <h3  style={{ color: '#FFD399',  fontWeight: "bolder", fontSize: "16px"}} >Contact Us</h3>
+                            <h3 className='text-yellow-300' style={{   fontWeight: "bolder", fontSize: "16px"}} >Contact Us</h3>
                             <ul className="pt-2">
                             {phoneNumbers.map((phone, index) => (
                             <li key={index} className="flex items-center space-x-2">
@@ -53,11 +45,23 @@ const Footer: React.FC = () => {
                             </li>
                         </ul>
                         </div>
+                        <div className="col-md-4">
+                            <h3 className='text-yellow-300' style={{ fontWeight: "bolder", fontSize: "16px"}} >Follow Us</h3>
+                            <ul className='flex justify-center space-x-3 text-xl pt-2'>
+                                <li><a href="https://www.facebook.com"><FaFacebook /></a></li>
+                                <li><a href="https://www.twitter.com"><FaXTwitter /></a></li>
+                                <li><a href="https://www.instagram.com"><FaInstagram /></a></li>
+                            </ul>
+                        </div>
+
                     </div>
 
                     <div>
-                        <p className="text-center pb-2"  style={{ color: '#FFD399'}} > &copy; 2024 Lelann Bookshop. All Rights Reserved</p>
-                    </div>
+  <p className="text-center pb-2 text-yellow-300 text-xs" >
+    &copy; {new Date().getFullYear()} Lelann Bookshop. All Rights Reserved.
+  </p>
+</div>
+
                 </div>
       
             </footer>

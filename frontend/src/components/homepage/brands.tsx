@@ -44,7 +44,7 @@ const Brands: React.FC = () => {
         </svg>
       </div>
 
-      <h1 className="text-3xl md:text-5xl font-bold text-center text-yellow-300 mb-6">
+      <h1 className="text-4xl md:text-5xl font-extrabold text-center text-yellow-300 mb-6">
         🤝 Trusted Brands
       </h1>
       <p className="text-center text-white mb-12 max-w-xl mx-auto px-4">
