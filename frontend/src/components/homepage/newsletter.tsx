@@ -45,7 +45,7 @@ const NewsletterCard: React.FC<NewsletterProps> = ({
                     <input
                         type="email"
                         placeholder={inputPlaceholder}
-                        className="flex-grow p-2 rounded-l-md text-gray-800 focus:outline-1 focus:outline-yellow-100"
+                        className="flex-grow p-2 rounded-l-md bg-gray-700 text-white focus:outline-1 focus:outline-yellow-200"
                     />
                     <button
                         className="p-2 px-4 bg-yellow-100 text-[#001D29] font-semibold rounded-r-md hover:bg-yellow-300 transition"

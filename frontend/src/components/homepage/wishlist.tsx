@@ -13,15 +13,15 @@ const WishListCard: React.FC<WishListCardProps> = ({
   price,
   image,
 }) => (
-  <div className="relative group hover:border-2 hover:border-sunset rounded-lg shadow-lg hover:shadow-xl bg-white p-4 w-full h-auto lg:h-52  transform transition-transform duration-300 hover:scale-95">
-    <div className="absolute -top-8 right-4 w-16 md:w-24 lg:w-48 h-16 md:h-24 lg:h-48 z-10 shadow-xl transform transition-transform duration-300 group-hover:scale-110">
+  <div className="relative group hover:border-2 hover:border-sunset rounded-lg shadow-lg hover:shadow-xl bg-[#00293bab] p-4 w-full h-auto transform transition-transform duration-300 hover:scale-95">
+    <div className="absolute -top-8 right-4 w-16 md:w-24 h-16 md:h-24 z-10 shadow-xl transform transition-transform duration-300 group-hover:scale-110">
       <img src={image} alt="product" className="w-full h-full object-contain" />
     </div>
 
     <div className="flex flex-col text-left">
       <h5 className="text-lg md:text-xl font-bold text-selective-yellow">{title}</h5>
-      {owner && <p className="text-sm text-gray-600">{owner}</p>}
-      <h4 className="text-base md:text-lg font-semibold text-gray-800 mt-2">
+      {owner && <p className="text-sm text-white">{owner}</p>}
+      <h4 className="text-base md:text-lg font-semibold text-gray-400 mt-2">
         KES {price}
       </h4>
     </div>
