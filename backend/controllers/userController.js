@@ -15,6 +15,15 @@ const UserControllers = {
   registerUser: async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
 
+    if (!name || !email || !password || !confirmPassword) {
+      return res
+        .status(400)
+        .json({ message: "Name, email, password and confirm password are required" });
+    }
+    // Check if password and confirm password match
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
     try {
       // Check if user already exists
       const existingUser = await prisma.user.findUnique({
@@ -31,7 +40,7 @@ const UserControllers = {
 
       // Create a new user
       const user = await prisma.user.create({
-        data: { name, email, password: hashedPassword, confirmPassword: hashedPassword },
+        data: { name, email, password: hashedPassword },
       });
       console.log(user);
       res.status(201).json(user);
@@ -49,22 +58,25 @@ const UserControllers = {
           .status(400)
           .json({ message: "Email and password are required" });
       }
-      // Check if user exists
+      // Check if user or admin exists
       const user = await prisma.user.findUnique({
         where: {
           email,
         },
       });
-      if (!user) {
+      const admin = await prisma.admin.findUnique({ where: { email } });
+
+      const account = user || admin;
+      if (!account) {
         return res.status(404).json({ message: "Invalid email or password" });
       }
       // Compare passwords
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, account.password);
       if (!isPasswordValid) {
         return res.status(401).json({ message: "Invalid email or password" });
       }
       // Generate a token
-      const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: account.id, role: account.role }, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
 
@@ -77,7 +89,7 @@ const UserControllers = {
         path: '/'
       });
 
-      res.status(200).json({ message: 'Logged in successfully'});
+      res.status(200).json({ message: 'Logged in successfully', role: account.role });
     } catch (error) {
       handlePrismaError(error, res);
     }

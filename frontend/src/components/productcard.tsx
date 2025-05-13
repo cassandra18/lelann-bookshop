@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, name, price, image}) => {
   };
 
   const handleInquire = () => {
-    window.open('https://wa.me/?text=I%20am%20interested%20in%20this%20product', '_blank');
+    window.open('https://wa.me/text=I%20am%20interested%20in%20this%20product', '_blank');
   };
 
   return (

@@ -62,7 +62,7 @@ const AdminRegistration = () => {
     }
     return (
         <>
-        <div className="flex bg-slate-300 mt-10 lg:ml-20 ml-10 rounded-tl-lg w-full h-screen mb-28">
+        <div className="flex bg-blue-600 ml-10 rounded-tl-lg max-w-5xl mx-auto h-screen mb-28">
           <div className="w-1/2 p-8  max-w-md mx-auto ">
             <h1 className="text-2xl font-bold text-center mb-6 text-oxford-blue">
               Welcome to Lelann family

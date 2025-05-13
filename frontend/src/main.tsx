@@ -19,6 +19,9 @@ import UserDashboard from "./pages/user/userDashboard.tsx";
 import ProtectedRoute from "./components/protectedRoute.tsx";
 import SignUpPage from "./pages/signupPage.tsx";
 import SignInPage from "./components/signin.tsx";
+import EducationalBooksPage from "./pages/EducationalBooksPage.tsx";
+
+
 
 const router = createBrowserRouter([
   {
@@ -28,6 +31,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Homepage />,
+      },
+      {
+        path: "/educational-books",
+        element: <EducationalBooksPage />,
+      },
+            {
+        path: "/educational-books/:subcategoryId",
+        element: <EducationalBooksPage />,
       },
       {
         path: "/other-books",

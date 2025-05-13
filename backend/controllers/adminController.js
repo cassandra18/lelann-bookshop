@@ -13,7 +13,7 @@ const registerAdmin = async (req, res) => {
             return res.status(401).json({ message: 'Invalid invite code' });
           }
         // Check if admin already exists
-        const existingAdmin = await prisma.admin.findUnique({
+        const existingAdmin = await prisma.user.findUnique({
             where: {
                 email,
             },
@@ -25,15 +25,16 @@ const registerAdmin = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create a new admin
-        const admin = await prisma.admin.create({
+        const admin = await prisma.user.create({
             data: {
                 name,
                 email,
                 password: hashedPassword,
+                role: 'admin',
             },
         });
 
-        res.status(201).json(admin);
+        res.status(201).json({ message: 'Admin registered successfully'});
     } catch (error) {
         console.log(error);  
         res.status(500).json({ message: 'Internal server error' });
@@ -46,7 +47,7 @@ const loginAdmin = async (req, res) => {
         const { email, password } = req.body;
 
         // Check if admin exists
-        const admin = await prisma.admin.findUnique({
+        const admin = await prisma.user.findUnique({
             where: {
                 email,
             },
@@ -87,7 +88,7 @@ const updateAdmin = async (req, res) => {
         const { id } = req.params;
         const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const admin = await prisma.admin.update({
+        const admin = await prisma.user.update({
             where: { id },
             data: {
                 name,
@@ -106,7 +107,7 @@ const updateAdmin = async (req, res) => {
 const deleteAdmin = async (req, res) => {
     try {
         const { id } = req.params;
-        const admin = await prisma.admin.delete({
+        const admin = await prisma.user.delete({
             where: { id },
         });
         res.status(200).json(admin);

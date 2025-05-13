@@ -1,8 +1,23 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const bcrypt = require('bcrypt');
+
 
 async function main() {
   try {
+    const hashedPassword = await bcrypt.hash('SuperSecureAdmin123', 10);
+      await prisma.user.create({
+        data: {
+          name: 'Super Admin',
+          email: 'admin@example.com',
+          password: hashedPassword,
+          role: 'admin',
+        },
+      });
+
+      console.log('Admin user created');
+    }
+
     // Add authors
     const authorA = await prisma.author.create({ data: { name: 'Author A' } });
     const authorB = await prisma.author.create({ data: { name: 'Author B' } });
@@ -116,6 +131,5 @@ async function main() {
   } finally {
     await prisma.$disconnect();
   }
-}
 
 main();
