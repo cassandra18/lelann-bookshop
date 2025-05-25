@@ -56,10 +56,10 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row bg-[#02364d] mt-10 rounded-lg max-w-5xl mx-5 lg:mx-auto mb-28 overflow-hidden shadow-lg">
+    <div className="flex md:flex-row bg-[#02364d] mt-10 rounded-lg max-w-5xl mx-auto mb-28 overflow-hidden shadow-lg">
       
       {/* Form Section */}
-      <div className="w-full lg:w-1/2 p-6 sm:p-10">
+      <div className="w-full md:w-1/2 p-6 sm:p-10">
         <h1 className="text-3xl font-bold text-center mb-6 text-yellow-300">
           Welcome to Lelann family
         </h1>
@@ -166,7 +166,7 @@ const SignUp: React.FC = () => {
       </div>
 
       {/* Image Section */}
-      <div className="hidden lg:block w-1/2">
+      <div className="hidden md:block w-1/2">
         <img
           src="images/signup-img.jpeg"
           alt="signup"

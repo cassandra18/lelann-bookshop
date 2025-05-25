@@ -2,21 +2,19 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 
-
 async function main() {
   try {
+    // Create Super Admin
     const hashedPassword = await bcrypt.hash('SuperSecureAdmin123', 10);
-      await prisma.user.create({
-        data: {
-          name: 'Super Admin',
-          email: 'admin@example.com',
-          password: hashedPassword,
-          role: 'admin',
-        },
-      });
-
-      console.log('Admin user created');
-    }
+    await prisma.user.create({
+      data: {
+        name: 'Super Admin',
+        email: 'admin@example.com',
+        password: hashedPassword,
+        role: 'admin',
+      },
+    });
+    console.log('Admin user created');
 
     // Add authors
     const authorA = await prisma.author.create({ data: { name: 'Author A' } });
@@ -34,7 +32,7 @@ async function main() {
       },
     });
 
-    // create subcategories
+    // Create subcategories
     const prePrimaryEcdeSubcategory = await prisma.subcategory.create({
       data: {
         name: 'Pre-primary & ECDE',
@@ -79,8 +77,6 @@ async function main() {
       },
     });
 
-    console.log('ECDE Primary Product:', ecdePrimaryProduct);
-
     const prePrimaryProduct = await prisma.product.create({
       data: {
         name: 'Pre-primary Book 1',
@@ -94,24 +90,20 @@ async function main() {
       },
     });
 
-    console.log('PrePrimary Product:', prePrimaryProduct);
-
     const grade1Product = await prisma.product.create({
       data: {
         name: 'Grade 1 Book',
         price: 12.99,
         condition: 'NEW',
         description: 'A new Grade 1 book',
-        author_id:  authorB.id,
+        author_id: authorB.id,
         publisher_id: publisherB.id,
         imageUrl: 'lelann_bookshop/backend/uploads/queenex_g5_encyclopedia.png',
-        subcategory_id: competencyBasedCurriculumCategory.id
+        subcategory_id: competencyBasedCurriculumCategory.id,
       },
     });
 
-    console.log('Grade 1 Product:', grade1Product);
-
-    // Include products in the output
+    // Display seeded data
     const educationalBooksWithProducts = await prisma.category.findUnique({
       where: {
         id: educationalBooksCategory.id,
@@ -125,11 +117,12 @@ async function main() {
       },
     });
 
-    console.log('Database has been seeded.', educationalBooksWithProducts);
+    console.log('Database has been seeded.', JSON.stringify(educationalBooksWithProducts, null, 2));
   } catch (error) {
-    console.error(error);
+    console.error('Seeding failed:', error);
   } finally {
     await prisma.$disconnect();
   }
+}
 
 main();

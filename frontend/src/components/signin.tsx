@@ -53,9 +53,9 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row bg-[#02364d] mt-10 rounded-lg max-w-5xl mx-5 lg:mx-auto mb-28 overflow-hidden">
+    <div className="flex md:flex-row bg-[#02364d] mt-10 rounded-lg max-w-5xl md:mx-auto  mb-28 overflow-hidden">
       {/* Form section */}
-      <div className="w-full lg:w-1/2 p-6">
+      <div className="w-full md:w-1/2 p-6">
         <h1 className="text-3xl font-bold text-center mb-6 text-yellow-300">
           Log in to your Lelann account
         </h1>
@@ -118,11 +118,11 @@ const SignIn: React.FC = () => {
       </div>
 
       {/* Image section */}
-      <div className="w-full lg:w-1/2 hidden lg:block">
+      <div className="w-full md:w-1/2 hidden md:block">
         <img
           src="images/signup-img.jpeg"
           alt="signin"
-          className="w-full h-64 lg:h-full object-cover shadow-md rounded-b-lg lg:rounded-b-none lg:rounded-r-lg"
+          className="w-full h-64 md:h-full object-cover shadow-md rounded-b-lg md:rounded-b-none md:rounded-r-lg"
         />
       </div>
     </div>

@@ -33,7 +33,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ image, title, link, emoji }
 const Categories: React.FC = () => {
   const categories = [
     { title: 'Stationaries', emoji: '✏️', image: '/images/stationaries.jpeg', link: '/stationaries' },
-    { title: 'School Books', emoji: '📚', image: '/images/educational-books.jpeg', link: '/school-books' },
+    { title: 'Educational Books', emoji: '📚', image: '/images/educational-books.jpeg', link: '/educational-books' },
     { title: 'Other Books', emoji: '📖', image: '/images/other-books.jpeg', link: '/other-books' },
     { title: 'Art Supplies', emoji: '🎨', image: '/images/art-supplies.jpeg', link: '/art-supplies' },
     { title: 'Toys & Games', emoji: '🧸', image: '/images/toys.jpeg', link: '/toys-games' },
