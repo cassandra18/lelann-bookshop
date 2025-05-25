@@ -40,7 +40,6 @@ function connectDatabase() {
 // Routes
 //app.use('/api/auth', require('./routes/auth'));
 app.use('/api/', require('./routes/productRoutes'));
-app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/author', require('./routes/authorRoutes'));
 app.use('/api/publisher', require('./routes/publisherRoutes'));
 app.use('/api/category', require('./routes/categoryRoutes'));

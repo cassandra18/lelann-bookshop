@@ -12,7 +12,7 @@ const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string[]>([]);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +26,7 @@ const SignUp: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match");
+      setMessage(["Passwords do not match"]);
       return;
     }
     try {
@@ -43,15 +43,24 @@ const SignUp: React.FC = () => {
       });
 
       if (response.ok) {
-        setMessage("SignUp created successfully!");
-        navigate("/user-dashboard");
+        setMessage(["User created successfully!"]);
         setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+        navigate("/user-dashboard");
+      
       } else {
-        const error = await response.json();
-        setMessage(error.message || "Failed to create SignUp!");
+        const errorData = await response.json();
+      // Handle errors from express-validator
+        if (response.status === 400 && errorData.errors) {
+          const validationErrors = errorData.errors.map((err: any) => err.msg);
+          setMessage(validationErrors); // Set all validation messages
+        } else {
+          // Handle other errors (e.g., "User with this email already exists" from your controller)
+          setMessage([errorData.message || "Failed to create User!"]);
+        }
       }
     } catch (error) {
-      setMessage("An error occurred. Please try again later.");
+      console.error("Fetch error during registration:", error);
+      setMessage(["An unexpected error occurred. Please try again later."]);
     }
   };
 
@@ -64,8 +73,16 @@ const SignUp: React.FC = () => {
           Welcome to Lelann family
         </h1>
 
-        {message && <p className="text-center text-sm text-red-500 mb-4">{message}</p>}
-
+        {message.length > 0 && (
+          <div className="mb-4">
+            {message.map((msg, index) => (
+              <p key={index} className="text-center text-sm text-red-500">
+                {msg}
+              </p>
+            ))}
+          </div>
+        )}
+        
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label htmlFor="name" className="text-white font-medium mb-1">

@@ -1,42 +1,36 @@
-// Middleware to validate user role permission on every request to protected resources
+// backend/middleware/authMiddleware.js
+const jwt = require('jsonwebtoken');
 
-const authorize = (roles) => (req, res, next) => {
-    const token = req.cookies.jwt; // Or Authorization header
+const authenticateJWT = (req, res, next) => {
+    const token = req.cookies.jwt;
+
     if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Authentication required: No token provided' });
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            return res.status(403).json({ message: 'Forbidden' });
+            console.error('JWT verification error:', err);
+            return res.status(403).json({ message: 'Authentication failed: Invalid token' });
         }
 
-        if (!roles.includes(decoded.role)) {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-
-        req.user = decoded; // Attach user info to request
+        req.user = decoded;
         next();
     });
 };
 
-// Middleware to check if the user is an admin
-const authorizeAdmin = (req, res, next) => {
-    if (req.user?.role !== 'admin') {
-        return res.status(403).json({ message: 'Access denied' });
-    }
-    next();
+const authorizeRoles = (allowedRoles) => {
+    return (req, res, next) => {
+        if (!req.user || !req.user.role) {
+            return res.status(403).json({ message: 'Authorization failed: User role not found' });
+        }
+
+        if (allowedRoles.includes(req.user.role)) {
+            next();
+        } else {
+            res.status(403).json({ message: 'Access denied: Insufficient permissions' });
+        }
+    };
 };
 
-const verifyUserRole = (roles) => (req, res, next) => {
-    console.log('User Role:', req.user.role);
-    if (roles.includes(req.user.role)) {
-        return next();
-    }
-
-   return  res.status(403).json({ message: 'Access denied. Invalid role.' });
-};
-
-
-
-module.exports = { authorize, authorizeAdmin, verifyUserRole };
+module.exports = { authenticateJWT, authorizeRoles };

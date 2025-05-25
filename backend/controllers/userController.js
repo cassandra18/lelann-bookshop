@@ -13,17 +13,14 @@ const prisma = new PrismaClient();
 
 const UserControllers = {
   registerUser: async (req, res) => {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password) {
       return res
         .status(400)
-        .json({ message: "Name, email, password and confirm password are required" });
+        .json({ message: "Name, email and password are required" });
     }
-    // Check if password and confirm password match
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
-    }
+
     try {
       // Check if user already exists
       const existingUser = await prisma.user.findUnique({
@@ -42,16 +39,21 @@ const UserControllers = {
       const user = await prisma.user.create({
         data: { name, email, password: hashedPassword },
       });
-      console.log(user);
-      res.status(201).json(user);
+      console.log('User created:', user);
+      res.status(201).json({ id: user.id, name: user.name, email: user.email, role: user.role });
     } catch (error) {
-      handlePrismaError(error, res);
+      console.error('Error creating user:', error);
+      if (error.code && error.code.startsWith('P')) { // Prisma error
+          handlePrismaError(error, res);
+      } else { // Generic error
+          res.status(500).json({ message: 'Internal server error during user registration.' });
+      }
     }
   },
   // Controller for user login
   loginUser: async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email, password } = req.body.formData;
       // Validate input
       if (!email || !password) {
         return res
@@ -59,14 +61,12 @@ const UserControllers = {
           .json({ message: "Email and password are required" });
       }
       // Check if user or admin exists
-      const user = await prisma.user.findUnique({
+      const account = await prisma.user.findUnique({
         where: {
           email,
         },
       });
-      const admin = await prisma.admin.findUnique({ where: { email } });
 
-      const account = user || admin;
       if (!account) {
         return res.status(404).json({ message: "Invalid email or password" });
       }
@@ -91,9 +91,88 @@ const UserControllers = {
 
       res.status(200).json({ message: 'Logged in successfully', role: account.role });
     } catch (error) {
-      handlePrismaError(error, res);
+      console.error("Login error:", error);
+      if (error.code && error.code.startsWith('P')) { // Prisma error
+        handlePrismaError(error, res);
+      } else { // Generic error
+        res.status(500).json({ message: 'Internal server error' });
+      }
     }
   },
+
+   // NEW: Function to verify user role for the frontend's ProtectedRoute
+    verifyUser: (req, res) => {
+        // If authenticateJWT has run successfully, req.user will be populated.
+        // This function simply returns the role that was authenticated.
+        if (req.user && req.user.role) {
+            return res.status(200).json({ role: req.user.role });
+        } else {
+            // This state should ideally not be reached if authenticateJWT runs correctly,
+            // but as a fallback, it means the token was valid but role info is missing.
+            return res.status(401).json({ message: 'Authentication required: User role not found in token' });
+        }
+    },
+
+    // NEW: Controller for User Dashboard
+    getUserDashboard: async (req, res) => {
+        try {
+            // `req.user` is populated by `authenticateJWT` middleware
+            const userId = req.user.id; // Get the ID of the logged-in user
+            const userRole = req.user.role; // Get the role of the logged-in user
+
+            // Example: Fetch user's own data from the database
+            const userProfile = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { name: true, email: true, createdAt: true }, // Select specific fields
+            });
+
+            if (!userProfile) {
+                return res.status(404).json({ message: 'User profile not found.' });
+            }
+
+            res.status(200).json({
+                message: `Welcome to your dashboard, ${userProfile.name}!`,
+                user: userProfile,
+                dashboardData: {
+                    recentOrders: [], // Placeholder for actual user orders
+                    wishlistItems: [], // Placeholder for user wishlist
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching user dashboard data:', error);
+            res.status(500).json({ message: 'Failed to retrieve user dashboard data.' });
+        }
+    },
+
+    // NEW: Controller for Admin Dashboard
+    getAdminDashboard: async (req, res) => {
+        try {
+            // `req.user` is populated by `authenticateJWT` middleware
+            const adminId = req.user.id;
+            const adminRole = req.user.role;
+
+            // Example: Fetch aggregated data for admin view
+            const totalUsers = await prisma.user.count();
+            const totalProducts = await prisma.product.count();
+            // You might fetch more complex analytics here, e.g., total orders, revenue etc.
+
+            res.status(200).json({
+                message: `Welcome to the Admin Dashboard, ${req.user.name || 'Admin'}!`,
+                adminInfo: {
+                    id: adminId,
+                    role: adminRole,
+                },
+                dashboardStats: {
+                    totalUsers: totalUsers,
+                    totalProducts: totalProducts,
+                    // Add more admin-specific stats here
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching admin dashboard data:', error);
+            res.status(500).json({ message: 'Failed to retrieve admin dashboard data.' });
+        }
+    },
 
   // Controller for getting user profile
   getUserProfile: async (req, res) => {

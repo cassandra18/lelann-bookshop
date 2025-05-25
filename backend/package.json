@@ -10,6 +10,9 @@
     "build": "prisma migrate deploy",
     "postinstall": "prisma generate"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cassandra18/lelann_bookshop.git"

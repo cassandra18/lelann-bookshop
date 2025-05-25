@@ -43,7 +43,7 @@ model Subcategory {
 
 model Product {
   id             String         @id @default(uuid())
-  name           String
+  name           String         @unique
   price          Float
   cta            String?
   condition      String       @default("NEW")
@@ -56,7 +56,7 @@ model Product {
   subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
   image          String
   description     String
-  company        String?
+  company        String
   featured       Boolean @default(false)
   bestseller     Boolean @default(false)
   newarrival     Boolean @default(false)
