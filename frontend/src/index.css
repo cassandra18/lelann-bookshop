@@ -156,45 +156,51 @@ navbar {
   color: #ffea00;
   border-bottom: 2px solid #ffea00;
 }
-
-.slick-prev, .slick-next {
+.swiper-button-prev,
+.swiper-button-next {
   background: transparent !important;
   border-radius: 9999px;
   z-index: 10;
-  width: 40px !important;
-  height: 40px !important;
+  width: 22px !important;
+  height: 22px !important;
+  color: #FFD399 !important;
 }
-.slick-prev {
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(244, 239, 234, 0.5) !important; 
+}
+.swiper-button-prev {
   left: 10px !important;
 }
 
-.slick-next {
+.swiper-button-next {
   right: 10px !important;
 }
-.slick-prev:before, .slick-next:before {
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 18px !important; 
   color: #FFD399 !important;
-  opacity: 1 !important;
-  font-size: 24px !important;
 }
 
-.slick-dots {
+.swiper-pagination {
   position: absolute !important;
   bottom: 10px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 10;
   display: flex !important;
-  display: flex !important;
   justify-content: center;
 }
 
-.slick-dots li button:before {
-  color: white !important;
-  opacity: 1 !important;
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.5 !important;
 }
 
-.slick-dots li.slick-active button:before {
-  color: #FFD399 !important;
+.swiper-pagination-bullet-active {
+  background: #FFD399 !important;
   opacity: 1 !important;
 }
 
