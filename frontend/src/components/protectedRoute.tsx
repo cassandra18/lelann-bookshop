@@ -1,46 +1,38 @@
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useAuth } from './context/AuthContext'; 
 
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  allowedRoles: string[];
+  redirectTo?: string;
+}
 
-const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles: string[] }) => {
-    const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  allowedRoles,
+  redirectTo = '/sign-in',
+}) => {
+  const { isAuthenticated, user, loading } = useAuth();
 
-    useEffect(() => {
-        const checkRole = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/user/verify', {
-                    method: 'GET',
-                    credentials: 'include',
-                });
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <p className="text-lg text-gray-700">Loading authentication...</p>
+      </div>
+    );
+  }
 
-                if (response.ok) {
-                    const { role } = await response.json();
-                    if (allowedRoles.includes(role)) {
-                        setIsAuthorized(true);
-                    } else {
-                        setIsAuthorized(false);
-                    }
-                } else {
-                    setIsAuthorized(false);
-                }
-            } catch (error) {
-                console.error('Error verifying role:', error);
-                setIsAuthorized(false);
-            }
-        };
+  if (!isAuthenticated) {
+    return <Navigate to={redirectTo} replace />;
+  }
 
-        checkRole();
-    }, [allowedRoles]);
+  if (user && !allowedRoles.includes(user.role)) {
+    console.warn(`User ${user.email} (role: ${user.role}) attempted to access a protected route for roles: ${allowedRoles.join(', ')}`);
+    return <Navigate to="/" replace />;
+  }
 
-    if (isAuthorized === null) {
-        return <div>Loading...</div>;  // Loading state until the role is verified
-    }
-
-    if (!isAuthorized) {
-        return <Navigate to="/sign-in" />;  // Redirect to login if unauthorized
-    }
-
-    return children;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

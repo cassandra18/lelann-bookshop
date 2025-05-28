@@ -53,7 +53,7 @@ const UserControllers = {
   // Controller for user login
   loginUser: async (req, res) => {
     try {
-      const { email, password } = req.body.formData;
+      const { email, password } = req.body.formData || req.body;
       // Validate input
       if (!email || !password) {
         return res
@@ -61,22 +61,22 @@ const UserControllers = {
           .json({ message: "Email and password are required" });
       }
       // Check if user or admin exists
-      const account = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: {
           email,
         },
       });
 
-      if (!account) {
+      if (!user) {
         return res.status(404).json({ message: "Invalid email or password" });
       }
       // Compare passwords
-      const isPasswordValid = await bcrypt.compare(password, account.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         return res.status(401).json({ message: "Invalid email or password" });
       }
       // Generate a token
-      const token = jwt.sign({ id: account.id, role: account.role }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: user.id, name: user.name, email: user.email, role: user.role }, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
 
@@ -89,7 +89,15 @@ const UserControllers = {
         path: '/'
       });
 
-      res.status(200).json({ message: 'Logged in successfully', role: account.role });
+      res.status(200).json({ message: 'Logged in successfully',
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        },
+        token 
+       });
     } catch (error) {
       console.error("Login error:", error);
       if (error.code && error.code.startsWith('P')) { // Prisma error
@@ -100,23 +108,56 @@ const UserControllers = {
     }
   },
 
-   // NEW: Function to verify user role for the frontend's ProtectedRoute
-    verifyUser: (req, res) => {
-        // If authenticateJWT has run successfully, req.user will be populated.
-        // This function simply returns the role that was authenticated.
-        if (req.user && req.user.role) {
-            return res.status(200).json({ role: req.user.role });
-        } else {
-            // This state should ideally not be reached if authenticateJWT runs correctly,
-            // but as a fallback, it means the token was valid but role info is missing.
-            return res.status(401).json({ message: 'Authentication required: User role not found in token' });
-        }
-    },
+  // NEW: Function to verify user role for the frontend's ProtectedRoute
+  verifyUser: (req, res) => {
+      if (req.user ) {
+          return res.status(200).json({ message: 'User authenticated',
+             user: {
+              id: req.user.id,
+              name: req.user.name,
+              email: req.user.email,
+              role: req.user.role
+            }
+          });
+      } else {
+        return res.status(401).json({ message: 'Authentication required: User role not found in token' });
+      }
+  },
+
+  getCurrentUser: async (req, res) => {
+  try {
+  if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: "Not authenticated or user ID missing from token." });
+      }
+
+      const userId = req.user.id;
+
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true, 
+        },
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found based on token." });
+      }
+
+      res.status(200).json(user); // Send back the user's data
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
 
     // NEW: Controller for User Dashboard
     getUserDashboard: async (req, res) => {
         try {
-            // `req.user` is populated by `authenticateJWT` middleware
             const userId = req.user.id; // Get the ID of the logged-in user
             const userRole = req.user.role; // Get the role of the logged-in user
 

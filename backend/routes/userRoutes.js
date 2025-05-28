@@ -13,6 +13,7 @@ const { createUserDashboard } = require('../controllers/userDashboardController'
 router.post('/register', validateRegisterInput, UserControllers.registerUser);
 router.post('/login', UserControllers.loginUser);
 router.get('/verify', authenticateJWT, UserControllers.verifyUser);
+router.get('/me', authenticateJWT, UserControllers.getCurrentUser);
 // Requires authentication AND the 'admin' role
 router.get('/admin-dashboard-data', authenticateJWT, authorizeRoles(['admin']), UserControllers.getAdminDashboard);
 

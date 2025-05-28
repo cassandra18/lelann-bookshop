@@ -1,5 +1,8 @@
+// src/components/signin.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from './context/AuthContext';
 
 const SignIn: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +12,9 @@ const SignIn: React.FC = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -22,39 +27,40 @@ const SignIn: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ formData }),
-        credentials: "include",
+      const response = await axios.post("http://localhost:5000/api/user/login", {
+        email: formData.email,
+        password: formData.password,
+      }, {
+        withCredentials: true,
       });
 
-      const data = await response.json();
+      const { token, user } = response.data;
 
-      if (response.ok) {
-        if (data.role === "admin") {
-          navigate("/admin-dashboard");
-        } else if (data.role === "customer") {
-          navigate("/user-dashboard");
-        } else {
-          setMessage("Unknown role. Contact admin.");
-        }
+      login(token, user); 
+
+      if (user.role === "admin") {
+        navigate("/admin-dashboard");
+      } else if (user.role === "customer") {
+        navigate("/user-dashboard");
       } else {
-        setMessage(data.message || "Login failed");
+        setMessage("Unknown role. Contact admin.");
+        // Optionally, log out the user if role is unknown
+        // logout();
       }
-    } catch (error) {
-      console.error(error);
-      setMessage("An error occurred. Please try again later.");
+
+    } catch (error: any) {
+      console.error('Login error:', error);
+      setMessage(error.response?.data?.message || "An error occurred during sign-in. Please try again.");
+    } finally {
+      setLoading(false); 
     }
   };
 
   return (
     <div className="flex md:flex-row bg-[#02364d] mt-10 rounded-lg max-w-5xl md:mx-auto  mb-28 overflow-hidden">
-      {/* Form section */}
       <div className="w-full md:w-1/2 p-6">
         <h1 className="text-3xl font-bold text-center mb-6 text-yellow-300">
           Log in to your Lelann account
@@ -65,7 +71,6 @@ const SignIn: React.FC = () => {
         )}
 
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Email input */}
           <div className="flex flex-col">
             <label htmlFor="email" className="text-white font-medium mb-1">
               Email
@@ -77,10 +82,10 @@ const SignIn: React.FC = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
+              disabled={loading} 
             />
           </div>
 
-          {/* Password input with toggle */}
           <div className="flex flex-col relative">
             <label htmlFor="password" className="text-white font-medium mb-1">
               Password
@@ -92,6 +97,7 @@ const SignIn: React.FC = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
+              disabled={loading}
             />
             <span
               onClick={() => setShowPassword((prev) => !prev)}
@@ -103,9 +109,10 @@ const SignIn: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-yellow-100 text-prussian-blue rounded py-2 mt-4 hover:bg-yellow-300 transition duration-200"
+            className="w-full bg-yellow-100 text-prussian-blue rounded py-2 mt-4 hover:bg-yellow-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Sign In
+            {loading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
 
@@ -117,7 +124,6 @@ const SignIn: React.FC = () => {
         </p>
       </div>
 
-      {/* Image section */}
       <div className="w-full md:w-1/2 hidden md:block">
         <img
           src="images/signup-img.jpeg"

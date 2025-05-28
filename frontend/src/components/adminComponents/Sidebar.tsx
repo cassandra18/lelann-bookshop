@@ -2,14 +2,14 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import {
-  FaTachometerAlt, // Dashboard
-  FaUsers,        // Users
-  FaBoxOpen,      // Products
-  FaThLarge,      // Categories
-  FaPencilAlt,    // Authors
-  FaBuilding,      // Publishers
-  FaTimes         // Close icon for mobile
-} from 'react-icons/fa'; // Ensure you have react-icons installed: npm install react-icons
+  FaTachometerAlt, 
+  FaUsers,        
+  FaBoxOpen,     
+  FaThLarge,      
+  FaPencilAlt,    
+  FaBuilding,   
+  FaTimes         
+} from 'react-icons/fa'; 
 
 interface SidebarProps {
   onClose: () => void;
@@ -47,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
                 to={item.path}
                 className={({ isActive }) =>
                   `flex items-center py-3 px-4 transition-colors duration-200 ease-in-out
-                   hover:bg-gray-700 ${isActive ? 'bg-gray-700 border-l-4 border-blue-500' : ''}`
+                   hover:bg-gray-700 hover:text-[#ffea00] ${isActive ? 'bg-gray-700 border-l-4 text-[#ffea00]' : ''}`
                 }
                 onClick={onClose}
               >

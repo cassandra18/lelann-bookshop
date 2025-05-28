@@ -7,6 +7,7 @@ import { CartProvider } from './components/cart-functionality';
 function App() {
   return (
     <>
+    
     <CartProvider>
       <Navbar />
       <Outlet />

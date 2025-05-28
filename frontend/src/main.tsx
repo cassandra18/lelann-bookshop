@@ -3,6 +3,9 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
+
+// Importing pages and components
+import { AuthProvider } from "./components/context/AuthContext.tsx";
 import Homepage from "./pages/homepage.tsx";
 import OtherBooksPage from "./pages/other-books.tsx";
 import BookDetails from "./components/bookdetails.tsx";
@@ -114,6 +117,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-      <RouterProvider router={ router }/>
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
     </React.StrictMode>
 );
