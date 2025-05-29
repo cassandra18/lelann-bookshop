@@ -14,11 +14,13 @@
     "country-list": "^2.3.0",
     "framer-motion": "^12.9.4",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.511.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.24.1",
     "react-slick": "^0.30.2",
+    "recharts": "^2.15.3",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.8"
   },

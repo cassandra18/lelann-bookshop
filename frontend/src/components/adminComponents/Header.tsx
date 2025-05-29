@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
             aria-haspopup="true"
             aria-expanded={isUserMenuOpen ? 'true' : 'false'}
           >
-            <FaUserCircle className="h-7 w-7 text-gray-400" />
+            <FaUserCircle className="h-7 w-7 text-gray-400 hover:text-white" />
             <span className="hidden md:block text-gray-200 font-semibold">
               {user ? user.name : 'Guest'}
             </span>

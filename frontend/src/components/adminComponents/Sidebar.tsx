@@ -58,7 +58,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
           ))}
         </ul>
       </nav>
-      {/* You could place a static logout button here as well, consistent with the Header */}
+      
+      <div className="p-4 border-t border-gray-700 mt-auto">
+        <p className="text-xs text-gray-500 text-center">&copy; {new Date().getFullYear()} Lelann Books and Stationaries</p>
+      </div>
     </div>
   );
 };
