@@ -17,13 +17,16 @@ import MPesaPaymentPage from "./pages/mpesaPaymentPage.tsx";
 import GiftCardPaymentPage from "./pages/giftCardPaymentPage.tsx";
 import KCBPaymentPage from "./pages/kcbPaymentPage.tsx";
 import CreditCardPaymentPage from "./pages/creditCardPaymentPage.tsx";
-import AdminDashboard from "./pages/admin/adminDashboard.tsx";
 import UserDashboard from "./pages/user/userDashboard.tsx";
 import ProtectedRoute from "./components/protectedRoute.tsx";
 import SignUpPage from "./pages/signupPage.tsx";
 import SignInPage from "./components/signin.tsx";
 import EducationalBooksPage from "./pages/EducationalBooksPage.tsx";
 
+
+// Importing admin components
+import Layout from "./pages/admin/adminDashboard.tsx";
+import DashboardOverview from "./components/adminComponents/dashboardOverview.tsx";
 
 
 const router = createBrowserRouter([
@@ -101,9 +104,15 @@ const router = createBrowserRouter([
     path: '/admin-dashboard',
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
-        <AdminDashboard />
+        <Layout />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        path: '/admin-dashboard',
+        element: <DashboardOverview />,
+      },
+    ]
   },
   {
     path: "/user-dashboard",

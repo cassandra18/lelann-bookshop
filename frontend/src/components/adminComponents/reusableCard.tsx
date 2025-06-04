@@ -1,8 +1,8 @@
 // Reusable Card Component
 interface CardProps {
   title: string;
-  value: number;
-  icon: React.ElementType; // Type for Lucide icon component
+  value: number | string;
+  icon: React.ElementType;
   className?: string;
 }
 
