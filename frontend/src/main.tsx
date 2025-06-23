@@ -100,6 +100,8 @@ const router = createBrowserRouter([
       }
     ],
   },
+
+  // Admin routes
   {
     path: '/admin-dashboard',
     element: (

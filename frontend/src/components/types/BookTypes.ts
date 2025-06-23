@@ -81,13 +81,22 @@ export interface BookFormProps {
     createdAt: string;
     updatedAt: string;
   }
-  
+
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
   // Subcategory that a book belongs to
   export interface Subcategory {
     id: string;
     name: string;
     parent_id?: string;
     category_id: string;
+    category?: Category; 
     createdAt: string;
     updatedAt: string;
   }
