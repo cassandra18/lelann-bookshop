@@ -1,71 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DB_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-// user model
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  password String
-  name     String
-  role     String @default("customer") 
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("customer")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 
 model Category {
-  id            String          @id @default(uuid())
-  name          String         @unique 
+  id            String        @id @default(uuid())
+  name          String        @unique
   description   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   subcategories Subcategory[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Subcategory {
-  id            String         @id @default(uuid())
-  name          String          @unique
+  id            String        @id @default(uuid())
+  name          String        @unique
   parent_id     String?
+  category_id   String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  products      Product[]
+  category      Category      @relation(fields: [category_id], references: [id])
   parent        Subcategory?  @relation("SubcategorySelfRelation", fields: [parent_id], references: [id])
   subcategories Subcategory[] @relation("SubcategorySelfRelation")
-  products      Product[]
-  category_id   String
-  category      Category      @relation(fields: [category_id], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Product {
-  id             String         @id @default(uuid())
-  name           String         @unique
+  id             String      @id @default(uuid())
+  name           String      @unique
   price          Float
-  cta            String?
-  condition      String       @default("NEW")
+  cta            String?     @default("Buy Now")
+  condition      String      @default("NEW")
   subject        String?
   author_id      String?
-  author         Author?    @relation(fields: [author_id], references: [id])
   publisher_id   String?
-  publisher      Publisher?  @relation(fields: [publisher_id], references: [id])
   subcategory_id String
-  subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
   image          String
-  description     String
+  description    String
   company        String
-  featured       Boolean @default(false)
-  bestseller     Boolean @default(false)
-  newarrival     Boolean @default(false)
-  wishlist       Boolean @default(false)
-  promotion      Boolean @default(false)
+  featured       Boolean     @default(false)
+  bestseller     Boolean     @default(false)
+  newarrival     Boolean     @default(false)
+  wishlist       Boolean     @default(false)
+  promotion      Boolean     @default(false)
   oldPrice       Float?
   discount       Float?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  author         Author?     @relation(fields: [author_id], references: [id])
+  publisher      Publisher?  @relation(fields: [publisher_id], references: [id])
+  subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
+}
+
+model Author {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  books     Product[]
+}
+
+model Publisher {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  books     Product[]
 }
 
 enum Condition {
@@ -74,22 +90,4 @@ enum Condition {
   USED_GOOD
   USED_VERY_GOOD
   USED_ACCEPTABLE
-}
-
-model Author {
-  id    String      @id @default(uuid())
-  name  String
-  email String    @unique
-  books Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Publisher {
-  id    String       @id @default(uuid())
-  name  String
-  email String     @unique
-  books Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

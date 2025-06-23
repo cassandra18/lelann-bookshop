@@ -166,6 +166,7 @@ async function main() {
         newarrival: false,
         wishlist: false,
         promotion: false,
+        cta: 'Buy Now!',
       },
     });
 
@@ -187,8 +188,32 @@ async function main() {
         newarrival: true,
         wishlist: false,
         promotion: false,
+        cta: 'Buy Now!',
       },
     });
+
+    const grade2Product = await prisma.product.upsert({
+      where: { name: 'Grade 2 Book' },
+      update: {},
+      create: {
+        name: 'Grade 2 Book',
+        price: 12.99,
+        condition: 'NEW',
+        description: 'A comprehensive Grade 2 textbook following the CBC curriculum.',
+        author_id: authorB.id,
+        publisher_id: publisherB.id,
+        image: 'lelann_bookshop/backend/uploads/queenex_g5_encyclopedia.png',
+        subcategory_id: competencyBasedCurriculumCategory.id,
+        company: 'Curriculum Publishers',
+        featured: true,
+        bestseller: true,
+        newarrival: true,
+        wishlist: false,
+        promotion: false,
+      },
+    });
+    console.log('Grade 2 Product created:', grade2Product);
+
 
     // Display seeded data (ensure to include necessary relations for proper logging)
     const seededCategories = await prisma.category.findMany({
