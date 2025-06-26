@@ -5,9 +5,10 @@ import ProductTable from "./ProductTable";
 
 type ProductListProps = {
   onAdd: () => void;
+  onEdit: (id: string) => void;
 };
 
-const ProductList: React.FC<ProductListProps> = ({ onAdd }) => {
+const ProductList: React.FC<ProductListProps> = ({ onAdd, onEdit }) => {
   const [products, setProducts] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,9 +39,9 @@ const ProductList: React.FC<ProductListProps> = ({ onAdd }) => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-slate-400">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">All Products</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">All Products</h1>
         <button
           onClick={onAdd}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -52,7 +53,7 @@ const ProductList: React.FC<ProductListProps> = ({ onAdd }) => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ProductTable products={products} onDelete={handleDelete} />
+        <ProductTable products={products} onDelete={handleDelete} onEdit={onEdit} />
       )}
     </div>
   );

@@ -82,13 +82,8 @@ const [formData, setFormData] = useState<BookFormData>({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const dataToSave = {
-      ...formData,
-      price: parseFloat(formData.price),
-      oldPrice: formData.oldPrice ? parseFloat(formData.oldPrice) : undefined,
-      discount: formData.discount ? parseFloat(formData.discount) : undefined,
-    };
-    onSave(dataToSave, imageFile);
+
+    onSave(formData, imageFile);
   };
 
   if (loadingDependencies) {

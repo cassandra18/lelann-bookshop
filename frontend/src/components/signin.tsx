@@ -42,7 +42,7 @@ const SignIn: React.FC = () => {
       login(token, user); 
 
       if (user.role === "admin") {
-        navigate("/admin-dashboard");
+        navigate("/admin");
       } else if (user.role === "customer") {
         navigate("/user-dashboard");
       } else {

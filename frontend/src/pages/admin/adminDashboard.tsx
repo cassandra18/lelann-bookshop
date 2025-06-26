@@ -13,7 +13,7 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen">
       <div
         className={`fixed inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
                      lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out z-30 lg:z-auto w-64 bg-gray-800 flex-shrink-0`}
@@ -27,9 +27,9 @@ const Layout: React.FC = () => {
         ></div>
       )}
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden bg-slate-400">
         <Header onMenuToggle={toggleSidebar} />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200 p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
           <Outlet /> 
         </main>
       </div>

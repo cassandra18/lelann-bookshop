@@ -16,23 +16,41 @@ export const fetchProduct = async (id: string): Promise<Book> => {
   return res.json();
 };
 
-export const createProduct = async (product: Partial<Book>) => {
+export const createProduct = async (
+  product: Partial<Book>,
+  imageFile: File | null
+) => {
+  const formData = new FormData();
+  formData.append("product", JSON.stringify(product));
+
+  if (imageFile) {
+    formData.append("image", imageFile);
+  }
+
   const res = await fetch(`${BASE_URL}/product/add`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(product),
+    body: formData,
   });
+
   if (!res.ok) throw new Error("Failed to create product");
 };
 
-export const updateProduct = async (id: string, product: Partial<Book>) => {
+
+export const updateProduct = async (id: string, product: Partial<Book>, imageFile: File | null) => {
+  const formData = new FormData();
+  formData.append("product", JSON.stringify(product));
+  if (imageFile) {
+    formData.append("image", imageFile);
+  }
+
   const res = await fetch(`${BASE_URL}/product/update/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(product),
+    body: formData,
   });
+
   if (!res.ok) throw new Error("Failed to update product");
 };
+
 
 export const deleteProduct = async (id: string) => {
   const res = await fetch(`${BASE_URL}/product/delete/${id}`, { method: "DELETE" });

@@ -50,7 +50,7 @@ export interface Book {
 export interface BookFormProps {
   book: Book | null;
   onClose: () => void;
-  onSave: (bookData: Omit<Book, 'id' | 'createdAt' | 'updatedAt' | 'image' | 'author' | 'publisher' | 'subcategory'>, imageFile: File | null) => void;
+ onSave: (bookData: BookFormData, imageFile: File | null) => void;
   isSubmitting: boolean;
 }
 

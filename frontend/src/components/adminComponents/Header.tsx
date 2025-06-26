@@ -29,10 +29,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
         >
           <FaBars className="h-6 w-6" />
         </button>
-
-        <Link to={user?.role === 'admin' ? "/admin-dashboard" : "/"} className="text-2xl font-bold text-[#ffea00] barlow-bold">
-          {user?.role === 'admin' ? "Admin Dashboard" : "Lelann Books"}
-        </Link>
       </div>
 
       <div className="flex items-center space-x-4">
@@ -71,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
               )}
               {user?.role === 'admin' && ( // Only show profile settings for admin for example
                  <Link
-                    to="/admin-dashboard/profile" // Or just /profile
+                    to="/admin/profile" // Or just /profile
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     onClick={() => setIsUserMenuOpen(false)}
                  >

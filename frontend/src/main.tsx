@@ -27,6 +27,7 @@ import EducationalBooksPage from "./pages/EducationalBooksPage.tsx";
 // Importing admin components
 import Layout from "./pages/admin/adminDashboard.tsx";
 import DashboardOverview from "./components/adminComponents/dashboardOverview.tsx";
+import ProductPage from "./pages/admin/products.tsx";
 
 
 const router = createBrowserRouter([
@@ -103,7 +104,7 @@ const router = createBrowserRouter([
 
   // Admin routes
   {
-    path: '/admin-dashboard',
+    path: '/admin',
     element: (
       <ProtectedRoute allowedRoles={['admin']}>
         <Layout />
@@ -111,9 +112,13 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: '/admin-dashboard',
+        path: '/admin',
         element: <DashboardOverview />,
       },
+      {
+        path: '/admin/products',
+        element: <ProductPage/>
+      }
     ]
   },
   {

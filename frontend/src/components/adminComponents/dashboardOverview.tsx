@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Book, ShoppingCart, Users, Package, Loader2, DollarSign, TrendingUp, TrendingDown, Clock } from 'lucide-react'; // Added DollarSign, TrendingUp, TrendingDown, Clock icons
+import { Book, ShoppingCart, Users, Package, Loader2, DollarSign, TrendingUp, Clock } from 'lucide-react'; // Added DollarSign, TrendingUp, TrendingDown, Clock icons
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import Card from './reusableCard'; // Assuming your Card component is flexible enough
@@ -115,8 +115,8 @@ const DashboardOverview = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
+    <div className="p-6 bg-slate-400 min-h-screen">
+      <h2 className="text-3xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -190,7 +190,7 @@ const DashboardOverview = () => {
             ))}
             {mockRecentOrders.length > 0 && (
                 <li className="pt-4 text-right">
-                    <Link to="/admin-dashboard/orders" className="text-blue-600 hover:underline text-sm">View All Orders &rarr;</Link>
+                    <Link to="/admin/orders" className="text-blue-600 hover:underline text-sm">View All Orders &rarr;</Link>
                 </li>
             )}
           </ul>
@@ -203,16 +203,16 @@ const DashboardOverview = () => {
             <Package className="mr-2 text-red-600" size={20} /> Quick Actions
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link to="/admin-dashboard/books/add" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
+            <Link to="/admin/books/add" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
               Add New Book
             </Link>
-            <Link to="/admin-dashboard/books" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
+            <Link to="/admin/books" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
               Manage Books
             </Link>
-            <Link to="/admin-dashboard/orders?status=pending" className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
+            <Link to="/admin/orders?status=pending" className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
               Process Pending Orders
             </Link>
-            <Link to="/admin-dashboard/users" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
+            <Link to="/admin/users" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
               Manage Users
             </Link>
           </div>

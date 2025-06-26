@@ -1,12 +1,12 @@
 import { Book } from "../../types/BookTypes";
-import { Link } from "react-router-dom";
 
 interface Props {
   products: Book[];
   onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
 }
 
-export default function ProductTable({ products, onDelete }: Props) {
+export default function ProductTable({ products, onDelete, onEdit }: Props) {
   return (
     <table className="w-full text-left border border-gray-200">
       <thead className="bg-gray-100">
@@ -32,12 +32,13 @@ export default function ProductTable({ products, onDelete }: Props) {
             <td>{book.subcategory?.category?.name || "—"}</td>
             <td>Ksh {book.price}</td>
             <td>
-              <Link
-                to={`/admin/products/edit/${book.id}`}
+              <button
+                onClick={() => onEdit(book.id)}
+                disabled={!onEdit}
                 className="text-blue-500 mr-2"
               >
                 Edit
-              </Link>
+              </button>
               <button
                 onClick={() => onDelete(book.id)}
                 className="text-red-500"
