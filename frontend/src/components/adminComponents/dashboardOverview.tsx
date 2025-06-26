@@ -115,8 +115,9 @@ const DashboardOverview = () => {
   }
 
   return (
-    <div className="p-6 bg-slate-400 min-h-screen">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
+    <div className="p-6  min-h-screen">
+      <h2 className="text-4xl font-extrabold text-yellow-300 mb-8 tracking-tight">📊 Dashboard Overview</h2>
+
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -131,7 +132,7 @@ const DashboardOverview = () => {
 
       {/* Sales Performance Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-gray-300 p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <TrendingUp className="mr-2 text-blue-600" size={20} /> Sales Performance (Last 7 Days)
           </h3>
@@ -148,7 +149,7 @@ const DashboardOverview = () => {
         </div>
 
         {/* Top Selling Categories Chart */}
-        <div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-gray-300 p-6 rounded-xl shadow-md">
             <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
                 <Book className="mr-2 text-purple-600" size={20} /> Top Selling Categories
             </h3>
@@ -168,7 +169,7 @@ const DashboardOverview = () => {
       {/* Recent Orders & Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Recent Orders */}
-        <div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-gray-300 p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <Clock className="mr-2 text-indigo-600" size={20} /> Recent Orders
           </h3>
@@ -198,7 +199,7 @@ const DashboardOverview = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-gray-300 p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <Package className="mr-2 text-red-600" size={20} /> Quick Actions
           </h3>

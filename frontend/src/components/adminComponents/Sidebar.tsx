@@ -26,8 +26,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   ];
 
   return (
-    <div className="w-full h-full bg-gray-800 text-white flex flex-col">
-      <div className="p-4 text-2xl font-bold border-b border-gray-700 flex items-center justify-between">
+    <div className="w-full h-full text-white flex flex-col"
+    style={{ background: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur" }}>
+      <div className="p-3.5 text-2xl font-bold border-b border-gray-700 flex items-center justify-between">
         <Link to="/admin" className="text-[#ffea00] barlow-bold">
           Admin Panel
         </Link>

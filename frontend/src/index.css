@@ -40,18 +40,20 @@ body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 .scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  scrollbar-color: #FFD399 transparent;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ffd39967 transparent; /* Thumb and track colors */
 
 }
 .scrollbar-hide::-webkit-scrollbar {
-  height: 0px; /* Chrome, Safari, Opera */
+  width: 2px; /* Vertical scrollbar */
+  height: 2px; /* Horizontal scrollbar */
 }
 .scrollbar-hide::-webkit-scrollbar-track {
   background: transparent;
 }
 .scrollbar-hide::-webkit-scrollbar-thumb {
-  background: #FFD399;
+  background-color: #FFD399; /* Thumb color */
+  border-radius: 10px;
 }
 /* background color
 00293B prussian blue 

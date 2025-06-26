@@ -7,7 +7,7 @@ interface CardProps {
 }
 
 const Card = ({ title, value, icon: Icon, className = '' }: CardProps) => (
-  <div className={`bg-white p-6 rounded-xl shadow-md flex items-center justify-between ${className}`}>
+  <div className={`bg-gray-300 p-6 rounded-xl shadow-md flex items-center justify-between ${className}`}>
     <div>
       <h3 className="text-lg font-semibold text-gray-600">{title}</h3>
       <p className="text-3xl font-bold text-gray-800 mt-1">{value}</p>

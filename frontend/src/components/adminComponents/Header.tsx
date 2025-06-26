@@ -20,7 +20,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
   };
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 bg-gray-800 text-white shadow-md z-20">
+    <header className="flex items-center justify-between px-6 py-4 text-white shadow-md z-20"
+    style={{ background: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur" }}>
       <div className="flex items-center">
         <button
           onClick={onMenuToggle}

@@ -53,7 +53,7 @@ const handleSave = async (data: BookFormData, imageFile: File | null) => {
   };
 
   return (
-    <div className="p-6">
+    <div className="md:p-6">
       {!showForm ? (
         <ProductList onAdd={handleAdd} onEdit={handleEdit} />
       ) : (

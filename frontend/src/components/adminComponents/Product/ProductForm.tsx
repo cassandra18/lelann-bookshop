@@ -102,29 +102,29 @@ const [formData, setFormData] = useState<BookFormData>({
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md text-center text-red-600">
           <p>{dependencyError}</p>
-          <button onClick={onClose} className="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg">Close</button>
+          <button onClick={onClose} className="mt-4 bg-gray-400 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg">Close</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6">{book ? 'Edit Book' : 'Add New Book'}</h3>
+    <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50 p-4 mt-20">
+      <div className="bg-[#02364d] p-8 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto scrollbar-hide">
+        <h3 className="text-3xl font-bold text-yellow-300 mb-6">{book ? '📝 Edit Book' : '🌟 Add New Book'}</h3>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" required />
+              <label htmlFor="name" className="block text-white font-medium mb-1">Name</label>
+              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" required />
             </div>
             <div>
-              <label htmlFor="price" className="block text-gray-700 text-sm font-bold mb-2">Price</label>
-              <input type="number" id="price" name="price" value={formData.price} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" step="0.01" required />
+              <label htmlFor="price" className="block text-white font-medium mb-1">Price</label>
+              <input type="number" id="price" name="price" value={formData.price} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" step="0.01" required />
             </div>
             <div>
-              <label htmlFor="author_id" className="block text-gray-700 text-sm font-bold mb-2">Author</label>
-              <select id="author_id" name="author_id" value={formData.author_id} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" required>
+              <label htmlFor="author_id" className="block text-white font-medium mb-1">Author</label>
+              <select id="author_id" name="author_id" value={formData.author_id} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" required>
                 <option value="">Select Author</option>
                 {authors.map(author => (
                   <option key={author.id} value={author.id}>{author.name}</option>
@@ -132,8 +132,8 @@ const [formData, setFormData] = useState<BookFormData>({
               </select>
             </div>
             <div>
-              <label htmlFor="publisher_id" className="block text-gray-700 text-sm font-bold mb-2">Publisher</label>
-              <select id="publisher_id" name="publisher_id" value={formData.publisher_id} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" required>
+              <label htmlFor="publisher_id" className="block text-white font-medium mb-1">Publisher</label>
+              <select id="publisher_id" name="publisher_id" value={formData.publisher_id} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" required>
                 <option value="">Select Publisher</option>
                 {publishers.map(publisher => (
                   <option key={publisher.id} value={publisher.id}>{publisher.name}</option>
@@ -141,8 +141,8 @@ const [formData, setFormData] = useState<BookFormData>({
               </select>
             </div>
             <div>
-              <label htmlFor="subcategory_id" className="block text-gray-700 text-sm font-bold mb-2">Category</label>
-              <select id="subcategory_id" name="subcategory_id" value={formData.subcategory_id} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" required>
+              <label htmlFor="subcategory_id" className="block text-white font-medium mb-1">Category</label>
+              <select id="subcategory_id" name="subcategory_id" value={formData.subcategory_id} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" required>
                 <option value="">Select Category</option>
                 {subcategories.map(sub => (
                   <option key={sub.id} value={sub.id}>{sub.name}</option>
@@ -150,8 +150,8 @@ const [formData, setFormData] = useState<BookFormData>({
               </select>
             </div>
             <div>
-              <label htmlFor="condition" className="block text-gray-700 text-sm font-bold mb-2">Condition</label>
-              <select id="condition" name="condition" value={formData.condition} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" required>
+              <label htmlFor="condition" className="block text-white font-medium mb-1">Condition</label>
+              <select id="condition" name="condition" value={formData.condition} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" required>
                 <option value="NEW">NEW</option>
                 <option value="USED">USED</option>
                 <option value="USED_GOOD">USED_GOOD</option>
@@ -160,27 +160,27 @@ const [formData, setFormData] = useState<BookFormData>({
               </select>
             </div>
             <div>
-              <label htmlFor="company" className="block text-gray-700 text-sm font-bold mb-2">Company</label>
-              <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" required />
+              <label htmlFor="company" className="block text-white font-medium mb-1">Company</label>
+              <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" required />
             </div>
             <div>
-              <label htmlFor="subject" className="block text-gray-700 text-sm font-bold mb-2">Subject</label>
-              <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" />
+              <label htmlFor="subject" className="block text-white font-medium mb-1">Subject</label>
+              <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" />
             </div>
             <div>
-              <label htmlFor="cta" className="block text-gray-700 text-sm font-bold mb-2">CTA</label>
-              <input type="text" id="cta" name="cta" value={formData.cta} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" />
+              <label htmlFor="cta" className="block text-white font-medium mb-1">CTA</label>
+              <input type="text" id="cta" name="cta" value={formData.cta} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" />
             </div>
             <div>
-              <label htmlFor="oldPrice" className="block text-gray-700 text-sm font-bold mb-2">Old Price (Optional)</label>
-              <input type="number" id="oldPrice" name="oldPrice" value={formData.oldPrice} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" step="0.01" />
+              <label htmlFor="oldPrice" className="block text-white font-medium mb-1">Old Price (Optional)</label>
+              <input type="number" id="oldPrice" name="oldPrice" value={formData.oldPrice} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" step="0.01" />
             </div>
             <div>
-              <label htmlFor="discount" className="block text-gray-700 text-sm font-bold mb-2">Discount (Optional)</label>
-              <input type="number" id="discount" name="discount" value={formData.discount} onChange={handleChange} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" step="0.01" />
+              <label htmlFor="discount" className="block text-white font-medium mb-1">Discount (Optional)</label>
+              <input type="number" id="discount" name="discount" value={formData.discount} onChange={handleChange} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" step="0.01" />
             </div>
             <div>
-              <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">Image</label>
+              <label htmlFor="image" className="block text-white font-medium mb-1">Image</label>
               <input type="file" id="image" name="image" onChange={handleImageChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
               {book?.image && <p className="text-xs text-gray-500 mt-1">Current image: {book.image.split('/').pop()}</p>}
             
@@ -195,30 +195,30 @@ const [formData, setFormData] = useState<BookFormData>({
           </div>
 
           <div className="mb-4">
-            <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">Description</label>
-            <textarea id="description" name="description" value={formData.description} onChange={handleChange} rows={3} className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-blue-500" required></textarea>
+            <label htmlFor="description" className="block text-white font-medium mb-1">Description</label>
+            <textarea id="description" name="description" value={formData.description} onChange={handleChange} rows={3} className="border bg-gray-400 text-gray-700 rounded px-3 py-2 focus:outline-none" required></textarea>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="flex items-center">
               <input type="checkbox" id="featured" name="featured" checked={formData.featured} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <label htmlFor="featured" className="ml-2 text-sm font-medium text-gray-700">Featured</label>
+              <label htmlFor="featured" className="ml-2 text-sm font-medium text-gray-300">Featured</label>
             </div>
             <div className="flex items-center">
               <input type="checkbox" id="bestseller" name="bestseller" checked={formData.bestseller} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <label htmlFor="bestseller" className="ml-2 text-sm font-medium text-gray-700">Bestseller</label>
+              <label htmlFor="bestseller" className="ml-2 text-sm font-medium text-gray-300">Bestseller</label>
             </div>
             <div className="flex items-center">
               <input type="checkbox" id="newarrival" name="newarrival" checked={formData.newarrival} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <label htmlFor="newarrival" className="ml-2 text-sm font-medium text-gray-700">New Arrival</label>
+              <label htmlFor="newarrival" className="ml-2 text-sm font-medium text-gray-300">New Arrival</label>
             </div>
             <div className="flex items-center">
               <input type="checkbox" id="wishlist" name="wishlist" checked={formData.wishlist} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <label htmlFor="wishlist" className="ml-2 text-sm font-medium text-gray-700">Wishlist</label>
+              <label htmlFor="wishlist" className="ml-2 text-sm font-medium text-gray-300">Wishlist</label>
             </div>
             <div className="flex items-center">
               <input type="checkbox" id="promotion" name="promotion" checked={formData.promotion} onChange={handleChange} className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <label htmlFor="promotion" className="ml-2 text-sm font-medium text-gray-700">Promotion</label>
+              <label htmlFor="promotion" className="ml-2 text-sm font-medium text-gray-300">Promotion</label>
             </div>
           </div>
 
@@ -226,14 +226,14 @@ const [formData, setFormData] = useState<BookFormData>({
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
+              className="bg-yellow-100 hover:bg-yellow-300 text-red-600 font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out"
               disabled={isSubmitting}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center justify-center"
+              className="bg-yellow-100 hover:bg-yellow-300 text-gray-700 font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out flex items-center justify-center"
               disabled={isSubmitting}
             >
               {isSubmitting && <Loader2 className="animate-spin mr-2" size={20} />}

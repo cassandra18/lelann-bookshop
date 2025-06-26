@@ -1,8 +1,11 @@
-// src/admin/products/ProductActions.ts
-
 import { Book } from "../../types/BookTypes";
 
 const BASE_URL = "http://localhost:5000/api";
+
+// Helper to get token
+const getToken = () => {
+  return localStorage.getItem("token"); // or use cookies if you're storing it there
+};
 
 export const fetchProducts = async (): Promise<Book[]> => {
   const res = await fetch(`${BASE_URL}/products`);
@@ -27,32 +30,53 @@ export const createProduct = async (
     formData.append("image", imageFile);
   }
 
+  const token = getToken();
+
   const res = await fetch(`${BASE_URL}/product/add`, {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     body: formData,
   });
 
   if (!res.ok) throw new Error("Failed to create product");
 };
 
-
-export const updateProduct = async (id: string, product: Partial<Book>, imageFile: File | null) => {
+export const updateProduct = async (
+  id: string,
+  product: Partial<Book>,
+  imageFile: File | null
+) => {
   const formData = new FormData();
   formData.append("product", JSON.stringify(product));
+
   if (imageFile) {
     formData.append("image", imageFile);
   }
 
+  const token = getToken();
+
   const res = await fetch(`${BASE_URL}/product/update/${id}`, {
     method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     body: formData,
   });
 
   if (!res.ok) throw new Error("Failed to update product");
 };
 
-
 export const deleteProduct = async (id: string) => {
-  const res = await fetch(`${BASE_URL}/product/delete/${id}`, { method: "DELETE" });
+  const token = getToken();
+
+  const res = await fetch(`${BASE_URL}/product/delete/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   if (!res.ok) throw new Error("Failed to delete product");
 };
