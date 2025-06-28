@@ -1,41 +1,37 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-
-
+// Add a new author
 const addAuthor = async (req, res) => {
     try {
-        const { name , email} = req.body;
+        const { name } = req.body;
 
-        if (!name || !email) {
-            return res.status(400).json({ message: 'Name and email are required' });
-        };
+        if (!name) {
+            return res.status(400).json({ message: 'Name is required' });
+        }
 
         // Check if author already exists
         const existingAuthor = await prisma.author.findUnique({
-            where: {
-                email,
-            },
+            where: { name },
         });
+
         if (existingAuthor) {
             return res.status(400).json({ message: 'Author with this name already exists' });
         }
 
-        // Create a new author
+        // Create new author
         const author = await prisma.author.create({
-            data: {
-                name,
-                email
-            },
+            data: { name },
         });
 
         res.status(201).json(author);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal server error' });
-    };
+    }
 };
 
+// Get all authors
 const getAuthors = async (req, res) => {
     try {
         const authors = await prisma.author.findMany();
@@ -46,15 +42,18 @@ const getAuthors = async (req, res) => {
     }
 };
 
+// Get author by ID
 const getAuthorById = async (req, res) => {
     try {
         const { id } = req.params;
         const author = await prisma.author.findUnique({
             where: { id },
         });
+
         if (!author) {
             return res.status(404).json({ message: 'Author not found' });
         }
+
         res.status(200).json(author);
     } catch (error) {
         console.log(error);
@@ -62,21 +61,23 @@ const getAuthorById = async (req, res) => {
     }
 };
 
+// Update author
 const updateAuthor = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email } = req.body;
+        const { name } = req.body;
 
         const author = await prisma.author.findUnique({
             where: { id },
         });
+
         if (!author) {
             return res.status(404).json({ message: 'Author not found' });
         }
 
         const updatedAuthor = await prisma.author.update({
             where: { id },
-            data: { name, email },
+            data: { name },
         });
 
         res.status(200).json(updatedAuthor);
@@ -86,12 +87,15 @@ const updateAuthor = async (req, res) => {
     }
 };
 
+// Delete author
 const deleteAuthor = async (req, res) => {
     try {
         const { id } = req.params;
+
         const author = await prisma.author.findUnique({
             where: { id },
         });
+
         if (!author) {
             return res.status(404).json({ message: 'Author not found' });
         }
@@ -107,4 +111,10 @@ const deleteAuthor = async (req, res) => {
     }
 };
 
-module.exports = { addAuthor, getAuthors, getAuthorById, updateAuthor, deleteAuthor };
+module.exports = {
+    addAuthor,
+    getAuthors,
+    getAuthorById,
+    updateAuthor,
+    deleteAuthor
+};

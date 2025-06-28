@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 // Function to add a new category
 const createCategory = async (req, res) => {
     try {
-        const { name, description } = req.body
+        const { name } = req.body
 
         // Validate required fields
         if (!name) {
@@ -15,7 +15,6 @@ const createCategory = async (req, res) => {
         const category = await prisma.category.create({
             data: {
                 name,
-                description
             },
         })
 
@@ -64,7 +63,7 @@ const getCategoryById = async (req, res) => {
 const updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, description } = req.body;
+        const { name} = req.body;
 
         // Validate required fields
         if (!name) {

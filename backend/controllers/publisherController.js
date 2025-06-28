@@ -1,22 +1,17 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-
-
+// Add publisher
 const addPublisher = async (req, res) => {
-    const { name, email } = req.body;
-    if (!name || !email) {
-        return res.status(400).json({ message: 'Please provide a name and an email' });
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({ message: 'Please provide a name' });
     }
 
     try {
         const newPublisher = await prisma.publisher.create({
-            data: { name, email },
+            data: { name },
         });
-
-        if (!newPublisher) {
-            return res.status(500).json({ message: 'Failed to add publisher' });
-        }
 
         res.status(201).json(newPublisher);
     } catch (error) {
@@ -25,12 +20,10 @@ const addPublisher = async (req, res) => {
     }
 };
 
+// Get all publishers
 const getPublishers = async (req, res) => {
     try {
         const publishers = await prisma.publisher.findMany();
-        if (!publishers) {
-            return res.status(404).json({ message: 'No publishers found' });
-        }
         res.status(200).json(publishers);
     } catch (error) {
         console.log(error);
@@ -38,6 +31,7 @@ const getPublishers = async (req, res) => {
     }
 };
 
+// Get publisher by ID
 const getPublisherById = async (req, res) => {
     const { id } = req.params;
 
@@ -57,9 +51,10 @@ const getPublisherById = async (req, res) => {
     }
 };
 
+// Update publisher
 const updatePublisher = async (req, res) => {
     const { id } = req.params;
-    const { name, email } = req.body;
+    const { name } = req.body;
 
     try {
         const publisher = await prisma.publisher.findUnique({
@@ -72,7 +67,7 @@ const updatePublisher = async (req, res) => {
 
         const updatedPublisher = await prisma.publisher.update({
             where: { id },
-            data: { name, email },
+            data: { name },
         });
 
         res.status(200).json(updatedPublisher);
@@ -82,6 +77,7 @@ const updatePublisher = async (req, res) => {
     }
 };
 
+// Delete publisher
 const deletePublisher = async (req, res) => {
     const { id } = req.params;
 
