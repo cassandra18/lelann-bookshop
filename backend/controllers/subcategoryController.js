@@ -3,20 +3,22 @@ const prisma = new PrismaClient();
 
 // Function to add a new subcategory
 const createSubcategory = async (req, res) => {
+    const { name, categoryId, parentId } = req.body;
+
+    if (!name || !categoryId) {
+        return res.status(400).json({ message: 'Name and category ID are required fields' });
+    }
+
     try {
-        const { name, parentId, categoryId } = req.body;
-
-        // Validate required fields
-        if (!name || !categoryId) {
-            return res.status(400).json({ message: 'Name and category ID are required fields' });
-        }
-
-        // Create a new subcategory
         const subcategory = await prisma.subcategory.create({
             data: {
                 name,
-                parent_id: parentId,
-                category_id: categoryId,
+                category: { connect: { id: categoryId } },
+                parent: parentId ? { connect: { id: parentId } } : undefined,
+            },
+            include: {
+                category: true,
+                parent: true,
             },
         });
 
@@ -30,7 +32,12 @@ const createSubcategory = async (req, res) => {
 // Function to get all subcategories
 const getSubcategories = async (req, res) => {
     try {
-        const subcategories = await prisma.subcategory.findMany();
+        const subcategories = await prisma.subcategory.findMany({
+            include: {
+                category: true,
+                parent: true,
+            },
+        });
         res.status(200).json(subcategories);
     } catch (error) {
         console.error(error);

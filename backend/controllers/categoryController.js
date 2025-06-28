@@ -84,7 +84,6 @@ const updateCategory = async (req, res) => {
             where: { id },
             data: {
                 name,
-                description,
             },
         });
 
