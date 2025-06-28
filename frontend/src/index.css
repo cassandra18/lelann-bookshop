@@ -41,7 +41,7 @@ body::-webkit-scrollbar {
 }
 .scrollbar-hide {
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #ffd39967 transparent; /* Thumb and track colors */
+  scrollbar-color: #ffd3998c transparent; /* Thumb and track colors */
 
 }
 .scrollbar-hide::-webkit-scrollbar {

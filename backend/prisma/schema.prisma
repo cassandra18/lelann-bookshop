@@ -46,25 +46,44 @@ model Product {
   cta            String?     @default("Buy Now")
   condition      String      @default("NEW")
   subject        String?
+  grade          String?     // e.g. "Grade 5", "Form 1"
+  format         String?     // e.g. "Paperback", "Hardcover", "eBook"
+  isbn           String?     @unique
+  edition        String?     // e.g. "2nd Edition"
+  language       String?     // e.g. "English", "Kiswahili"
+  pages          Int?
+  yearPublished  Int?
+  stock          Int?        // Inventory count
+  curriculum     String?     // e.g. "CBC", "8-4-4", "IGCSE"
+  level          String?     // e.g. "Primary", "Secondary", "University"
+  availability   Boolean?    @default(true) // In stock or not
+  rating         Float?      // For user reviews (optional)
+  
   author_id      String?
   publisher_id   String?
   subcategory_id String
+
   image          String
   description    String
   company        String
+
   featured       Boolean     @default(false)
   bestseller     Boolean     @default(false)
   newarrival     Boolean     @default(false)
   wishlist       Boolean     @default(false)
   promotion      Boolean     @default(false)
+
   oldPrice       Float?
   discount       Float?
+
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+
   author         Author?     @relation(fields: [author_id], references: [id])
   publisher      Publisher?  @relation(fields: [publisher_id], references: [id])
   subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
 }
+
 
 model Author {
   id        String    @id @default(uuid())

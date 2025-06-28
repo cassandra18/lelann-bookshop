@@ -1,37 +1,19 @@
-import { useEffect, useState } from "react";
 import { Book } from "../../types/BookTypes";
-import { fetchProducts, deleteProduct } from "./ProductActions";
 import ProductTable from "./ProductTable";
+import { deleteProduct } from "./ProductActions";
 
 type ProductListProps = {
+  products: Book[];
   onAdd: () => void;
   onEdit: (id: string) => void;
 };
 
-const ProductList: React.FC<ProductListProps> = ({ onAdd, onEdit }) => {
-  const [products, setProducts] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
-  }, []);
-
+const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onEdit }) => {
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
       try {
         await deleteProduct(id);
-        setProducts(prev => prev.filter(b => b.id !== id));
+        alert("Product deleted. Please refresh.");
       } catch (error) {
         console.error("Delete failed:", error);
       }
@@ -39,20 +21,22 @@ const ProductList: React.FC<ProductListProps> = ({ onAdd, onEdit }) => {
   };
 
   return (
-    <div className="min-h-screen  md:p-6 text-white">
+    <div className="min-h-screen md:p-6 text-white">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="md:text-4xl text-2xl font-bold text-yellow-300 tracking-tight">📚 Product Management</h1>
+          <h1 className="md:text-4xl text-2xl font-bold text-yellow-300 tracking-tight">
+            📚 Product Management
+          </h1>
           <button
             onClick={onAdd}
-            className="bg-yellow-100 text-[#001D29] font-semibold md:px-5 px-2 md:py-2 rounded-full shadow hover:bg-yellow-300 transition "
+            className="bg-yellow-100 text-[#001D29] font-semibold md:px-5 px-2 md:py-2 rounded-full shadow hover:bg-yellow-300 transition"
           >
             + Add Product
           </button>
         </div>
 
         <div className="bg-gray-300 rounded-lg shadow-lg p-4 overflow-x-auto">
-          {loading ? (
+          {products.length === 0 ? (
             <p className="text-gray-500">Loading products...</p>
           ) : (
             <ProductTable products={products} onDelete={handleDelete} onEdit={onEdit} />
