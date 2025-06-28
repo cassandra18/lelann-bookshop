@@ -20,7 +20,6 @@ model User {
 model Category {
   id            String        @id @default(uuid())
   name          String        @unique
-  description   String?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   subcategories Subcategory[]
@@ -88,7 +87,6 @@ model Product {
 model Author {
   id        String    @id @default(uuid())
   name      String
-  email     String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   books     Product[]
@@ -97,7 +95,6 @@ model Author {
 model Publisher {
   id        String    @id @default(uuid())
   name      String
-  email     String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   books     Product[]

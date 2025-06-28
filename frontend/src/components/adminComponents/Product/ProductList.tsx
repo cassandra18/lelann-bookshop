@@ -37,7 +37,10 @@ const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onEdit }) =>
 
         <div className="bg-gray-300 rounded-lg shadow-lg p-4 overflow-x-auto">
           {products.length === 0 ? (
-            <p className="text-gray-500">Loading products...</p>
+            <div className="text-center text-gray-700 py-12">
+              <p className="text-lg font-medium">No products found.</p>
+              <p className="text-sm text-gray-600 mt-2">Start by adding a new product.</p>
+            </div>
           ) : (
             <ProductTable products={products} onDelete={handleDelete} onEdit={onEdit} />
           )}
