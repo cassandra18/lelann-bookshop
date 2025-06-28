@@ -204,11 +204,11 @@ const DashboardOverview = () => {
             <Package className="mr-2 text-red-600" size={20} /> Quick Actions
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link to="/admin/books/add" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
-              Add New Book
+            <Link to="/admin/products/add" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
+              Add New Product
             </Link>
-            <Link to="/admin/books" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
-              Manage Books
+            <Link to="/admin/products" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
+              Manage Products
             </Link>
             <Link to="/admin/orders?status=pending" className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-200">
               Process Pending Orders
