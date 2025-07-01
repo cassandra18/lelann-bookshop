@@ -9,7 +9,7 @@ router.use(authenticateJWT);
 router.post('/add', addPublisher);
 router.get('/', getPublishers);
 router.get('/:id', getPublisherById);
-router.put('/:id', updatePublisher);
-router.delete('/:id', deletePublisher);
+router.put('/update/:id', updatePublisher);
+router.delete('/delete/:id', deletePublisher);
 
 module.exports = router;

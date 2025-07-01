@@ -15,6 +15,7 @@ export default function AuthorForm({
 }: AuthorFormProps) {
   const [newAuthor, setNewAuthor] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (editingAuthor) {
@@ -26,9 +27,11 @@ export default function AuthorForm({
 
   const handleSubmit = async () => {
     setError("");
+    setLoading(true);
 
     if (!newAuthor.trim()) {
       setError("Author name cannot be empty.");
+      setLoading(false);
       return;
     }
 
@@ -46,8 +49,12 @@ export default function AuthorForm({
       onAuthorAdded?.();
     } catch (err: any) {
       const msg =
-        err?.response?.data?.message || err.message || "An unexpected error occurred.";
+        err?.response?.data?.message ||
+        err.message ||
+        "An unexpected error occurred.";
       setError(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,10 +73,20 @@ export default function AuthorForm({
         />
         <button
           onClick={handleSubmit}
-          className="bg-yellow-300 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-100"
+          disabled={loading}
+          className={`bg-yellow-300 text-black px-4 py-2 rounded font-semibold ${
+            loading ? "opacity-60 cursor-not-allowed" : ""
+          }`}
         >
-          {editingAuthor ? "Update" : "Add"}
+          {loading
+            ? editingAuthor
+              ? "Updating..."
+              : "Adding..."
+            : editingAuthor
+            ? "Update"
+            : "Add"}
         </button>
+
         {editingAuthor && (
           <button
             onClick={onCancelEdit}

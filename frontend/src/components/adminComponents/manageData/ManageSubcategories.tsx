@@ -4,6 +4,8 @@ import SubcategoryForm from "../forms/Subcategory";
 
 interface SubcategoryEntity extends BaseEntity {
   category_id: string;
+  parent_id?: string | null;
+  children?: SubcategoryEntity[];
 }
 
 export default function ManageSubcategories() {
@@ -40,6 +42,57 @@ export default function ManageSubcategories() {
     loadSubcategories();
   }, []);
 
+  const buildTree = (items: SubcategoryEntity[]): SubcategoryEntity[] => {
+    const map = new Map<string, SubcategoryEntity>();
+    const roots: SubcategoryEntity[] = [];
+
+    items.forEach(item => {
+      map.set(item.id, { ...item, children: [] });
+    });
+
+    map.forEach(item => {
+      if (item.parent_id) {
+        const parent = map.get(item.parent_id);
+        if (parent) {
+          parent.children!.push(item);
+        }
+      } else {
+        roots.push(item);
+      }
+    });
+
+    return roots;
+  };
+
+  const renderTree = (nodes: SubcategoryEntity[], depth = 0): JSX.Element[] => {
+    return nodes.flatMap((node, index) => [
+      <tr
+        key={node.id}
+        className="border-b border-gray-700 hover:bg-gray-700"
+      >
+        <td className="p-2">{index + 1}</td>
+        <td className="p-2" style={{ paddingLeft: `${depth * 20}px` }}>
+          {"— ".repeat(depth) + node.name}
+        </td>
+        <td className="p-2 space-x-2">
+          <button
+            onClick={() => setEditingSubcategory(node)}
+            className="text-yellow-300 hover:text-yellow-400 pr-4"
+          >
+            ✏️
+          </button>
+          <button
+            onClick={() => handleDelete(node.id)}
+            className="text-red-400 hover:text-red-500"
+          >
+            🗑️
+          </button>
+        </td>
+      </tr>,
+      ...(node.children ? renderTree(node.children, depth + 1) : [])
+    ]);
+  };
+
   return (
     <div className="space-y-6">
       <SubcategoryForm
@@ -50,7 +103,7 @@ export default function ManageSubcategories() {
 
       <div className="bg-gray-800 p-4 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold text-yellow-300 mb-4">
-          📋 Subcategory List
+          📋 Subcategory Tree
         </h2>
         {loading ? (
           <p className="text-white">Loading subcategories...</p>
@@ -67,31 +120,7 @@ export default function ManageSubcategories() {
                 <th className="p-2">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              {subcategories.map((sub, index) => (
-                <tr
-                  key={sub.id}
-                  className="border-b border-gray-700 hover:bg-gray-700"
-                >
-                  <td className="p-2">{index + 1}</td>
-                  <td className="p-2">{sub.name}</td>
-                  <td className="p-2 space-x-2">
-                    <button
-                      onClick={() => setEditingSubcategory(sub)}
-                      className="text-yellow-300 hover:text-yellow-400"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      onClick={() => handleDelete(sub.id)}
-                      className="text-red-400 hover:text-red-500"
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody>{renderTree(buildTree(subcategories))}</tbody>
           </table>
         )}
       </div>

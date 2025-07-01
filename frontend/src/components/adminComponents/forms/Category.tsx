@@ -8,9 +8,14 @@ interface CategoryFormProps {
   clearEditing?: () => void;
 }
 
-export default function CategoryForm({ onCategorySaved, editingCategory, clearEditing }: CategoryFormProps) {
+export default function CategoryForm({
+  onCategorySaved,
+  editingCategory,
+  clearEditing,
+}: CategoryFormProps) {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (editingCategory) setName(editingCategory.name);
@@ -19,14 +24,18 @@ export default function CategoryForm({ onCategorySaved, editingCategory, clearEd
 
   const handleSubmit = async () => {
     setError("");
+    setLoading(true);
     if (!name.trim()) {
       setError("Category name cannot be empty.");
+      setLoading(false);
       return;
     }
 
     try {
       if (editingCategory) {
-        const result = await updateEntity("categories", editingCategory.id, { name });
+        const result = await updateEntity("categories", editingCategory.id, {
+          name,
+        });
         toast.success(`Category "${result.name}" updated.`);
       } else {
         const result = await createEntity("categories", { name });
@@ -36,7 +45,11 @@ export default function CategoryForm({ onCategorySaved, editingCategory, clearEd
       if (onCategorySaved) onCategorySaved();
       if (clearEditing) clearEditing();
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || "An error occurred.");
+      setError(
+        err.response?.data?.message || err.message || "An error occurred."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,12 +68,21 @@ export default function CategoryForm({ onCategorySaved, editingCategory, clearEd
         />
         <button
           onClick={handleSubmit}
-          className="bg-yellow-300 text-black px-4 py-2 rounded font-semibold"
+          disabled={loading}
+          className={`bg-yellow-300 text-black px-4 py-2 rounded font-semibold ${
+            loading ? "opacity-60 cursor-not-allowed" : ""
+          }`}
         >
-          {editingCategory ? "Update" : "Add"}
+          {loading
+            ? editingCategory
+              ? "Updating..."
+              : "Adding..."
+            : editingCategory
+            ? "Update"
+            : "Add"}
         </button>
         {editingCategory && (
-         <button
+          <button
             onClick={clearEditing}
             className="text-red-600 bg-white rounded px-2 py-2 font-semibold hover:bg-yellow-100"
           >

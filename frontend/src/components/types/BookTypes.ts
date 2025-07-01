@@ -43,6 +43,7 @@ export interface Book {
   wishlist: boolean;
   author_id?: string;
   publisher_id?: string;
+  categoryId?: string;
   subcategory_id: string;
 }
 

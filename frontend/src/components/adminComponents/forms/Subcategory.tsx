@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { createEntity, updateEntity, fetchAll, BaseEntity } from "../api/entityAPI";
+import {
+  createEntity,
+  updateEntity,
+  fetchAll,
+  BaseEntity,
+} from "../api/entityAPI";
 import { toast } from "react-hot-toast";
 
 interface CategoryFormProps {
@@ -15,14 +20,23 @@ export default function SubcategoryForm({
 }: CategoryFormProps) {
   const [categories, setCategories] = useState<BaseEntity[]>([]);
   const [categoryId, setCategoryId] = useState("");
+  const [subcategories, setSubcategories] = useState<BaseEntity[]>([]);
+  const [parentId, setParentId] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchAll("categories")
       .then((data) => setCategories(data as BaseEntity[]))
       .catch(() => setError("Failed to load categories"));
+  }, []);
+
+  useEffect(() => {
+    fetchAll("subcategories")
+      .then((data) => setSubcategories(data as BaseEntity[]))
+      .catch(() => console.error("Failed to load subcategories"));
   }, []);
 
   useEffect(() => {
@@ -38,34 +52,49 @@ export default function SubcategoryForm({
   const handleSubmit = async () => {
     setMessage("");
     setError("");
+    setLoading(true);
 
     if (!name.trim() || !categoryId) {
       setError("Subcategory name and category must be selected.");
+      setLoading(false);
       return;
     }
 
     try {
       let result;
+      const payload: any = {
+        name,
+        categoryId,
+      };
+
+      if (parentId) {
+        payload.parentId = parentId;
+      }
+
       if (editingSubcategory) {
-        result = await updateEntity("subcategories", editingSubcategory.id, {
-          name,
-          category_id: categoryId,
-        });
+        result = await updateEntity(
+          "subcategories",
+          editingSubcategory.id,
+          payload
+        );
         toast.success(`Subcategory "${result.name}" updated successfully.`);
       } else {
-        result = await createEntity("subcategories", {
-          name,
-          category_id: categoryId,
-        });
+        result = await createEntity("subcategories", payload);
         toast.success(`Subcategory "${result.name}" created successfully.`);
       }
 
       setName("");
       setCategoryId("");
+      setParentId("");
+
       if (onCategoryAdded) onCategoryAdded();
       if (clearEditing) clearEditing();
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || "An error occurred.");
+      setError(
+        err.response?.data?.message || err.message || "An error occurred."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,12 +112,15 @@ export default function SubcategoryForm({
         className="w-full px-4 py-2 rounded bg-gray-900 text-white mb-2"
       />
 
+      {/* Select category */}
       <select
         value={categoryId}
         onChange={(e) => setCategoryId(e.target.value)}
         className="w-full px-4 py-2 rounded bg-gray-900 text-white mb-4"
       >
-        <option value="" className="bg-blue-400 text-black">Select category</option>
+        <option value="" className="bg-blue-400 text-black">
+          Select category
+        </option>
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
             {cat.name}
@@ -96,13 +128,37 @@ export default function SubcategoryForm({
         ))}
       </select>
 
+      {/* Select parent subcategory */}
+      <select
+        value={parentId}
+        onChange={(e) => setParentId(e.target.value)}
+        className="w-full px-4 py-2 rounded bg-gray-900 text-white mb-4"
+      >
+        <option value="" className="bg-blue-400 text-black">(Optional) Select parent subcategory</option>
+        {subcategories.map((sub) => (
+          <option key={sub.id} value={sub.id}>
+            {sub.name}
+          </option>
+        ))}
+      </select>
+
       <div className="flex gap-2">
         <button
           onClick={handleSubmit}
-          className="bg-yellow-300 text-black px-4 py-2 rounded font-semibold"
+          disabled={loading}
+          className={`bg-yellow-300 text-black px-4 py-2 rounded font-semibold ${
+            loading ? "opacity-60 cursor-not-allowed" : ""
+          }`}
         >
-          {editingSubcategory ? "Update" : "Add"}
+          {loading
+            ? editingSubcategory
+              ? "Updating..."
+              : "Adding..."
+            : editingSubcategory
+            ? "Update"
+            : "Add"}
         </button>
+
         {editingSubcategory && (
           <button
             onClick={clearEditing}

@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { createPublisher, updatePublisher, Publisher } from "../api/publisherAPI";
+import {
+  createPublisher,
+  updatePublisher,
+  Publisher,
+} from "../api/publisherAPI";
 import { toast } from "react-hot-toast";
 
 interface PublisherFormProps {
@@ -15,6 +19,7 @@ export default function PublisherForm({
 }: PublisherFormProps) {
   const [newPublisher, setNewPublisher] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (editingPublisher) {
@@ -26,9 +31,11 @@ export default function PublisherForm({
 
   const handleSubmit = async () => {
     setError("");
+    setLoading(true);
 
     if (!newPublisher.trim()) {
       setError("Publisher name cannot be empty.");
+      setLoading(false);
       return;
     }
 
@@ -45,8 +52,13 @@ export default function PublisherForm({
       setNewPublisher("");
       onPublisherAdded?.();
     } catch (err: any) {
-      const msg = err?.response?.data?.message || err.message || "An unexpected error occurred.";
+      const msg =
+        err?.response?.data?.message ||
+        err.message ||
+        "An unexpected error occurred.";
       setError(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,10 +77,20 @@ export default function PublisherForm({
         />
         <button
           onClick={handleSubmit}
-          className="bg-yellow-300 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-400"
+          disabled={loading}
+          className={`bg-yellow-300 text-black px-4 py-2 rounded font-semibold ${
+            loading ? "opacity-60 cursor-not-allowed" : ""
+          }`}
         >
-          {editingPublisher ? "Update" : "Add"}
+          {loading
+            ? editingPublisher
+              ? "Updating..."
+              : "Adding..."
+            : editingPublisher
+            ? "Update"
+            : "Add"}
         </button>
+
         {editingPublisher && (
           <button
             onClick={onCancelEdit}
