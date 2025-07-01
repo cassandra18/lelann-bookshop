@@ -4,6 +4,9 @@ import CategoryForm from "../forms/Category";
 
 export default function ManageCategories() {
   const [categories, setCategories] = useState<BaseEntity[]>([]);
+  const [editingCategory, setEditingCategory] = useState<BaseEntity | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -21,6 +24,11 @@ export default function ManageCategories() {
   };
 
   const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+    if (!confirmDelete) return;
+
     try {
       await deleteEntity("categories", id);
       setCategories((prev) => prev.filter((cat) => cat.id !== id));
@@ -35,9 +43,15 @@ export default function ManageCategories() {
 
   return (
     <div className="space-y-6">
-      <CategoryForm onCategoryAdded={loadCategories} />
+      <CategoryForm
+        onCategorySaved={loadCategories}
+        editingCategory={editingCategory}
+        clearEditing={() => setEditingCategory(null)}
+      />
       <div className="bg-gray-800 p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-yellow-300 mb-4">📋 Category List</h2>
+        <h2 className="text-xl font-semibold text-yellow-300 mb-4">
+          📋 Category List
+        </h2>
         {loading ? (
           <p className="text-white">Loading categories...</p>
         ) : error ? (
@@ -55,11 +69,19 @@ export default function ManageCategories() {
             </thead>
             <tbody>
               {categories.map((cat, index) => (
-                <tr key={cat.id} className="border-b border-gray-700 hover:bg-gray-700">
+                <tr
+                  key={cat.id}
+                  className="border-b border-gray-700 hover:bg-gray-700"
+                >
                   <td className="p-2">{index + 1}</td>
                   <td className="p-2">{cat.name}</td>
                   <td className="p-2 space-x-2">
-                    <button className="text-yellow-300 hover:text-yellow-400">✏️</button>
+                    <button
+                      onClick={() => setEditingCategory(cat)}
+                      className="text-yellow-300 hover:text-yellow-400"
+                    >
+                      ✏️
+                    </button>
                     <button
                       onClick={() => handleDelete(cat.id)}
                       className="text-red-400 hover:text-red-500"

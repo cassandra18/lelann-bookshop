@@ -8,7 +8,7 @@ router.use(authenticateJWT);
 router.get('/', getAuthors);
 router.post('/add', addAuthor);
 router.get('/:id', getAuthorById);
-router.put('/:id', updateAuthor);
-router.delete('/:id', deleteAuthor);
+router.put('/update/:id', updateAuthor);
+router.delete('/delete/:id', deleteAuthor);
 
 module.exports = router;

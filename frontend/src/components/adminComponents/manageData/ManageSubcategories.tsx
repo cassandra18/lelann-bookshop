@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import { fetchAll, deleteEntity, BaseEntity } from "../api/entityAPI";
 import SubcategoryForm from "../forms/Subcategory";
 
+interface SubcategoryEntity extends BaseEntity {
+  category_id: string;
+}
+
 export default function ManageSubcategories() {
-  const [subcategories, setSubcategories] = useState<BaseEntity[]>([]);
+  const [subcategories, setSubcategories] = useState<SubcategoryEntity[]>([]);
+  const [editingSubcategory, setEditingSubcategory] = useState<SubcategoryEntity | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -11,7 +16,7 @@ export default function ManageSubcategories() {
     setLoading(true);
     setError("");
     try {
-      const data = await fetchAll<BaseEntity>("subcategories");
+      const data = await fetchAll<SubcategoryEntity>("subcategories");
       setSubcategories(data);
     } catch (err: any) {
       setError(err.message || "Failed to load subcategories.");
@@ -29,15 +34,24 @@ export default function ManageSubcategories() {
     }
   };
 
+  const clearEditing = () => setEditingSubcategory(null);
+
   useEffect(() => {
     loadSubcategories();
   }, []);
 
   return (
     <div className="space-y-6">
-      <SubcategoryForm onCategoryAdded={loadSubcategories} />
+      <SubcategoryForm
+        onCategoryAdded={loadSubcategories}
+        editingSubcategory={editingSubcategory}
+        clearEditing={clearEditing}
+      />
+
       <div className="bg-gray-800 p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-yellow-300 mb-4">📋 Subcategory List</h2>
+        <h2 className="text-xl font-semibold text-yellow-300 mb-4">
+          📋 Subcategory List
+        </h2>
         {loading ? (
           <p className="text-white">Loading subcategories...</p>
         ) : error ? (
@@ -55,11 +69,19 @@ export default function ManageSubcategories() {
             </thead>
             <tbody>
               {subcategories.map((sub, index) => (
-                <tr key={sub.id} className="border-b border-gray-700 hover:bg-gray-700">
+                <tr
+                  key={sub.id}
+                  className="border-b border-gray-700 hover:bg-gray-700"
+                >
                   <td className="p-2">{index + 1}</td>
                   <td className="p-2">{sub.name}</td>
                   <td className="p-2 space-x-2">
-                    <button className="text-yellow-300 hover:text-yellow-400">✏️</button>
+                    <button
+                      onClick={() => setEditingSubcategory(sub)}
+                      className="text-yellow-300 hover:text-yellow-400"
+                    >
+                      ✏️
+                    </button>
                     <button
                       onClick={() => handleDelete(sub.id)}
                       className="text-red-400 hover:text-red-500"

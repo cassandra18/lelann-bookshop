@@ -18,7 +18,7 @@ export const fetchOne = async <T>(entity: EntityType, id: string): Promise<T> =>
   return res.data;
 };
 
-export const createEntity = async <T extends BaseEntity>(
+export const createEntity = async <T = any>(
   entity: EntityType,
   data: Partial<T>
 ): Promise<T> => {
@@ -26,7 +26,7 @@ export const createEntity = async <T extends BaseEntity>(
   return res.data;
 };
 
-export const updateEntity = async <T extends BaseEntity>(
+export const updateEntity = async <T = any>(
   entity: EntityType,
   id: string,
   data: Partial<T>

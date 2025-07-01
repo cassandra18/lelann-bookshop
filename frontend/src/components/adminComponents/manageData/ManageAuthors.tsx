@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  fetchAuthors,
-  deleteAuthor,
-  Author,
-} from "../api/authorAPI";
+import { fetchAuthors, deleteAuthor, Author } from "../api/authorAPI";
 import AuthorForm from "../forms/Author";
 
 const ManageAuthors = () => {
   const [authors, setAuthors] = useState<Author[]>([]);
+  const [editingAuthor, setEditingAuthor] = useState<Author | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,6 +22,11 @@ const ManageAuthors = () => {
   };
 
   const handleDeleteAuthor = async (id: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this author?"
+    );
+    if (!confirmDelete) return;
+
     try {
       await deleteAuthor(id);
       setAuthors((prev) => prev.filter((a) => a.id !== id));
@@ -40,7 +42,11 @@ const ManageAuthors = () => {
   return (
     <div className="space-y-6">
       {/* Form to Add Author */}
-      <AuthorForm onAuthorAdded={loadAuthors} />
+      <AuthorForm
+        onAuthorAdded={loadAuthors}
+        editingAuthor={editingAuthor}
+        onCancelEdit={() => setEditingAuthor(null)}
+      />
 
       {/* List of Authors */}
       <div className="bg-gray-800 p-4 rounded-lg shadow-md">
@@ -72,7 +78,12 @@ const ManageAuthors = () => {
                   <td className="p-2">{index + 1}</td>
                   <td className="p-2">{author.name}</td>
                   <td className="p-2 space-x-2">
-                    <button className="text-yellow-300 hover:text-yellow-400">✏️</button>
+                    <button
+                      onClick={() => setEditingAuthor(author)}
+                      className="text-yellow-300 hover:text-yellow-400"
+                    >
+                      ✏️
+                    </button>
                     <button
                       onClick={() => handleDeleteAuthor(author.id)}
                       className="text-red-400 hover:text-red-500"

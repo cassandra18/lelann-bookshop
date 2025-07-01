@@ -8,6 +8,9 @@ import PublisherForm from "../forms/Publisher";
 
 const ManagePublishers = () => {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
+  const [editingPublisher, setEditingPublisher] = useState<Publisher | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,6 +28,11 @@ const ManagePublishers = () => {
   };
 
   const handleDeletePublisher = async (id: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this publisher?"
+    );
+    if (!confirmDelete) return;
+
     try {
       await deletePublisher(id);
       setPublishers((prev) => prev.filter((p) => p.id !== id));
@@ -40,7 +48,11 @@ const ManagePublishers = () => {
   return (
     <div className="space-y-6">
       {/* Form to Add Publisher */}
-      <PublisherForm onPublisherAdded={loadPublishers} />
+      <PublisherForm
+        onPublisherAdded={loadPublishers}
+        editingPublisher={editingPublisher}
+        onCancelEdit={() => setEditingPublisher(null)}
+      />
 
       {/* List of Publishers */}
       <div className="bg-gray-800 p-4 rounded-lg shadow-md">
@@ -72,7 +84,12 @@ const ManagePublishers = () => {
                   <td className="p-2">{index + 1}</td>
                   <td className="p-2">{publisher.name}</td>
                   <td className="p-2 space-x-2">
-                    <button className="text-yellow-300 hover:text-yellow-400">✏️</button>
+                    <button
+                      onClick={() => setEditingPublisher(publisher)}
+                      className="text-yellow-300 hover:text-yellow-400"
+                    >
+                      ✏️
+                    </button>
                     <button
                       onClick={() => handleDeletePublisher(publisher.id)}
                       className="text-red-400 hover:text-red-500"

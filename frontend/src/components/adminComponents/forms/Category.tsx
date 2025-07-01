@@ -1,37 +1,50 @@
-import { useState } from "react";
-import { createEntity } from "../api/entityAPI";
+import { useEffect, useState } from "react";
+import { createEntity, updateEntity } from "../api/entityAPI";
+import { toast } from "react-hot-toast";
 
 interface CategoryFormProps {
-  onCategoryAdded?: () => void;
+  onCategorySaved?: () => void;
+  editingCategory?: { id: string; name: string } | null;
+  clearEditing?: () => void;
 }
 
-export default function CategoryForm({ onCategoryAdded }: CategoryFormProps) {
+export default function CategoryForm({ onCategorySaved, editingCategory, clearEditing }: CategoryFormProps) {
   const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleAddCategory = async () => {
-    setMessage("");
-    setError("");
+  useEffect(() => {
+    if (editingCategory) setName(editingCategory.name);
+    else setName("");
+  }, [editingCategory]);
 
+  const handleSubmit = async () => {
+    setError("");
     if (!name.trim()) {
       setError("Category name cannot be empty.");
       return;
     }
 
     try {
-      const result = await createEntity("categories", { name });
-      setMessage(`✅ Category "${result.name}" created successfully.`);
+      if (editingCategory) {
+        const result = await updateEntity("categories", editingCategory.id, { name });
+        toast.success(`Category "${result.name}" updated.`);
+      } else {
+        const result = await createEntity("categories", { name });
+        toast.success(`Category "${result.name}" created.`);
+      }
       setName("");
-      if (onCategoryAdded) onCategoryAdded();
+      if (onCategorySaved) onCategorySaved();
+      if (clearEditing) clearEditing();
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || "An error occurred.");
     }
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-xl font-semibold text-yellow-300 mb-4">➕ Add New Category</h2>
+    <div className="bg-gray-800 p-4 rounded-lg shadow-md w-full ">
+      <h2 className="text-xl font-semibold text-yellow-300 mb-4">
+        {editingCategory ? "✏️ Edit Category" : "➕ Add New Category"}
+      </h2>
       <div className="flex gap-2">
         <input
           type="text"
@@ -41,13 +54,20 @@ export default function CategoryForm({ onCategoryAdded }: CategoryFormProps) {
           className="flex-1 px-4 py-2 rounded bg-gray-900 text-white"
         />
         <button
-          onClick={handleAddCategory}
+          onClick={handleSubmit}
           className="bg-yellow-300 text-black px-4 py-2 rounded font-semibold"
         >
-          Add
+          {editingCategory ? "Update" : "Add"}
         </button>
+        {editingCategory && (
+         <button
+            onClick={clearEditing}
+            className="text-red-600 bg-white rounded px-2 py-2 font-semibold hover:bg-yellow-100"
+          >
+            Cancel
+          </button>
+        )}
       </div>
-      {message && <p className="text-green-400 mt-2">{message}</p>}
       {error && <p className="text-red-400 mt-2">{error}</p>}
     </div>
   );

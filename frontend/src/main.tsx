@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
+import { Toaster } from "react-hot-toast";
 
 // Importing pages and components
 import { AuthProvider } from "./components/context/AuthContext.tsx";
@@ -23,13 +24,11 @@ import SignUpPage from "./pages/signupPage.tsx";
 import SignInPage from "./components/signin.tsx";
 import EducationalBooksPage from "./pages/EducationalBooksPage.tsx";
 
-
 // Importing admin components
 import Layout from "./pages/admin/adminDashboard.tsx";
 import DashboardOverview from "./components/adminComponents/dashboardOverview.tsx";
 import ProductPage from "./pages/admin/products.tsx";
 import ManageDataPage from "./pages/admin/manageDataPage.tsx";
-
 
 const router = createBrowserRouter([
   {
@@ -44,7 +43,7 @@ const router = createBrowserRouter([
         path: "/educational-books",
         element: <EducationalBooksPage />,
       },
-            {
+      {
         path: "/educational-books/:subcategoryId",
         element: <EducationalBooksPage />,
       },
@@ -63,11 +62,11 @@ const router = createBrowserRouter([
       {
         path: "/basket",
         element: <Basket />,
-      },    
+      },
       {
         path: "/checkout",
         element: <CheckoutPage />,
-      }, 
+      },
       {
         path: "/checkout/shipping-address",
         element: <ShippingAddress />,
@@ -94,52 +93,55 @@ const router = createBrowserRouter([
       },
       {
         path: "/sign-up",
-        element: <SignUpPage/>,
+        element: <SignUpPage />,
       },
       {
         path: "/sign-in",
-        element: <SignInPage/>,
-      }
+        element: <SignInPage />,
+      },
     ],
   },
 
   // Admin routes
   {
-    path: '/admin',
+    path: "/admin",
     element: (
-      <ProtectedRoute allowedRoles={['admin']}>
+      <ProtectedRoute allowedRoles={["admin"]}>
         <Layout />
       </ProtectedRoute>
     ),
     children: [
       {
-        path: '/admin',
+        path: "/admin",
         element: <DashboardOverview />,
       },
       {
-        path: '/admin/products',
-        element: <ProductPage/>
+        path: "/admin/products",
+        element: <ProductPage />,
       },
       {
-        path: '/admin/manage',
-        element: <ManageDataPage/>
-      }
-    ]
+        path: "/admin/manage",
+        element: <ManageDataPage />,
+      },
+    ],
   },
   {
     path: "/user-dashboard",
     element: (
-      <ProtectedRoute allowedRoles={['customer']}>
+      <ProtectedRoute allowedRoles={["customer"]}>
         <UserDashboard />
       </ProtectedRoute>
-    )
-  }
+    ),
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-        <AuthProvider>
-            <RouterProvider router={router} />
-        </AuthProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <AuthProvider>
+      <>
+        <RouterProvider router={router} />
+        <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+      </>
+    </AuthProvider>
+  </React.StrictMode>
 );
