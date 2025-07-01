@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { UserControllers } = require('../controllers/userController');
-const authenticateAdmin = require('../middleware/authenticateAdmin');
-// const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
 const validateRegisterInput  = require('../middleware/validation');
 const authenticateJWT = require('../middleware/authenticateUser');
 const { authorizeRoles } = require('../middleware/authorizeRole');
@@ -27,7 +25,7 @@ router.delete('/delete-profile/:userId', authenticateJWT, UserControllers.delete
 router.put('/update-password/:userId', authenticateJWT, UserControllers.updateUserPassword);
 
 // Admin routes
-router.use(authenticateAdmin);
+router.use(authenticateJWT);
 
 router.get('/all-users', UserControllers.getAllUsers);
 router.get('/get-user/:id', UserControllers.getUserById);

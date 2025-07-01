@@ -1,7 +1,4 @@
-import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-
+import axiosInstance from "./axiosInstance";
 export type EntityType = "authors" | "publishers" | "categories" | "subcategories";
 
 export interface BaseEntity {
@@ -9,36 +6,23 @@ export interface BaseEntity {
   name: string;
 }
 
-const getToken = () => localStorage.getItem("token");
-
-// ---------- GENERIC FUNCTIONS ----------
+// ---------- GENERIC FUNCTIONS USING AXIOS INSTANCE ----------
 
 export const fetchAll = async <T>(entity: EntityType): Promise<T[]> => {
-  const res = await fetch(`${API_URL}/${entity}`);
-  if (!res.ok) throw new Error(`Failed to fetch ${entity}`);
-  return res.json();
+  const res = await axiosInstance.get<T[]>(`/${entity}`);
+  return res.data;
 };
 
 export const fetchOne = async <T>(entity: EntityType, id: string): Promise<T> => {
-  const res = await fetch(`${API_URL}/${entity}/${id}`);
-  if (!res.ok) throw new Error(`Failed to fetch ${entity} with ID ${id}`);
-  return res.json();
+  const res = await axiosInstance.get<T>(`/${entity}/${id}`);
+  return res.data;
 };
 
 export const createEntity = async <T extends BaseEntity>(
   entity: EntityType,
   data: Partial<T>
 ): Promise<T> => {
-  const token = getToken();
-
-  const res = await axios.post(`${API_URL}/${entity}/add`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-
+  const res = await axiosInstance.post<T>(`/${entity}/add`, data);
   return res.data;
 };
 
@@ -47,28 +31,10 @@ export const updateEntity = async <T extends BaseEntity>(
   id: string,
   data: Partial<T>
 ): Promise<T> => {
-  const token = getToken();
-
-  const res = await axios.put(`${API_URL}/${entity}/update/${id}`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-
+  const res = await axiosInstance.put<T>(`/${entity}/update/${id}`, data);
   return res.data;
 };
 
-export const deleteEntity = async (entity: EntityType, id: string) => {
-  const token = getToken();
-
-  const res = await fetch(`${API_URL}/${entity}/delete/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!res.ok) throw new Error(`Failed to delete ${entity} with ID ${id}`);
+export const deleteEntity = async (entity: EntityType, id: string): Promise<void> => {
+  await axiosInstance.delete(`/${entity}/delete/${id}`);
 };

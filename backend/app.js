@@ -22,10 +22,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'middleware', 'uploads')
 
 // Routes
 app.use('/api/', require('./routes/productRoutes'));
-app.use('/api/author', require('./routes/authorRoutes'));
-app.use('/api/publisher', require('./routes/publisherRoutes'));
-app.use('/api/category', require('./routes/categoryRoutes'));
-app.use('/api/subcategory', require('./routes/subcategoryRoutes'));
+app.use('/api/authors', require('./routes/authorRoutes'));
+app.use('/api/publishers', require('./routes/publisherRoutes'));
+app.use('/api/categories', require('./routes/categoryRoutes'));
+app.use('/api/subcategories', require('./routes/subcategoryRoutes'));
 app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/paystack', require('./routes/paystackPaymentRoutes'));
 app.use('/api/mpesa', require('./routes/mpesaPaymentRoutes'));

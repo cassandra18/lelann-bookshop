@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authenticateAdmin = require('../middleware/authenticateAdmin');
+const authenticateJWT = require('../middleware/authenticateUser');
 const { addPublisher, getPublishers, getPublisherById, updatePublisher, deletePublisher } = require('../controllers/publisherController');
 
 
-router.use(authenticateAdmin);
+router.use(authenticateJWT);
 
 router.post('/add', addPublisher);
 router.get('/', getPublishers);

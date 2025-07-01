@@ -1,55 +1,60 @@
 import { useState } from "react";
-import { createAuthor } from "../api/entityAPI";
+import { createAuthor } from "../api/authorAPI";
 
-export default function AuthorForm() {
-  const [name, setName] = useState("");
+
+interface AuthorFormProps {
+  onAuthorAdded?: () => void;
+}
+
+
+export default function AuthorForm({ onAuthorAdded }: AuthorFormProps) {
+  const [newAuthor, setNewAuthor] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAddAuthor = async () => {
     setMessage("");
     setError("");
 
-    try {
-      const result = await createAuthor({ name });
+    if (!newAuthor.trim()) {
+      setError("Author name cannot be empty.");
+      return;
+    }
 
-      if (result.error || result.message?.toLowerCase().includes("error")) {
-        setError(result.message || "Failed to create author.");
-      } else {
-        setMessage(result.message || "Author created successfully.");
-        setName("");
-      }
-    } catch (err) {
-      setError("An unexpected error occurred.");
+    try {
+      const result = await createAuthor({ name: newAuthor });
+      setMessage(`✅ Author "${result.name}" created successfully.`);
+      setNewAuthor("");
+
+      // Refresh parent list
+      if (onAuthorAdded) onAuthorAdded();
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err.message || "An unexpected error occurred.";
+      setError(msg);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 p-4 border rounded-xl w-full max-w-md bg-white shadow"
-    >
-      <h2 className="text-xl font-semibold">Add Author</h2>
+    <div className="bg-gray-800 p-4 rounded-lg shadow-md w-full max-w-md">
+      <h2 className="text-xl font-semibold text-yellow-300 mb-4">➕ Add New Author</h2>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          placeholder="Enter author name"
+          value={newAuthor}
+          onChange={(e) => setNewAuthor(e.target.value)}
+          className="flex-1 px-4 py-2 rounded bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-yellow-300"
+        />
+        <button
+          onClick={handleAddAuthor}
+          className="bg-yellow-300 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-400"
+        >
+          Add
+        </button>
+      </div>
 
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Enter author name"
-        className="border p-2 rounded w-full"
-        required
-      />
-
-      <button
-        type="submit"
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-      >
-        Add Author
-      </button>
-
-      {message && <p className="text-green-600">{message}</p>}
-      {error && <p className="text-red-600">{error}</p>}
-    </form>
+      {message && <p className="text-green-400 mt-2">{message}</p>}
+      {error && <p className="text-red-400 mt-2">{error}</p>}
+    </div>
   );
 }

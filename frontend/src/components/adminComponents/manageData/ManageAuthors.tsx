@@ -1,51 +1,58 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  fetchAuthors,
+  deleteAuthor,
+  Author,
+} from "../api/authorAPI";
+import AuthorForm from "../forms/Author";
 
 const ManageAuthors = () => {
-  const [authors, setAuthors] = useState([
-    { id: 1, name: "Jane Doe" },
-    { id: 2, name: "John Smith" },
-  ]);
-  const [newAuthor, setNewAuthor] = useState("");
+  const [authors, setAuthors] = useState<Author[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleAddAuthor = () => {
-    if (!newAuthor.trim()) return;
-    setAuthors([
-      ...authors,
-      { id: Date.now(), name: newAuthor.trim() }
-    ]);
-    setNewAuthor("");
+  const loadAuthors = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const data = await fetchAuthors();
+      setAuthors(data);
+    } catch (err: any) {
+      setError(err.message || "Failed to load authors.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteAuthor = (id: number) => {
-    setAuthors(authors.filter((a) => a.id !== id));
+  const handleDeleteAuthor = async (id: string) => {
+    try {
+      await deleteAuthor(id);
+      setAuthors((prev) => prev.filter((a) => a.id !== id));
+    } catch (err: any) {
+      alert(err.message || "Failed to delete author.");
+    }
   };
+
+  useEffect(() => {
+    loadAuthors();
+  }, []);
 
   return (
     <div className="space-y-6">
       {/* Form to Add Author */}
-      <div className="bg-gray-800 p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-yellow-300 mb-4">➕ Add New Author</h2>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Enter author name"
-            value={newAuthor}
-            onChange={(e) => setNewAuthor(e.target.value)}
-            className="flex-1 px-4 py-2 rounded bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-yellow-300"
-          />
-          <button
-            onClick={handleAddAuthor}
-            className="bg-yellow-300 text-black px-4 py-2 rounded font-semibold hover:bg-yellow-400"
-          >
-            Add
-          </button>
-        </div>
-      </div>
+      <AuthorForm onAuthorAdded={loadAuthors} />
 
       {/* List of Authors */}
       <div className="bg-gray-800 p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-yellow-300 mb-4">📋 Author List</h2>
-        {authors.length === 0 ? (
+        <h2 className="text-xl font-semibold text-yellow-300 mb-4">
+          📋 Author List
+        </h2>
+
+        {loading ? (
+          <p className="text-white">Loading authors...</p>
+        ) : error ? (
+          <p className="text-red-400">{error}</p>
+        ) : authors.length === 0 ? (
           <p className="text-white">No authors added yet.</p>
         ) : (
           <table className="w-full text-left table-auto text-white">
@@ -58,7 +65,10 @@ const ManageAuthors = () => {
             </thead>
             <tbody>
               {authors.map((author, index) => (
-                <tr key={author.id} className="border-b border-gray-700 hover:bg-gray-700">
+                <tr
+                  key={author.id}
+                  className="border-b border-gray-700 hover:bg-gray-700"
+                >
                   <td className="p-2">{index + 1}</td>
                   <td className="p-2">{author.name}</td>
                   <td className="p-2 space-x-2">
