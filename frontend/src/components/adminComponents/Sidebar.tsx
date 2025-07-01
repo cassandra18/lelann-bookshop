@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
       style={{ background: "rgba(0, 0, 0, 0.3)", backdropFilter: "blur" }}
     >
       <div className="p-3.5 text-2xl font-bold border-b border-gray-700 flex items-center justify-between">
-        <Link to="/admin" className="text-[#ffea00] barlow-bold">
+        <Link to="/admin" className="text-yellow-300 barlow-bold">
           Admin Panel
         </Link>
         <button
@@ -46,8 +46,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
                 to={item.path}
                 className={({ isActive }) =>
                   `flex items-center py-3 px-4 transition-colors duration-200 ease-in-out
-                   hover:bg-gray-700 hover:text-[#ffea00] ${
-                     isActive ? "bg-gray-700 border-l-4 text-[#ffea00]" : ""
+                   hover:bg-gray-700 hover:text-yellow-300 ${
+                     isActive ? "bg-gray-700 border-l-4 text-yellow-300" : ""
                    }`
                 }
                 onClick={onClose}

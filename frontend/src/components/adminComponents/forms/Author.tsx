@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createAuthor } from "../api/index";
+import { createAuthor } from "../api/entityAPI";
 
 export default function AuthorForm() {
   const [name, setName] = useState("");

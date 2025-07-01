@@ -28,7 +28,7 @@ import EducationalBooksPage from "./pages/EducationalBooksPage.tsx";
 import Layout from "./pages/admin/adminDashboard.tsx";
 import DashboardOverview from "./components/adminComponents/dashboardOverview.tsx";
 import ProductPage from "./pages/admin/products.tsx";
-import ManagePublishers from "./components/adminComponents/manageData/ManageAuthors.tsx";
+import ManageDataPage from "./pages/admin/manageDataPage.tsx";
 
 
 const router = createBrowserRouter([
@@ -122,7 +122,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/manage',
-        element: <ManagePublishers/>
+        element: <ManageDataPage/>
       }
     ]
   },

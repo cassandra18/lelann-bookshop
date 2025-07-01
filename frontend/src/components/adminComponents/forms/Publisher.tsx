@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createPublisher } from "../api/index";
+import { createPublisher } from "../api/entityAPI";
 
 export default function PublisherForm() {
   const [name, setName] = useState("");

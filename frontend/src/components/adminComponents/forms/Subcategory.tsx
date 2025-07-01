@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createSubcategory, fetchCategories } from "../api/index";
+import { createSubcategory, fetchCategories } from "../api/entityAPI";
 
 export default function SubcategoryForm() {
   const [name, setName] = useState("");

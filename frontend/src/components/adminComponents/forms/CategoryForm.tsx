@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createCategory } from "../api/index";
+import { createCategory } from "../api/entityAPI";
 
 export default function CategoryForm() {
   const [name, setName] = useState("");
