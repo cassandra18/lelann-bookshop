@@ -86,7 +86,7 @@ model Product {
 
 model Author {
   id        String    @id @default(uuid())
-  name      String
+  name      String     @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   books     Product[]
@@ -94,7 +94,7 @@ model Author {
 
 model Publisher {
   id        String    @id @default(uuid())
-  name      String
+  name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   books     Product[]
