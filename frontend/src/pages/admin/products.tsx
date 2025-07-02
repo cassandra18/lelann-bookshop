@@ -67,6 +67,7 @@ const [loading, setLoading] = useState(true);
       setShowForm(false);
     } catch (error) {
       console.error("Failed to save product:", error);
+      throw error;
     } finally {
       setIsSubmitting(false);
     }

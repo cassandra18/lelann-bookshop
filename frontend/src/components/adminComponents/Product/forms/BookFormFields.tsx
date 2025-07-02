@@ -23,13 +23,13 @@ export function BookFormFields({
 }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <h1 className="col-span-1 md:col-span-2 md:text-3xl text-2xl text-yellow-300">📚 Book Information</h1>
+      <h1 className="col-span-1 md:col-span-2 md:text-3xl text-2xl text-yellow-300">📚 Product Information</h1>
       <input
         type="text"
         name="name"
         value={formData.name}
         onChange={handleChange}
-        placeholder="Book Title"
+        placeholder="Product Name"
         className={inputStyle}
       />
       <input

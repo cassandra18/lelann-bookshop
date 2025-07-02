@@ -61,6 +61,13 @@ const addProduct = async (req, res) => {
     // Construct image URL
     const image = `http://localhost:5000/uploads/${req.file.filename}`;
 
+    const existing = await prisma.product.findUnique({
+      where: { name: req.body.name },
+    });
+
+    if (existing) {
+      return res.status(400).json({ message: "Product name already exists" });
+    }
     const subcategory = await prisma.subcategory.findUnique({
       where: { id: subcategoryId },
       select: { id: true, category_id: true },
@@ -163,7 +170,7 @@ const getProductById = async (req, res) => {
         publisher: true,
         subcategory: {
           include: {
-            category: true, 
+            category: true,
           },
         },
       },

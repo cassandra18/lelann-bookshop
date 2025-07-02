@@ -53,7 +53,7 @@ const BestSellerCard: React.FC<BestSellerCardProps & { index: number }> = ({
     <div className="p-4 flex flex-col justify-between h-full">
       <div>
         <h2 className="text-lg font-semibold text-selective-yellow">{name}</h2>
-        <p className="text-sm text-gray-500">{author.name}</p>
+        <p className="text-sm text-gray-500">{author?.name || "Unknown Author"}</p>
         <p className="text-sm text-gray-500 mt-1 line-clamp-2">
           {description || "One of our most popular picks!"}
         </p>
