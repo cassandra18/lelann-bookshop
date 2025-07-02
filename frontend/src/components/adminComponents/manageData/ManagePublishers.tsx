@@ -86,7 +86,7 @@ const ManagePublishers = () => {
                   <td className="p-2 space-x-2">
                     <button
                       onClick={() => setEditingPublisher(publisher)}
-                      className="text-yellow-300 hover:text-yellow-400"
+                      className="text-yellow-300 hover:text-yellow-400 pr-4"
                     >
                       ✏️
                     </button>

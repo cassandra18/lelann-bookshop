@@ -80,7 +80,7 @@ const ManageAuthors = () => {
                   <td className="p-2 space-x-2">
                     <button
                       onClick={() => setEditingAuthor(author)}
-                      className="text-yellow-300 hover:text-yellow-400"
+                      className="text-yellow-300 hover:text-yellow-400 pr-4"
                     >
                       ✏️
                     </button>
