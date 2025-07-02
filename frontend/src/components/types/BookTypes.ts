@@ -44,7 +44,7 @@ export interface Book {
   author_id?: string;
   publisher_id?: string;
   categoryId?: string;
-  subcategory_id: string;
+  subcategoryId: string;
 }
 
   // Props for BookForm component

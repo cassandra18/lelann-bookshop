@@ -14,6 +14,7 @@ const ProductPage = () => {
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [products, setProducts] = useState<Book[]>([]);
+const [loading, setLoading] = useState(true);
 
   // Load all books on mount
   useEffect(() => {
@@ -26,6 +27,8 @@ const ProductPage = () => {
       setProducts(books);
     } catch (err) {
       console.error("Failed to fetch books:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,7 +79,7 @@ const ProductPage = () => {
   return (
     <div className="md:p-6">
       {!showForm ? (
-        <ProductList products={products} onAdd={handleAdd} onEdit={handleEdit} />
+        <ProductList products={products} onAdd={handleAdd} onEdit={handleEdit} loading={loading} />
       ) : (
         <BookForm
           book={editingBook}

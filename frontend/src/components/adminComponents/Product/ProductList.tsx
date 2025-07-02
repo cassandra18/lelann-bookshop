@@ -6,9 +6,10 @@ type ProductListProps = {
   products: Book[];
   onAdd: () => void;
   onEdit: (id: string) => void;
+  loading: boolean;
 };
 
-const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onEdit }) => {
+const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onEdit, loading }) => {
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
       try {
@@ -36,7 +37,12 @@ const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onEdit }) =>
         </div>
 
         <div className="bg-gray-300 rounded-lg shadow-lg p-4 overflow-x-auto">
-          {products.length === 0 ? (
+          {loading ? (
+            <div className="text-center text-gray-700 py-12">
+              <p className="text-lg font-medium">Loading products...</p>
+              <p className="text-sm text-gray-600 mt-2">Please wait a moment.</p>
+            </div>
+          ) : products.length === 0 ? (
             <div className="text-center text-gray-700 py-12">
               <p className="text-lg font-medium">No products found.</p>
               <p className="text-sm text-gray-600 mt-2">Start by adding a new product.</p>

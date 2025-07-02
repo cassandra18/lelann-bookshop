@@ -16,6 +16,8 @@ export default function BookForm({ book, onSave, onClose, isSubmitting }: Props)
     handleChange,
     categories,
     filteredSubcategories,
+      authors,
+  publishers,
   } = useBookForm(
       book
     ? {
@@ -31,6 +33,7 @@ export default function BookForm({ book, onSave, onClose, isSubmitting }: Props)
     e.preventDefault();
     const imageFile = (formData as any).image as File | null ?? null;
     await onSave(formData, imageFile);
+      console.log("Form data to be submitted:", formData);
   };
 
   return (
@@ -40,20 +43,22 @@ export default function BookForm({ book, onSave, onClose, isSubmitting }: Props)
         handleChange={handleChange}
         categories={categories}
         subcategories={filteredSubcategories}
+          authors={authors}
+  publishers={publishers}
       />
 
       <div className="flex items-center gap-2">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          className="bg-yellow-300 text-prussian-blue font-semibold hover:bg-yellow-100 px-4 py-2 rounded disabled:opacity-50"
         >
           {book ? "Update Book" : "Add Book"}
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="bg-gray-400 text-white px-4 py-2 rounded"
+          className="bg-white text-red-500 font-semibold px-4 py-2 rounded hover:bg-yellow-100 transition"
         >
           Cancel
         </button>
