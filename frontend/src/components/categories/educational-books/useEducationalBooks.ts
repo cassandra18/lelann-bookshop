@@ -23,39 +23,37 @@ export interface EducationalBook {
   popularity: number;
 }
 
-const EDUCATIONAL_CATEGORY_ID = "YOUR_EDUCATIONAL_CATEGORY_ID"; // Replace with real ID
 
-const useEducationalBooks = (subcategoryId: string | undefined, sortOption: string) => {
+const useEducationalBooks = (categoryId: string, subcategoryId: string | undefined, sortOption: string) => {
   const [books, setBooks] = useState<EducationalBook[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchBooks = async () => {
+  useEffect(() => {
+  const fetchBooksAndSubcategories = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(`/api/products?category_id=${EDUCATIONAL_CATEGORY_ID}`);
-      const fetchedBooks = response.data.filter((book: EducationalBook) => book.subcategory?.category_id === EDUCATIONAL_CATEGORY_ID);
+      const [booksRes, subcatsRes] = await Promise.all([
+        axios.get(`http://localhost:5000/api/products?category_id=${categoryId}`),
+        axios.get(`http://localhost:5000/api/subcategories?category_id=${categoryId}`),
+      ]);
+
+      const fetchedBooks = booksRes.data.filter(
+        (book: EducationalBook) => book.subcategory?.category_id === categoryId
+      );
+
       setBooks(fetchedBooks);
-    } catch (err) {
-      setError("Error fetching educational books");
+      setSubcategories(subcatsRes.data);
+    } catch (err: any) {
+      setError(`Error fetching books or subcategories: ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchSubcategories = async () => {
-    try {
-      const response = await axios.get(`/api/subcategory?category_id=${EDUCATIONAL_CATEGORY_ID}`);
-      setSubcategories(response.data);
-    } catch (err) {
-      setError("Error fetching subcategories");
-    }
-  };
-
-  useEffect(() => {
-    fetchBooks();
-    fetchSubcategories();
-  }, []);
+  fetchBooksAndSubcategories();
+}, [categoryId]);
 
   // Filter and sort
   let filteredBooks = subcategoryId
@@ -63,11 +61,11 @@ const useEducationalBooks = (subcategoryId: string | undefined, sortOption: stri
     : books;
 
   if (sortOption === "price-asc") {
-    filteredBooks = filteredBooks.sort((a, b) => a.price - b.price);
+    filteredBooks = [...filteredBooks].sort((a, b) => a.price - b.price);
   } else if (sortOption === "price-desc") {
-    filteredBooks = filteredBooks.sort((a, b) => b.price - a.price);
+    filteredBooks = [...filteredBooks].sort((a, b) => b.price - a.price);
   } else if (sortOption === "popularity") {
-    filteredBooks = filteredBooks.sort((a, b) => b.popularity - a.popularity);
+    filteredBooks = [...filteredBooks].sort((a, b) => b.popularity - a.popularity);
   }
 
   return {

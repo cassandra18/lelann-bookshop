@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import useEducationalBooks from "../components/educational-books/useEducationalBooks";
-import FiltersSidebar from "../components/educational-books/FilterSidebar";
-import BooksGrid from "../components/educational-books/BooksGrid";
+import useEducationalBooks from "../components/categories/educational-books/useEducationalBooks";
+import FiltersSidebar from "../components/categories/educational-books/FilterSidebar";
+import BooksGrid from "../components/categories/educational-books/BooksGrid";
 import Pagination from "../components/common/Pagination";
 
 const EducationalBooks: React.FC = () => {
-  const { subcategoryId } = useParams<{ subcategoryId: string }>();
+  const { categoryId, subcategoryId } = useParams<{ categoryId: string; subcategoryId: string }>();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState("relevance");
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { filteredBooks, subcategories, loading, error } = useEducationalBooks(subcategoryId, sortOption);
+  const { filteredBooks, subcategories, loading, error } = useEducationalBooks(categoryId!, subcategoryId, sortOption);
 
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
   const displayedBooks = filteredBooks.slice(

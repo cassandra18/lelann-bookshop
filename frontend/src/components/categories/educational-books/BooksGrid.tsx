@@ -1,6 +1,6 @@
 import React from "react";
 import { EducationalBook } from "./useEducationalBooks";
-import { useCart } from "../cart-functionality";
+import { useCart } from "../../cart-functionality";
 import { Link } from "react-router-dom";
 
 interface Props {

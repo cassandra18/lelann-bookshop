@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../pagination";
-import { useCart } from "../cart-functionality";
+import { useCart } from "../../cart-functionality";
 
 interface Subcategory {
   id: string;

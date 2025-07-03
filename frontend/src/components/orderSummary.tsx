@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from "../components/cart-functionality";
+import { useCart } from "./cart-functionality";
 
 const OrderSummary: React.FC = () => {
     const { state } = useCart();
