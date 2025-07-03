@@ -42,7 +42,7 @@ model Product {
   id             String      @id @default(uuid())
   name           String      @unique
   price          Float
-  cta            String?     @default("Buy Now")
+  cta            String    @default("Buy Now")
   condition      String      @default("NEW")
   subject        String?
   grade          String?     // e.g. "Grade 5", "Form 1"
