@@ -22,7 +22,7 @@ import UserDashboard from "./pages/user/userDashboard.tsx";
 import ProtectedRoute from "./components/protectedRoute.tsx";
 import SignUpPage from "./pages/signupPage.tsx";
 import SignInPage from "./components/signin.tsx";
-import EducationalBooksPage from "./pages/EducationalBooksPage.tsx";
+import EducationalBooksPage from "./pages/categories/EducationalBooks.tsx";
 
 // Importing admin components
 import Layout from "./pages/admin/adminDashboard.tsx";

@@ -33,8 +33,14 @@ const createSubcategory = async (req, res) => {
 
 // Function to get all subcategories
 const getSubcategories = async (req, res) => {
+  const { categoryId } = req.query;
+
   try {
     const subcategories = await prisma.subcategory.findMany({
+        where: {
+    category_id: categoryId,
+    parent_id: null,
+  },
       select: {
         id: true,
         name: true,
@@ -44,6 +50,7 @@ const getSubcategories = async (req, res) => {
         parent: true,
       },
     });
+
     res.status(200).json(subcategories);
   } catch (error) {
     console.error(error);
