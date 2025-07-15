@@ -5,28 +5,28 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const categoryId = req.query.categoryId;
+  const category_id = req.query.categoryId;
 
-  if (!categoryId) {
-    return res.status(400).json({ error: "categoryId is required" });
+  if (!category_id) {
+    return res.status(400).json({ error: "category_id is required" });
   }
 
   try {
     const subcategories = await prisma.subcategory.findMany({
-      where: { categoryId },
+      where: { category_id },
       select: {
         id: true,
         name: true,
-        categoryId: true,
+        category_id: true,
       },
     });
 
     const authors = await prisma.author.findMany({
       where: {
-        products: {
+        books: {
           some: {
             subcategory: {
-              categoryId,
+              category_id,
             },
           },
         },
@@ -40,10 +40,10 @@ router.get("/", async (req, res) => {
 
     const publishers = await prisma.publisher.findMany({
       where: {
-        products: {
+        books: {
           some: {
             subcategory: {
-              categoryId,
+              category_id,
             },
           },
         },

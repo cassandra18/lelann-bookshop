@@ -63,12 +63,12 @@ export interface ProductApiResponse {
  * Fetch books using selected filters and pagination.
  */
 export const fetchProducts = async (
-  categoryId: string,
+  category_id: string,
   filters: SelectedFilters = {},
   page: number = 1
 ): Promise<ProductApiResponse> => {
   const params = new URLSearchParams();
-  params.append("categoryId", categoryId);
+  params.append("categoryId", category_id);
   params.append("page", page.toString());
 
   if (filters.authorIds) {
@@ -87,7 +87,7 @@ export const fetchProducts = async (
     params.append("search", filters.search);
   }
 
-  const res = await fetch(`/api/products?${params.toString()}`);
+  const res = await fetch(`http://localhost:5000/api/products?${params.toString()}`);
   if (!res.ok) {
     throw new Error("Failed to fetch products");
   }
@@ -99,9 +99,9 @@ export const fetchProducts = async (
  * Fetch filter options (authors, publishers, subcategories) for a given category.
  */
 export const fetchFilterOptions = async (
-  categoryId: string
+  category_id: string
 ): Promise<FilterOptions> => {
-  const res = await fetch(`/api/filters?categoryId=${categoryId}`);
+  const res = await fetch(`http://localhost:5000/api/filters?categoryId=${category_id}`);
   if (!res.ok) {
     throw new Error("Failed to fetch filter options");
   }

@@ -124,20 +124,21 @@ const addProduct = async (req, res) => {
 // Get all products with optional filters
 const getProducts = async (req, res) => {
   try {
-    // Extract query parameters from the request
-    const { featured, bestseller, promotion, newarrival, wishlist } = req.query;
+    const { featured, bestseller, promotion, newarrival, wishlist, categoryId } = req.query;
 
-    // Build the `where` condition based on the query parameters
-    const whereCondition = {};
+    const whereCondition = {
+      ...(featured === "true" && { featured: true }),
+      ...(bestseller === "true" && { bestseller: true }),
+      ...(promotion === "true" && { promotion: true }),
+      ...(newarrival === "true" && { newarrival: true }),
+      ...(wishlist === "true" && { wishlist: true }),
+      ...(categoryId && {
+        subcategory: {
+          category_id: categoryId,
+        },
+      }),
+    };
 
-    // Apply conditions only if the respective query parameters are present
-    if (featured === "true") whereCondition.featured = true;
-    if (bestseller === "true") whereCondition.bestseller = true;
-    if (promotion === "true") whereCondition.promotion = true;
-    if (newarrival === "true") whereCondition.newarrival = true;
-    if (wishlist === "true") whereCondition.wishlist = true;
-
-    // Fetch products based on the built condition
     const products = await prisma.product.findMany({
       where: whereCondition,
       include: {
@@ -151,7 +152,7 @@ const getProducts = async (req, res) => {
       },
     });
 
-    res.status(200).json(products);
+    res.status(200).json({ products });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
