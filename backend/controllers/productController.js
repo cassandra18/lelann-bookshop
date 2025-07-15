@@ -124,7 +124,22 @@ const addProduct = async (req, res) => {
 // Get all products with optional filters
 const getProducts = async (req, res) => {
   try {
-    const { featured, bestseller, promotion, newarrival, wishlist, categoryId } = req.query;
+    const {
+      featured,
+      bestseller,
+      promotion,
+      newarrival,
+      wishlist,
+      categoryId,
+      subcategoryIds,
+    } = req.query;
+
+    // Ensure subcategoryIds is always an array if provided
+    const parsedSubcategoryIds = Array.isArray(subcategoryIds)
+      ? subcategoryIds
+      : subcategoryIds
+      ? [subcategoryIds]
+      : undefined;
 
     const whereCondition = {
       ...(featured === "true" && { featured: true }),
@@ -132,11 +147,23 @@ const getProducts = async (req, res) => {
       ...(promotion === "true" && { promotion: true }),
       ...(newarrival === "true" && { newarrival: true }),
       ...(wishlist === "true" && { wishlist: true }),
+
       ...(categoryId && {
         subcategory: {
           category_id: categoryId,
+          ...(parsedSubcategoryIds && {
+            id: { in: parsedSubcategoryIds },
+          }),
         },
       }),
+
+      // If no categoryId, but subcategory filter exists
+      ...(!categoryId &&
+        parsedSubcategoryIds && {
+          subcategory: {
+            id: { in: parsedSubcategoryIds },
+          },
+        }),
     };
 
     const products = await prisma.product.findMany({

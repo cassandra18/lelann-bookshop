@@ -7,7 +7,6 @@ interface FilterPanelProps {
   onFilterChange: (filters: SelectedFilters) => void;
 }
 
-// You can define this locally
 type FilterOption = {
   id: string;
   name: string;
@@ -83,7 +82,7 @@ const handleCheckboxChange = (
   );
 
   return (
-    <aside className="w-full md:w-64 bg-white p-4 border rounded shadow-sm">
+    <aside className="w-full md:w-64  p-4 border rounded shadow-sm">
       {renderFilterGroup("Authors", "authorIds", filterData.authors)}
       {renderFilterGroup("Publishers", "publisherIds", filterData.publishers)}
       {renderFilterGroup("Subcategories", "subcategoryIds", filterData.subcategories)}

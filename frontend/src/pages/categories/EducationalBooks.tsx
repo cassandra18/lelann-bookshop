@@ -28,15 +28,8 @@ const EducationalBooks: React.FC = () => {
       <SubcategoryCards subcategories={subcategories} />
       
       <div className="flex flex-col md:flex-row gap-6 mt-6">
-        <div className="md:w-1/4">
-          {/* ✅ Use real categoryId from DB */}
           <FilterPanel category_id={categoryId} onFilterChange={handleFilterChange} />
-        </div>
-
-        <div className="md:w-3/4 flex-1">
-          {/* ✅ Use real categoryId here too */}
           <BookGrid filters={selectedFilters} categoryId={categoryId} />
-        </div>
       </div>
     </div>
   );

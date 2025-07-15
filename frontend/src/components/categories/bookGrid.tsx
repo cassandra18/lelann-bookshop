@@ -33,7 +33,7 @@ const BookGrid: React.FC<BookGridProps> = ({ filters, categoryId }) => {
   if (books.length === 0) return <p className="text-center text-gray-500 mt-10">No books found.</p>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-6 mt-6">
       {books.map((book) => (
         <BookCard
           key={book.id}
