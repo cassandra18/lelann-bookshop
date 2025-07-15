@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const { PrismaClient } = require('@prisma/client'); // ✅ import PrismaClient
 const { errorHanlder } = require('./middleware/errorHandler');
 
+
 const prisma = new PrismaClient(); // ✅ instantiate Prisma
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api/subcategories', require('./routes/subcategoryRoutes'));
 app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/paystack', require('./routes/paystackPaymentRoutes'));
 app.use('/api/mpesa', require('./routes/mpesaPaymentRoutes'));
+app.use('/api/filters', require('./routes/filter'));
 app.use(errorHanlder);
 
 // Show incoming requests
