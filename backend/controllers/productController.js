@@ -21,7 +21,6 @@ const addProduct = async (req, res) => {
       bestseller = false,
       newarrival = false,
       oldPrice,
-      discount,
     } = req.body;
 
     // Validate required fields
@@ -47,15 +46,6 @@ const addProduct = async (req, res) => {
         return res
           .status(400)
           .json({ message: "oldPrice must be a valid number" });
-      }
-    }
-    let discountFloat;
-    if (discount) {
-      discountFloat = parseFloat(discount);
-      if (isNaN(discountFloat)) {
-        return res
-          .status(400)
-          .json({ message: "Discount must be a valid number" });
       }
     }
     // Construct image URL
@@ -96,7 +86,6 @@ const addProduct = async (req, res) => {
       description,
       cta,
       oldPrice: oldPriceFloat,
-      discount: discountFloat,
       promotion: promotion === "true",
       bestseller: bestseller === "true",
       newarrival: newarrival === "true",
@@ -236,7 +225,6 @@ const updateProduct = async (req, res) => {
       newarrival,
       wishlist,
       oldPrice,
-      discount,
     } = req.body;
 
     // Check if the product exists
@@ -267,10 +255,6 @@ const updateProduct = async (req, res) => {
         oldPrice !== undefined
           ? parseFloat(oldPrice)
           : existingProduct.oldPrice,
-      discount:
-        discount !== undefined
-          ? parseFloat(discount)
-          : existingProduct.discount,
       promotion:
         promotion !== undefined
           ? promotion === "true"

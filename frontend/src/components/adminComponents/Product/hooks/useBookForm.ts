@@ -13,7 +13,6 @@ export function useBookForm(initialData: Partial<BookFormData> = {}) {
     name: "",
     price: "",
     oldPrice: "",
-    discount: "",
     cta: "",
     subject: "",
     company: "",

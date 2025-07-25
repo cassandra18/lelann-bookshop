@@ -66,7 +66,7 @@ const FeaturedProducts: React.FC = () => {
     const fetchFeaturedProducts = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/products?featured=true');
-        setFeaturedProducts(response.data);
+        setFeaturedProducts(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching featured products:', error);
       }

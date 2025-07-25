@@ -78,7 +78,7 @@ const BestSeller: React.FC = () => {
     const fetchBestSellers = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/products?bestseller=true");
-        setBestSellers(response.data);
+        setBestSellers(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching best sellers:", error);
       }

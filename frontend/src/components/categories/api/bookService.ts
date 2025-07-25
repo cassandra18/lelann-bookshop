@@ -32,7 +32,6 @@ export interface Product {
   wishlist: boolean;
   promotion: boolean;
   oldPrice?: number;
-  discount?: number;
   author?: {
     id: string;
     name: string;

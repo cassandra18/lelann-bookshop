@@ -29,7 +29,6 @@ export default function BookForm({
           ...book,
           price: book.price.toString(),
           oldPrice: book.oldPrice?.toString(),
-          discount: book.discount?.toString(),
         }
       : undefined
   );

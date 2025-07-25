@@ -50,22 +50,6 @@ export function BookFormFields({
       />
       <input
         type="text"
-        name="discount"
-        value={formData.discount || ""}
-        onChange={handleChange}
-        placeholder="Discount % (optional)"
-        className={inputStyle}
-      />
-      <input
-        type="text"
-        name="cta"
-        value={formData.cta || ""}
-        onChange={handleChange}
-        placeholder="CTA (optional)"
-        className={inputStyle}
-      />
-      <input
-        type="text"
         name="subject"
         value={formData.subject || ""}
         onChange={handleChange}

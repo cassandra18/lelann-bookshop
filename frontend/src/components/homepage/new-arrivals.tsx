@@ -8,7 +8,6 @@ interface NewArrivalCardProps {
   author: { name: string };
   price: number;
   oldPrice?: number;
-  discount?: number;
   cta: string;
   description?: string;
 }
@@ -32,7 +31,6 @@ const NewArrivalCard: React.FC<NewArrivalCardProps & { index: number }> = ({
   author,
   price,
   oldPrice,
-  discount,
   cta,
   description,
   index,
@@ -45,11 +43,11 @@ const NewArrivalCard: React.FC<NewArrivalCardProps & { index: number }> = ({
     variants={cardVariants}
     custom={index}
   >
-    {discount && (
+    {/* {discount && (
       <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 text-xs font-bold rounded">
         {discount}% OFF
       </div>
-    )}
+    )} */}
     <img
       src={image}
       alt={name}
@@ -85,7 +83,7 @@ const NewArrival: React.FC = () => {
     const fetchNewArrivals = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/products?newarrival=true");
-        setNewArrivals(response.data);
+        setNewArrivals(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching new arrivals:", error);
       }
@@ -112,7 +110,6 @@ const NewArrival: React.FC = () => {
             author={product.author}
             price={product.price}
             oldPrice={product.oldPrice}
-            discount={product.discount}
             image={product.image}
             cta={product.cta}
             description={product.description}

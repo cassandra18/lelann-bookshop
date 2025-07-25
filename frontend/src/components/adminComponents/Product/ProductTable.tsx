@@ -19,7 +19,7 @@ export default function ProductTable({ products, onDelete, onEdit }: Props) {
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-400">
-        {products.map((book) => (
+        {Array.isArray(products) && products.map((book) => (
           <tr key={book.id} className="hover:bg-gray-100 transition">
             <td className="p-3">
               <img

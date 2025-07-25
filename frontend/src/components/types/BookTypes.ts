@@ -31,7 +31,6 @@ export interface Book {
   price: string;
   cta?: string;
   oldPrice?: string;
-  discount?: string;
   condition: "NEW" | "USED" | "USED_GOOD" | "USED_VERY_GOOD" | "USED_ACCEPTABLE";
   subject?: string;
   description: string;
