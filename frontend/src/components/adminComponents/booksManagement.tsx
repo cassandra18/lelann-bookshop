@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Loader2, Search, PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import BookForm from './bookForm';
+import BookForm from './Product/ProductForm';
 import { Book } from '../types/BookTypes';
 
 const BASE_URL = 'http://localhost:5000/api'; 

@@ -5,7 +5,6 @@ export interface Book {
     price: number;
     cta?: string;
     oldPrice?: number;
-    discount?: number;
     condition: "NEW" | "USED" | "USED_GOOD" | "USED_VERY_GOOD" | "USED_ACCEPTABLE";
     subject?: string;
     image: string;
@@ -28,9 +27,8 @@ export interface Book {
 
   export interface BookFormData {
   name: string;
-  price: string;
-  cta?: string;
-  oldPrice?: string;
+  price: number;
+  oldPrice?: number;
   condition: "NEW" | "USED" | "USED_GOOD" | "USED_VERY_GOOD" | "USED_ACCEPTABLE";
   subject?: string;
   description: string;
@@ -42,8 +40,8 @@ export interface Book {
   wishlist: boolean;
   author_id?: string;
   publisher_id?: string;
-  categoryId?: string;
-  subcategoryId: string;
+  category_id?: string;
+  subcategory_id: string;
 }
 
   // Props for BookForm component
