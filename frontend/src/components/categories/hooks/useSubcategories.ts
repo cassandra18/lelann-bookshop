@@ -14,7 +14,7 @@ interface Subcategory {
 
 export const useSubcategories = (categoryName: string) => {
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
-  const [categoryId, setCategoryId] = useState('');
+  const [category_id, setCategory_id] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -32,7 +32,7 @@ export const useSubcategories = (categoryName: string) => {
           return;
         }
 
-        setCategoryId(matchedCategory.id);
+        setCategory_id(matchedCategory.id);
 
         // 2. Fetch all subcategories
         const subcategoryRes = await axios.get<Subcategory[]>('http://localhost:5000/api/subcategories');
@@ -52,5 +52,5 @@ export const useSubcategories = (categoryName: string) => {
     fetchData();
   }, [categoryName]);
 
-  return { subcategories, categoryId, loading, error };
+  return { subcategories, category_id, loading, error };
 };

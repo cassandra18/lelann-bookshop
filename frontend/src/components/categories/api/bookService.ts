@@ -1,7 +1,7 @@
 export interface SelectedFilters {
-  authorIds?: string[];
-  publisherIds?: string[];
-  subcategoryIds?: string[];
+  author_ids?: string[];
+  publisher_ids?: string[];
+  subcategory_ids?: string[];
   search?: string;
 }
 
@@ -65,21 +65,21 @@ export const fetchProducts = async (
   category_id: string,
   filters: SelectedFilters = {},
   page: number = 1
-): Promise<ProductApiResponse> => {
+): Promise<Product[]> => {
   const params = new URLSearchParams();
-  params.append("categoryId", category_id);
+  params.append("category_id", category_id);
   params.append("page", page.toString());
 
-  if (filters.authorIds) {
-    filters.authorIds.forEach(id => params.append("authorIds", id));
+  if (filters.author_ids) {
+    filters.author_ids.forEach(id => params.append("author_id", id));
   }
 
-  if (filters.publisherIds) {
-    filters.publisherIds.forEach(id => params.append("publisherIds", id));
+  if (filters.publisher_ids) {
+    filters.publisher_ids.forEach(id => params.append("publisher_id", id));
   }
 
-  if (filters.subcategoryIds) {
-    filters.subcategoryIds.forEach(id => params.append("subcategoryIds", id));
+  if (filters.subcategory_ids) {
+    filters.subcategory_ids.forEach(id => params.append("subcategory_id", id));
   }
 
   if (filters.search) {

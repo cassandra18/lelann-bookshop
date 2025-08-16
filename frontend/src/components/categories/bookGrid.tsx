@@ -4,10 +4,10 @@ import { Product, SelectedFilters, fetchProducts } from "./api/bookService";
 
 interface BookGridProps {
   filters: SelectedFilters;
-  categoryId: string;
+  category_id: string;
 }
 
-const BookGrid: React.FC<BookGridProps> = ({ filters, categoryId }) => {
+const BookGrid: React.FC<BookGridProps> = ({ filters, category_id }) => {
   const [books, setBooks] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -15,9 +15,12 @@ const BookGrid: React.FC<BookGridProps> = ({ filters, categoryId }) => {
     const getBooks = async () => {
       setLoading(true);
       try {
-        const fetched = await fetchProducts(categoryId, filters);
-        if (!fetched?.products) throw new Error("No products in response");
-        setBooks(fetched.products);
+        const response = await fetchProducts(category_id, filters);
+        // Assuming the array of products is in response.products
+        if (!Array.isArray(response)) {
+            throw new Error("API did not return an array of products.");
+        }
+        setBooks(response);
       } catch (err) {
         console.error("Failed to fetch books", err);
         setBooks([]);
@@ -27,7 +30,7 @@ const BookGrid: React.FC<BookGridProps> = ({ filters, categoryId }) => {
     };
 
     getBooks();
-  }, [filters, categoryId]);
+  }, [filters, category_id]);
 
   if (loading) return <p className="text-center text-gray-500 mt-10">Loading books...</p>;
   if (books.length === 0) return <p className="text-center text-gray-500 mt-10">No books found.</p>;

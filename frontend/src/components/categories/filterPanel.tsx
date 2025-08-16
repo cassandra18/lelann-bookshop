@@ -20,9 +20,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ category_id, onFilterChange }
   });
 
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
-    authorIds: [],
-    publisherIds: [],
-    subcategoryIds: [],
+    author_ids: [],
+    publisher_ids: [],
+    subcategory_ids: [],
   });
 
   useEffect(() => {
@@ -45,13 +45,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ category_id, onFilterChange }
   }, [selectedFilters, onFilterChange]);
 
 const handleCheckboxChange = (
-  type: "authorIds" | "publisherIds" | "subcategoryIds",
+  type: "author_ids" | "publisher_ids" | "subcategory_ids",
   id: string
 ) => {
   setSelectedFilters((prev) => {
     const current = prev[type] ?? [];
     const updated = current.includes(id)
-      ? current.filter((item) => item !== id)
+      ? current.filter((item: string) => item !== id)
       : [...current, id];
 
     return { ...prev, [type]: updated };
@@ -61,7 +61,7 @@ const handleCheckboxChange = (
 
   const renderFilterGroup = (
     label: string,
-    type: "authorIds" | "publisherIds" | "subcategoryIds",
+    type: "author_ids" | "publisher_ids" | "subcategory_ids",
     options: FilterOption[]
   ) => (
     <div className="mb-4">
@@ -83,9 +83,9 @@ const handleCheckboxChange = (
 
   return (
     <aside className="w-full md:w-64  p-4 border rounded shadow-sm">
-      {renderFilterGroup("Authors", "authorIds", filterData.authors)}
-      {renderFilterGroup("Publishers", "publisherIds", filterData.publishers)}
-      {renderFilterGroup("Subcategories", "subcategoryIds", filterData.subcategories)}
+      {renderFilterGroup("Authors", "author_ids", filterData.authors)}
+      {renderFilterGroup("Publishers", "publisher_ids", filterData.publishers)}
+      {renderFilterGroup("Subcategories", "subcategory_ids", filterData.subcategories)}
     </aside>
   );
 };
