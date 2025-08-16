@@ -41,8 +41,8 @@ export default function BookForm({
 
   try {
        const imageFile = ((formData as any).image as File | null) ?? null;
-      await onSave(formData, imageFile);
       console.log("Form data to be submitted:", formData);
+      await onSave(formData, imageFile);
     } catch (err: any) {
       console.error("Failed to save book:", err);
       setError(

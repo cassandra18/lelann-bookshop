@@ -33,7 +33,7 @@ export function BookFormFields({
         className={inputStyle}
       />
       <input
-        type="text"
+        type="number"
         name="price"
         value={formData.price}
         onChange={handleChange}
@@ -41,7 +41,7 @@ export function BookFormFields({
         className={inputStyle}
       />
       <input
-        type="text"
+        type="number"
         name="oldPrice"
         value={formData.oldPrice || ""}
         onChange={handleChange}
@@ -70,8 +70,8 @@ export function BookFormFields({
       </select>
 
       <select
-        name="categoryId"
-        value={formData.categoryId || ""}
+        name="category_id"
+        value={formData.category_id || ""}
         onChange={handleChange}
         className={inputStyle}
       >
@@ -84,8 +84,8 @@ export function BookFormFields({
       </select>
 
       <select
-        name="subcategoryId"
-        value={formData.subcategoryId || ""}
+        name="subcategory_id"
+        value={formData.subcategory_id || ""}
         onChange={handleChange}
         className={inputStyle}
       >

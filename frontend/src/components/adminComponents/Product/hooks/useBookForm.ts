@@ -11,14 +11,13 @@ export function useBookForm(initialData: Partial<BookFormData> = {}) {
 
   const [formData, setFormData] = useState<BookFormData>({
     name: "",
-    price: "",
-    oldPrice: "",
-    cta: "",
+    price: 0,
+    oldPrice: 0,
     subject: "",
     company: "",
     condition: "NEW",
-    categoryId: "",
-    subcategoryId: "",
+    category_id: "",
+    subcategory_id: "",
     author_id: "",
     publisher_id: "",
     description: "",
@@ -54,15 +53,15 @@ export function useBookForm(initialData: Partial<BookFormData> = {}) {
   }, []);
 
   useEffect(() => {
-    if (formData.categoryId) {
+    if (formData.category_id) {
       const filtered = subcategories.filter(
-        (sub) => String(sub.category_id) === String(formData.categoryId)
+        (sub) => String(sub.category_id) === String(formData.category_id)
       );
       setFilteredSubcategories(filtered);
     } else {
       setFilteredSubcategories([]);
     }
-  }, [formData.categoryId, subcategories]);
+  }, [formData.category_id, subcategories]);
 
   const handleChange = (
     e: React.ChangeEvent<

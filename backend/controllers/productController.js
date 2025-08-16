@@ -9,13 +9,12 @@ const addProduct = async (req, res) => {
       price,
       condition = "NEW",
       description,
-      authorId,
-      publisherId,
-      subcategoryId,
+      author_id,
+      publisher_id,
+      subcategory_id,
       subject,
       featured = false,
       company,
-      cta,
       wishlist = false,
       promotion = false,
       bestseller = false,
@@ -24,9 +23,9 @@ const addProduct = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!name || !price || !subcategoryId) {
+    if (!name || !price || !subcategory_id) {
       return res.status(400).json({
-        message: "Name, price, and subcategoryId are required fields",
+        message: "Name, price, and subcategory_id are required fields",
       });
     }
     // Check if image file is uploaded
@@ -59,12 +58,12 @@ const addProduct = async (req, res) => {
       return res.status(400).json({ message: "Product name already exists" });
     }
     const subcategory = await prisma.subcategory.findUnique({
-      where: { id: subcategoryId },
+      where: { id: subcategory_id },
       select: { id: true, category_id: true },
     });
 
     if (!subcategory) {
-      return res.status(400).json({ message: "Invalid subcategoryId" });
+      return res.status(400).json({ message: "Invalid subcategory_id" });
     }
 
     if (!subcategory.category_id) {
@@ -81,10 +80,9 @@ const addProduct = async (req, res) => {
       subject,
       featured: featured === "true", // Convert to boolean
       company,
-      subcategory: { connect: { id: subcategoryId } },
+      subcategory: { connect: { id: subcategory_id } },
       image,
       description,
-      cta,
       oldPrice: oldPriceFloat,
       promotion: promotion === "true",
       bestseller: bestseller === "true",
@@ -93,12 +91,12 @@ const addProduct = async (req, res) => {
     };
 
     // Conditionally add author and publisher if IDs are provided
-    if (authorId) {
-      productData.author = { connect: { id: authorId } };
+    if (author_id) {
+      productData.author = { connect: { id: author_id } };
     }
 
-    if (publisherId) {
-      productData.publisher = { connect: { id: publisherId } };
+    if (publisher_id) {
+      productData.publisher = { connect: { id: publisher_id } };
     }
 
     // Create a new product
@@ -119,15 +117,15 @@ const getProducts = async (req, res) => {
       promotion,
       newarrival,
       wishlist,
-      categoryId,
-      subcategoryIds,
+      category_id,
+      subcategory_ids,
     } = req.query;
 
-    // Ensure subcategoryIds is always an array if provided
-    const parsedSubcategoryIds = Array.isArray(subcategoryIds)
-      ? subcategoryIds
-      : subcategoryIds
-      ? [subcategoryIds]
+    // Ensure subcategory_ids is always an array if provided
+    const parsedsubcategory_ids = Array.isArray(subcategory_ids)
+      ? subcategory_ids
+      : subcategory_ids
+      ? [subcategory_ids]
       : undefined;
 
     const whereCondition = {
@@ -137,20 +135,20 @@ const getProducts = async (req, res) => {
       ...(newarrival === "true" && { newarrival: true }),
       ...(wishlist === "true" && { wishlist: true }),
 
-      ...(categoryId && {
+      ...(category_id && {
         subcategory: {
-          category_id: categoryId,
-          ...(parsedSubcategoryIds && {
-            id: { in: parsedSubcategoryIds },
+          category_id: category_id,
+          ...(parsedsubcategory_ids && {
+            id: { in: parsedsubcategory_ids },
           }),
         },
       }),
 
-      // If no categoryId, but subcategory filter exists
-      ...(!categoryId &&
-        parsedSubcategoryIds && {
+      // If no category_id, but subcategory filter exists
+      ...(!category_id &&
+        parsedsubcategory_ids && {
           subcategory: {
-            id: { in: parsedSubcategoryIds },
+            id: { in: parsedsubcategory_ids },
           },
         }),
     };
@@ -215,7 +213,7 @@ const updateProduct = async (req, res) => {
       description,
       authorId,
       publisherId,
-      subcategoryId,
+      subcategory_id,
       subject,
       featured,
       company,
@@ -244,8 +242,8 @@ const updateProduct = async (req, res) => {
       featured:
         featured !== undefined ? featured === "true" : existingProduct.featured,
       company,
-      subcategory: subcategoryId
-        ? { connect: { id: subcategoryId } }
+      subcategory: subcategory_id
+        ? { connect: { id: subcategory_id } }
         : existingProduct.subcategory,
       image: req.file
         ? `https://lelann-bookshop.onrender.com/uploads/${req.file.filename}`
