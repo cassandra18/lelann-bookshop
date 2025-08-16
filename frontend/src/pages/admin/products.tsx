@@ -1,27 +1,28 @@
 import { useState, useEffect } from 'react';
-import ProductList from '../../components/adminComponents/Product/ProductList';
-import BookForm from '../../components/adminComponents/Product/ProductForm';
 import { Book, BookFormData } from '../../components/types/BookTypes';
 import {
   createProduct,
   updateProduct,
   fetchProduct,
   fetchProducts,
+  deleteProduct,
 } from '../../components/adminComponents/Product/ProductActions';
+import BookForm from '../../components/adminComponents/Product/ProductForm';
+import BooksManagement from '../../components/adminComponents/booksManagement';
 
 const ProductPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [products, setProducts] = useState<Book[]>([]);
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  // Load all books on mount
   useEffect(() => {
     loadProducts();
   }, []);
 
   const loadProducts = async () => {
+    setLoading(true);
     try {
       const books = await fetchProducts();
       setProducts(books);
@@ -47,14 +48,22 @@ const [loading, setLoading] = useState(true);
     }
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProduct(id);
+      await loadProducts();
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
+  };
+
   const handleSave = async (data: BookFormData, imageFile: File | null) => {
     setIsSubmitting(true);
     try {
       const product: Partial<Book> = {
         ...data,
-        price: parseFloat(data.price),
-        oldPrice: data.oldPrice ? parseFloat(data.oldPrice) : undefined,
-        discount: data.discount ? parseFloat(data.discount) : undefined,
+        price: data.price,
+        oldPrice: data.oldPrice ? data.oldPrice : 0,
       };
 
       if (editingBook) {
@@ -63,7 +72,7 @@ const [loading, setLoading] = useState(true);
         await createProduct(product, imageFile);
       }
 
-      await loadProducts(); // Refresh list
+      await loadProducts();
       setShowForm(false);
     } catch (error) {
       console.error("Failed to save product:", error);
@@ -80,7 +89,13 @@ const [loading, setLoading] = useState(true);
   return (
     <div className="md:p-6">
       {!showForm ? (
-        <ProductList products={products} onAdd={handleAdd} onEdit={handleEdit} loading={loading} />
+        <BooksManagement
+          books={products}
+          loading={loading}
+          onAdd={handleAdd}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       ) : (
         <BookForm
           book={editingBook}
