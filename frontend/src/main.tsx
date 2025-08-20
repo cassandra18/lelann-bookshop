@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 // Importing pages and components
 import { AuthProvider } from "./components/context/AuthContext.tsx";
 import Homepage from "./pages/homepage.tsx";
-import OtherBooksPage from "./pages/other-books.tsx";
+import OtherBooks from "./pages/categories/OtherBooks.tsx";
 import BookDetails from "./components/bookdetails.tsx";
 import Basket from "./pages/basket.tsx";
 import CheckoutPage from "./pages/checkoutpage.tsx";
@@ -23,6 +23,8 @@ import ProtectedRoute from "./components/protectedRoute.tsx";
 import SignUpPage from "./pages/signupPage.tsx";
 import SignInPage from "./components/signin.tsx";
 import EducationalBooksPage from "./pages/categories/EducationalBooks.tsx";
+import Stationary from "./pages/categories/Stationary.tsx";
+
 
 // Importing admin components
 import Layout from "./pages/admin/adminDashboard.tsx";
@@ -49,11 +51,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/other-books",
-        element: <OtherBooksPage />,
+        element: <OtherBooks />,
       },
       {
         path: "/other-books/:subcategoryId",
-        element: <OtherBooksPage />,
+        element: <OtherBooks />,
+      },
+      {
+        path: "/stationary",
+        element: <Stationary />,
+      },
+      {
+        path: "/stationary/:subcategoryId",
+        element: <Stationary />,
       },
       {
         path: "/otherbooks/:bookId",
