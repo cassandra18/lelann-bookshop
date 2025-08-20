@@ -89,16 +89,6 @@ export const NavItems: NavItem[] = [
         ],
     },
     {
-        name: "Uniforms",
-        link: "/uniforms",
-        subLinks: [
-            { name: "Pre-Primary & ECDE", link: "/pre-primary" },
-            { name: "Primary School", link: "/primary" },
-            { name: "Secondary School", link: "/secondary" },
-            { name: "International Schools", link: "/international" },
-        ],
-    },
-    {
         name: "Stationary",
         link: "/stationary",
         subLinks: [

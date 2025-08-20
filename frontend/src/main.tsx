@@ -24,6 +24,9 @@ import SignUpPage from "./pages/signupPage.tsx";
 import SignInPage from "./components/signin.tsx";
 import EducationalBooksPage from "./pages/categories/EducationalBooks.tsx";
 import Stationary from "./pages/categories/Stationary.tsx";
+import ArtSupplies from "./pages/categories/ArtSupplies.tsx";
+import Toys from "./pages/categories/Toys&Games.tsx";
+import Electronics from "./pages/categories/Electronics.tsx";
 
 
 // Importing admin components
@@ -68,6 +71,18 @@ const router = createBrowserRouter([
       {
         path: "/otherbooks/:bookId",
         element: <BookDetails />,
+      },
+      {
+        path: "/art-supplies",
+        element: <ArtSupplies />,
+      },
+      {
+        path: "/toys-games",
+        element: <Toys />,
+      },
+      {
+        path: "/electronics",
+        element: <Electronics />,
       },
       {
         path: "/basket",
