@@ -11,13 +11,21 @@ export function useBookForm(initialData: Partial<BookFormData> = {}) {
 
   const [formData, setFormData] = useState<BookFormData>({
     name: "",
-    price: 0,
-    oldPrice: 0,
+    price: 0.00,
+    oldPrice: 0.00,
     subject: "",
+    grade: "",
+    format: "",
+    isbn: "",
+    language: "",
+    yearPublished: "",
+    stock: "",
+    curriculum: "",
+    level: "",
     company: "",
     condition: "NEW",
     category_id: "",
-    subcategory_id: "",
+    subcategory_ids: [],
     author_id: "",
     publisher_id: "",
     description: "",
@@ -70,19 +78,44 @@ export function useBookForm(initialData: Partial<BookFormData> = {}) {
   ) => {
     const { name, value, type, files } = e.target as HTMLInputElement;
 
-    if (type === "file" && files) {
+    // Handle multi-select dropdown
+    if (name === "subcategory_ids" && (e.target as HTMLSelectElement).multiple) {
+      const selectedValues = Array.from(
+        (e.target as HTMLSelectElement).options
+      )
+        .filter(option => option.selected)
+        .map(option => option.value);
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: selectedValues,
+      }));
+    } 
+    // Handle file input
+    else if (type === "file" && files) {
       const file = files[0];
       setFormData((prev) => ({
         ...prev,
         [name]: file,
       }));
-    } else if (type === "checkbox") {
+    } 
+    // Handle checkbox
+    else if (type === "checkbox") {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({
         ...prev,
         [name]: checked,
       }));
-    } else {
+    }
+    // Handle number inputs (convert string value to number)
+    else if (["price", "oldPrice", "pages", "yearPublished", "stock", "rating"].includes(name)) {
+        setFormData((prev) => ({
+            ...prev,
+            [name]: Number(value),
+        }));
+    }
+    // Handle other inputs
+    else {
       setFormData((prev) => ({
         ...prev,
         [name]: value,

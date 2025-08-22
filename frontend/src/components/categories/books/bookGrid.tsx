@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "./bookCard";
-import { Product, SelectedFilters, fetchProducts } from "./api/bookService";
+import { Product, SelectedFilters, fetchProducts } from "../api/bookService";
 
 interface BookGridProps {
   filters: SelectedFilters;
@@ -16,8 +16,6 @@ const BookGrid: React.FC<BookGridProps> = ({ filters, category_id }) => {
       setLoading(true);
       try {
         const response = await fetchProducts(category_id, filters);
-        // The API returns an object with a 'products' key.
-        // We need to access that key to get the array.
         if (!response.products || !Array.isArray(response.products)) {
             throw new Error("API response is not in the expected format.");
         }

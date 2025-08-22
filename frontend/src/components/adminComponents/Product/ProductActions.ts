@@ -10,7 +10,16 @@ const getToken = () => localStorage.getItem("token");
 export const fetchProducts = async (): Promise<Book[]> => {
   const res = await fetch(`${BASE_URL}/products`);
   if (!res.ok) throw new Error("Failed to fetch products");
-  return res.json();
+    // Parse the JSON response
+  const data = await res.json();
+  
+  // Check if the products property exists and is an array, then return it
+  if (data && Array.isArray(data.products)) {
+    return data.products;
+  }
+  
+  // If not, throw an error or return an empty array
+  throw new Error("API response is not in the expected format.");
 };
 
 // ✅ Fetch single product by ID

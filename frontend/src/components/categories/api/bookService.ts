@@ -1,8 +1,5 @@
 export interface SelectedFilters {
-  author_ids?: string[];
-  publisher_ids?: string[];
-  subcategory_ids?: string[];
-  search?: string;
+  [key: string]: string[] | string | undefined;
 }
 
 export interface Product {
@@ -52,10 +49,14 @@ export interface FetchProductsResponse {
   totalPages: number;
   currentPage: number;
 }
+
+export interface FilterOptionGroup {
+  id: string;
+  name: string;
+}
+
 export interface FilterOptions {
-  authors: { id: string; name: string }[];
-  publishers: { id: string; name: string }[];
-  subcategories: { id: string; name: string }[];
+  [key: string]: FilterOptionGroup[];
 }
 
 export interface ProductApiResponse {
@@ -76,20 +77,17 @@ export const fetchProducts = async (
   params.append("category_id", category_id);
   params.append("page", page.toString());
 
-  if (filters.author_ids) {
-    filters.author_ids.forEach(id => params.append("author_id", id));
-  }
-
-  if (filters.publisher_ids) {
-    filters.publisher_ids.forEach(id => params.append("publisher_id", id));
-  }
-
-  if (filters.subcategory_ids) {
-    filters.subcategory_ids.forEach(id => params.append("subcategory_id", id));
-  }
-
-  if (filters.search) {
-    params.append("search", filters.search);
+  for (const key in filters) {
+    const value = filters[key];
+    if (value) {
+      if (Array.isArray(value)) {
+        // Handle array values (e.g., subcategory_ids)
+        value.forEach(item => params.append(key, item));
+      } else {
+        // Handle single string values (e.g., search)
+        params.append(key, value);
+      }
+    }
   }
 
   const res = await fetch(`http://localhost:5000/api/products?${params.toString()}`);
@@ -100,9 +98,7 @@ export const fetchProducts = async (
   return await res.json();
 };
 
-/**
- * Fetch filter options (authors, publishers, subcategories) for a given category.
- */
+// Fetch available filter options for a given category
 export const fetchFilterOptions = async (
   category_id: string
 ): Promise<FilterOptions> => {

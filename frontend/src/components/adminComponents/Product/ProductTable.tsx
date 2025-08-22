@@ -19,9 +19,10 @@ const ProductTable: React.FC<ProductTableProps> = ({
           <th className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider rounded-tl-lg">ID</th>
           <th className="px-4 py-3 text-center text-sm font-semibold uppercase tracking-wider">Image</th>
           <th className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider">Name</th>
+          <th className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider">Price</th>
           <th className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider">Author</th>
           <th className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider">Publisher</th>
-          <th className="px-4 py-3 text-right text-sm font-semibold uppercase tracking-wider">Price</th>
+          <th className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider">Company</th>
           <th className="px-4 py-3 text-center text-sm font-semibold uppercase tracking-wider rounded-tr-lg">Actions</th>
         </tr>
       </thead>
@@ -38,21 +39,22 @@ const ProductTable: React.FC<ProductTableProps> = ({
               />
             </td>
             <td className="px-4 py-3 text-left font-medium text-gray-900">{book.name}</td>
-            <td className="px-4 py-3 text-left text-gray-700">{book.author?.name || "—"}</td>
-            <td className="px-4 py-3 text-left text-gray-700">{book.publisher?.name || "—"}</td>
-            <td className="px-4 py-3 text-right text-gray-700">Ksh {book.price?.toFixed(2)}</td> {/* Format price */}
+            <td className="px-4 py-3 text-left text-gray-700">{book.price}</td>
+            <td className="px-4 py-3 text-center text-gray-700">{book.author?.name || "—"}</td>
+            <td className="px-4 py-3 text-center text-gray-700">{book.publisher?.name || "—"}</td>
+            <td className="px-4 py-3 text-center text-gray-700">{book.company || "—"}</td>
             <td className="px-4 py-3 whitespace-nowrap text-center">
               <button
-                className="mr-2 px-3 py-1 text-sm font-semibold text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+                className="mr-2 px-3 py-1 text-lg font-bold"
                 onClick={() => onEdit(book.id)}
               >
-                Edit
+                ✏️
               </button>
               <button
-                className="px-3 py-1 text-sm font-semibold text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200"
+                className="px-3 py-1 text-lg font-bold"
                 onClick={() => onDelete(book.id)}
               >
-                Delete
+                🗑️
               </button>
             </td>
           </tr>

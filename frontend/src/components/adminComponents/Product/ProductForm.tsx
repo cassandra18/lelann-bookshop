@@ -59,7 +59,7 @@ export default function BookForm({
         formData={formData}
         handleChange={handleChange}
         categories={categories}
-        subcategories={filteredSubcategories}
+        filteredSubcategories={filteredSubcategories}
         authors={authors}
         publishers={publishers}
       />

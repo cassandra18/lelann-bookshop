@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fetchFilterOptions } from "./api/bookService";
-import type { FilterOptions, SelectedFilters } from "./api/bookService";
+import { fetchFilterOptions } from "../api/bookService";
+import type { FilterOptions, SelectedFilters } from "../api/bookService";
 
 interface FilterPanelProps {
   category_id: string;
@@ -50,11 +50,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ category_id, onFilterChange }
   }, [selectedFilters, onFilterChange]);
 
 const handleCheckboxChange = (
-  type: "author_ids" | "publisher_ids" | "subcategory_ids",
+  type: string,
   id: string
 ) => {
   setSelectedFilters((prev) => {
-    const current = prev[type] ?? [];
+    const current = Array.isArray(prev[type]) ? prev[type] : [];
     const updated = current.includes(id)
       ? current.filter((item: string) => item !== id)
       : [...current, id];
@@ -74,7 +74,7 @@ const handleCheckboxChange = (
 
   const renderFilterGroup = (
     label: string,
-    type: "author_ids" | "publisher_ids" | "subcategory_ids",
+    type: string,
     options: FilterOption[],
     isCollapsed: boolean,
     toggleCollapse: () => void
@@ -123,7 +123,14 @@ const handleCheckboxChange = (
   return (
     <aside className="w-full md:w-64 p-6  text-white rounded-xl shadow-2xl font-inter">
       <h2 className="text-2xl font-bold mb-6 text-yellow-300">Filters</h2>
-
+     
+      {renderFilterGroup(
+        "Subcategories",
+        "subcategory_ids",
+        filterData.subcategories,
+        isSubcategoriesCollapsed,
+        () => setIsSubcategoriesCollapsed(!isSubcategoriesCollapsed)
+      )}
       {renderFilterGroup(
         "Authors",
         "author_ids",
@@ -137,13 +144,6 @@ const handleCheckboxChange = (
         filterData.publishers,
         isPublishersCollapsed,
         () => setIsPublishersCollapsed(!isPublishersCollapsed)
-      )}
-      {renderFilterGroup(
-        "Subcategories",
-        "subcategory_ids",
-        filterData.subcategories,
-        isSubcategoriesCollapsed,
-        () => setIsSubcategoriesCollapsed(!isSubcategoriesCollapsed)
       )}
 
       {/* Clear Filters Button */}

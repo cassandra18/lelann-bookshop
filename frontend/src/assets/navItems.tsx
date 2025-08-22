@@ -137,6 +137,25 @@ export const NavItems: NavItem[] = [
         ]
     },
     {
+        name: "Sports & Fitness",
+        link: "/sports-fitness",
+        subLinks: [
+            { name: "Sports Equipment", link: "/equipment" },
+            { name: "Sports Apparel", link: "/apparel" },
+            { name: "Fitness Gear", link: "/gear" },
+            { name: "Outdoor Recreation", link: "/outdoor" },
+            { name: "Yoga & Meditation", link: "/yoga" },
+            { name: "Cycling", link: "/cycling" },
+            { name: "Running & Walking", link: "/running" },
+            { name: "Team Sports", link: "/team-sports" },
+            { name: "Water Sports", link: "/water-sports" },
+            { name: "Gym & Weightlifting", link: "/gym" },
+            { name: "Martial Arts & Self-defense", link: "/martial-arts" },
+            { name: "Sports Accessories", link: "/accessories" },
+            { name: "Others", link: "/others" },
+        ]
+    },
+    {
         name: "Toys & Games",
         link: "/toys-games",
         subLinks: [
@@ -153,14 +172,14 @@ export const NavItems: NavItem[] = [
             { name: "Others", link: "/others" },
         ]
     },
-    {
-        name: "On Sale",
-        link: "/on-sale"
-    },
-    {
-        name: "BookList",
-        link: "/booklist"
-    },
+    // {
+    //     name: "On Sale",
+    //     link: "/on-sale"
+    // },
+    // {
+    //     name: "BookList",
+    //     link: "/booklist"
+    // },
     {
         name: "About Us",
         link: "/about-us"

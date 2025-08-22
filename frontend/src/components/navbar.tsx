@@ -83,7 +83,7 @@ const Navbar: React.FC = () => {
         <div className="max-w-screen-xl mx-auto flex justify-between items-center py-2 px-2">
           {/* Desktop navigation */}
           <div className="hidden lg:flex space-x-4">
-            {NavItems.slice(0, NavItems.length - 4).map((item) => (
+            {NavItems.slice(0, NavItems.length - 2).map((item) => (
               <div key={item.name} className="relative group">
                 <NavLink
                   to={item.link}
@@ -121,9 +121,9 @@ const Navbar: React.FC = () => {
               </div>
             ))}
 
-            {/* Container with the last 4 NavItems */}
+            {/* Container with the last 2 NavItems */}
             <div className="bg-gray-700 w-full flex flex-row space-x-4 pl-2 rounded-xl">
-              {NavItems.slice(NavItems.length - 4).map((item) => (
+              {NavItems.slice(NavItems.length - 2).map((item) => (
                 <div key={item.name} className="relative group">
                   <NavLink
                     to={item.link}
@@ -180,7 +180,7 @@ const Navbar: React.FC = () => {
         {/* Mobile navigation */}
         {isMenuOpen && (
           <div className="lg:hidden flex flex-col space-y-4 my-4 mx-16 items-start">
-            {NavItems.slice(0, NavItems.length - 4).map((item) => (
+            {NavItems.slice(0, NavItems.length - 2).map((item) => (
               <div key={item.name} className="relative group">
                 <NavLink
                   to={item.link}
@@ -210,9 +210,9 @@ const Navbar: React.FC = () => {
               </div>
             ))}
 
-            {/* Container with bg-gray-800 for the last 4 NavItems */}
+            {/* Container with bg-gray-800 for the last 2 NavItems */}
             <div className="bg-gray-800 w-full flex flex-col space-y-4 py-4 px-2 rounded-xl">
-              {NavItems.slice(NavItems.length - 4).map((item) => (
+              {NavItems.slice(NavItems.length - 2).map((item) => (
                 <div key={item.name} className="relative group">
                   <NavLink
                     to={item.link}

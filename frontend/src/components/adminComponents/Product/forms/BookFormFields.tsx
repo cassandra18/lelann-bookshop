@@ -1,11 +1,12 @@
 import React from "react";
 import { BookFormData } from "../../../types/BookTypes";
+import MultiSelectDropdown from "./MultipleSelectDropDown";
 
 interface Props {
   formData: BookFormData;
   handleChange: (e: React.ChangeEvent<any>) => void;
   categories: any[];
-  subcategories: any[];
+  filteredSubcategories: any[];
   authors: any[];
   publishers: any[];
 }
@@ -17,10 +18,22 @@ export function BookFormFields({
   formData,
   handleChange,
   categories,
-  subcategories,
+  filteredSubcategories,
   authors,
   publishers,
 }: Props) {
+
+  const handleMultiSelectChange = (selectedIds: string[]) => {
+    // This calls the parent component's state update logic
+    handleChange({
+      target: {
+        name: "subcategory_ids",
+        value: selectedIds,
+        type: "select-multiple",
+      },
+    } as React.ChangeEvent<any>);
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <h1 className="col-span-1 md:col-span-2 md:text-3xl text-2xl text-yellow-300">📚 Product Information</h1>
@@ -56,6 +69,14 @@ export function BookFormFields({
         placeholder="Subject (optional)"
         className={inputStyle}
       />
+      <input
+        type="text"
+        name="company"
+        value={formData.company || ""}
+        onChange={handleChange}
+        placeholder="Company"
+        className={inputStyle}
+      />
       <select
         name="condition"
         value={formData.condition}
@@ -68,7 +89,62 @@ export function BookFormFields({
         <option value="USED_VERY_GOOD">Used - Very Good</option>
         <option value="USED_ACCEPTABLE">Used - Acceptable</option>
       </select>
-
+      <input
+        type="text"
+        name="format"
+        value={formData.format || ""}
+        onChange={handleChange}
+        placeholder="Format (optional)"
+        className={inputStyle}
+      />
+      <input
+        type="text"
+        name="isbn"
+        value={formData.isbn || ""}
+        onChange={handleChange}
+        placeholder="ISBN (optional)"
+        className={inputStyle}
+      />
+      <input
+        type="text"
+        name="language"
+        value={formData.language || ""}
+        onChange={handleChange}
+        placeholder="Language (optional)"
+        className={inputStyle}
+      />
+            <input
+        type="number"
+        name="yearPublished"
+        value={formData.yearPublished || ""}
+        onChange={handleChange}
+        placeholder="Year Published (optional)"
+        className={inputStyle}
+      />
+      <input
+        type="number"
+        name="stock"
+        value={formData.stock || ""}
+        onChange={handleChange}
+        placeholder="Stock (optional)"
+        className={inputStyle}
+      />
+      <input
+        type="text"
+        name="curriculum"
+        value={formData.curriculum || ""}
+        onChange={handleChange}
+        placeholder="Curriculum (optional)"
+        className={inputStyle}
+      />
+      <input
+        type="text"
+        name="level"
+        value={formData.level || ""}
+        onChange={handleChange}
+        placeholder="Level (optional)"
+        className={inputStyle}
+      />
       <select
         name="category_id"
         value={formData.category_id || ""}
@@ -83,19 +159,12 @@ export function BookFormFields({
         ))}
       </select>
 
-      <select
-        name="subcategory_id"
-        value={formData.subcategory_id || ""}
-        onChange={handleChange}
-        className={inputStyle}
-      >
-        <option value="">Select Subcategory</option>
-        {subcategories.map((sub) => (
-          <option key={sub.id} value={sub.id}>
-            {sub.name}
-          </option>
-        ))}
-      </select>
+      <MultiSelectDropdown
+        label="Subcategories"
+        options={filteredSubcategories}
+        selectedValues={formData.subcategory_ids}
+        onChange={handleMultiSelectChange}
+      />
 
       <select
         name="author_id"

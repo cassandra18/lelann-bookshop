@@ -26,6 +26,14 @@ export interface Book {
   }
 
   export interface BookFormData {
+  grade: string;
+  isbn: string;
+  language: string;
+  yearPublished: string;
+  stock: string;
+  curriculum: string;
+  level: string;
+  format: string;
   name: string;
   price: number;
   oldPrice?: number;
@@ -41,7 +49,7 @@ export interface Book {
   author_id?: string;
   publisher_id?: string;
   category_id?: string;
-  subcategory_id: string;
+  subcategory_ids: string[];
 }
 
   // Props for BookForm component

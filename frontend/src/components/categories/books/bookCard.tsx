@@ -31,7 +31,7 @@ const BookCard: React.FC<BookCardProps> = ({
       <img
         src={image}
         alt={name}
-        className="w-full h-64 object-cover shadow-lg"
+        className="w-full h-56 object-cover shadow-lg"
       />
     </Link>
 

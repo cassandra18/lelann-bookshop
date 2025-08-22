@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import CategoryHeader from '../../components/categories/CategoryHeader';
-import FilterPanel from '../../components/categories/filterPanel';
-import { useSubcategories } from '../../components/categories/hooks/useSubcategories';
+import CategoryHeader from '../../components/categories/books/CategoryHeader';
+import FilterPanel from '../../components/categories/books/filterPanel';
+import { useSubcategories } from '../../components/categories/books/hooks/useSubcategories';
 import { SelectedFilters } from '../../components/categories/api/bookService';
-import BookGrid from '../../components/categories/bookGrid';
+import BookGrid from '../../components/categories/books/bookGrid';
 
 const EducationalBooks: React.FC = () => {
   const { category_id, loading, error } = useSubcategories('Educational Books');
