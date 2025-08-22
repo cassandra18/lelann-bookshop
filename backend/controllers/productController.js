@@ -11,7 +11,7 @@ const addProduct = async (req, res) => {
       description,
       author_id,
       publisher_id,
-      subcategory_id,
+      subcategory_ids,
       subject,
       featured = false,
       company,
@@ -22,10 +22,14 @@ const addProduct = async (req, res) => {
       oldPrice,
     } = req.body;
 
+        const subcategoryIdsArray = typeof subcategory_ids === 'string'
+      ? subcategory_ids.split(',').map(id => id.trim())
+      : subcategory_ids;
+      
     // Validate required fields
-    if (!name || !price || !subcategory_id) {
+    if (!name || !price || !subcategoryIdsArray || subcategoryIdsArray.length === 0) {
       return res.status(400).json({
-        message: "Name, price, and subcategory_id are required fields",
+        message: "Name, price, and subcategory_ids are required fields",
       });
     }
     // Check if image file is uploaded
@@ -57,19 +61,20 @@ const addProduct = async (req, res) => {
     if (existing) {
       return res.status(400).json({ message: "Product name already exists" });
     }
-    const subcategory = await prisma.subcategory.findUnique({
-      where: { id: subcategory_id },
+    const subcategories = await prisma.subcategory.findMany({
+      where: { id: { in: subcategoryIdsArray } },
       select: { id: true, category_id: true },
     });
 
-    if (!subcategory) {
-      return res.status(400).json({ message: "Invalid subcategory_id" });
+    if (!subcategories || subcategories.length === 0) {
+      return res.status(400).json({ message: "Invalid subcategory_ids" });
     }
 
-    if (!subcategory.category_id) {
+    const allSubcategoriesHaveCategory = subcategories.every(sub => sub.category_id);
+    if (!allSubcategoriesHaveCategory) {
       return res
         .status(400)
-        .json({ message: "Subcategory does not have a category assigned" });
+        .json({ message: "One or more subcategories do not have a category assigned" });
     }
 
     // Create product data object
@@ -78,9 +83,11 @@ const addProduct = async (req, res) => {
       price: priceFloat,
       condition,
       subject,
-      featured: featured === "true", // Convert to boolean
+      featured: featured === "true",
       company,
-      subcategory: { connect: { id: subcategory_id } },
+      subcategories: {
+        connect: subcategoryIdsArray.map((id) => ({ id })),
+      },
       image,
       description,
       oldPrice: oldPriceFloat,
@@ -118,7 +125,7 @@ const getProducts = async (req, res) => {
       newarrival,
       wishlist,
       category_id,
-      subcategory_id,
+      subcategory_ids,
       author_id,
       publisher_id,
       search,
@@ -130,10 +137,10 @@ const getProducts = async (req, res) => {
     const take = parseInt(limit);
 
     // Normalize into arrays if multiple provided
-    const subcategoryIds = Array.isArray(subcategory_id)
-      ? subcategory_id
-      : subcategory_id
-      ? [subcategory_id]
+    const subcategoryIds = Array.isArray(subcategory_ids)
+      ? subcategory_ids
+      : subcategory_ids
+      ? [subcategory_ids]
       : [];
 
     const authorIds = Array.isArray(author_id)
@@ -156,18 +163,14 @@ const getProducts = async (req, res) => {
       ...(newarrival === "true" && { newarrival: true }),
       ...(wishlist === "true" && { wishlist: true }),
 
-      ...(category_id && {
-        subcategory: {
-          category_id,
-          ...(subcategoryIds.length > 0 && { id: { in: subcategoryIds } }),
-        },
-      }),
-
-      // If only subcategories without category_id
-      ...(!category_id &&
-        subcategoryIds.length > 0 && {
-          subcategory: { id: { in: subcategoryIds } },
-        }),
+      ...(category_id || subcategoryIds.length > 0) && {
+        subcategories: {
+          some: {
+            ...(category_id && { category_id }),
+            ...(subcategoryIds.length > 0 && { id: { in: subcategoryIds } }),
+          },
+          },
+      },
 
       ...(authorIds.length > 0 && { author_id: { in: authorIds } }),
       ...(publisherIds.length > 0 && { publisher_id: { in: publisherIds } }),
@@ -188,7 +191,7 @@ const getProducts = async (req, res) => {
         include: {
           author: true,
           publisher: true,
-          subcategory: { include: { category: true } },
+          subcategories: { include: { category: true } },
         },
       }),
       prisma.product.count({ where: whereCondition }),
@@ -217,7 +220,7 @@ const getProductById = async (req, res) => {
       include: {
         author: true,
         publisher: true,
-        subcategory: {
+        subcategories: {
           include: {
             category: true,
           },
@@ -247,7 +250,7 @@ const updateProduct = async (req, res) => {
       description,
       authorId,
       publisher_id,
-      subcategory_id,
+      subcategory_ids,
       subject,
       featured,
       company,
@@ -259,8 +262,13 @@ const updateProduct = async (req, res) => {
       oldPrice,
     } = req.body;
 
-    // Check if the product exists
-    const existingProduct = await prisma.product.findUnique({ where: { id } });
+    // Check if the product exists and include its current subcategories
+    const existingProduct = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        subcategories: true,
+      },
+    });
 
     if (!existingProduct) {
       return res.status(404).json({ message: "Product not found" });
@@ -276,9 +284,13 @@ const updateProduct = async (req, res) => {
       featured:
         featured !== undefined ? featured === "true" : existingProduct.featured,
       company,
-      subcategory: subcategory_id
-        ? { connect: { id: subcategory_id } }
-        : existingProduct.subcategory,
+      // Now existingProduct.subcategories will be a valid array
+      subcategories: subcategory_ids
+        ? {
+            disconnect: existingProduct.subcategories.map(sub => ({ id: sub.id })),
+            connect: subcategory_ids.map(id => ({ id })),
+          }
+        : undefined,
       image: req.file
         ? `https://lelann-bookshop.onrender.com/uploads/${req.file.filename}`
         : existingProduct.image,

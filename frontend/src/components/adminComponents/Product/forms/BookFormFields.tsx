@@ -50,7 +50,6 @@ export function BookFormFields({
         name="price"
         value={formData.price}
         onChange={handleChange}
-        placeholder="Price"
         className={inputStyle}
       />
       <input

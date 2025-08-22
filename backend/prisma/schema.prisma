@@ -32,7 +32,7 @@ model Subcategory {
   category_id   String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  products      Product[]
+  products Product[] @relation("ProductSubcategories")
   category      Category      @relation(fields: [category_id], references: [id])
   parent        Subcategory?  @relation("SubcategorySelfRelation", fields: [parent_id], references: [id])
   subcategories Subcategory[] @relation("SubcategorySelfRelation")
@@ -59,7 +59,6 @@ model Product {
   rating         Float?
   author_id      String?
   publisher_id   String?
-  subcategory_id String
   image          String
   description    String
   company        String
@@ -73,7 +72,7 @@ model Product {
   updatedAt      DateTime    @updatedAt
   author         Author?     @relation(fields: [author_id], references: [id])
   publisher      Publisher?  @relation(fields: [publisher_id], references: [id])
-  subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
+  subcategories    Subcategory[] @relation("ProductSubcategories")
 }
 
 model Author {

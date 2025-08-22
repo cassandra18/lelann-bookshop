@@ -11,8 +11,8 @@ export function useBookForm(initialData: Partial<BookFormData> = {}) {
 
   const [formData, setFormData] = useState<BookFormData>({
     name: "",
-    price: 0.00,
-    oldPrice: 0.00,
+    price: 0,
+    oldPrice: 0,
     subject: "",
     grade: "",
     format: "",
@@ -111,7 +111,7 @@ export function useBookForm(initialData: Partial<BookFormData> = {}) {
     else if (["price", "oldPrice", "pages", "yearPublished", "stock", "rating"].includes(name)) {
         setFormData((prev) => ({
             ...prev,
-            [name]: Number(value),
+            [name]: value === "" ? "" : Number(value),
         }));
     }
     // Handle other inputs

@@ -25,8 +25,10 @@ router.get("/", async (req, res) => {
       where: {
         books: {
           some: {
-            subcategory: {
-              category_id,
+            subcategories: {
+              some: {
+                category_id,
+              },
             },
           },
         },
@@ -42,8 +44,10 @@ router.get("/", async (req, res) => {
       where: {
         books: {
           some: {
-            subcategory: {
-              category_id,
+            subcategories: {
+              some: {
+                category_id,
+              },
             },
           },
         },
