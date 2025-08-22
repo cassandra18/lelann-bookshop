@@ -25,13 +25,13 @@ const BookCard: React.FC<BookCardProps> = ({
     : 0;
 
   return (
-   <div className="bg-white shadow-md rounded-2xl overflow-hidden transform  transition-transform duration-300 hover:scale-105 flex flex-col h-64">
+   <div className="bg-white shadow-md rounded-2xl overflow-hidden transform  transition-transform duration-300 hover:scale-105 flex flex-col h-96">
   <div className="relative">
     <Link to={`/books/${id}`}>
       <img
         src={image}
         alt={name}
-        className="w-full h-64 object-cover"
+        className="w-full h-64 object-cover shadow-lg"
       />
     </Link>
 
@@ -51,7 +51,7 @@ const BookCard: React.FC<BookCardProps> = ({
     <div className="flex items-center space-x-2 mb-2">
       <span className=" font-bold text-green-600">Ksh {price.toFixed(2)}</span>
       {hasDiscount && (
-        <span className="text-sm text-gray-400 line-through">Ksh {oldPrice?.toFixed(2)}</span>
+        <span className="text-sm text-gray-400 line-through">{oldPrice?.toFixed(2)}</span>
       )}
     </div>
     <Link

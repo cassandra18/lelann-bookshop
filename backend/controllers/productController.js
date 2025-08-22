@@ -118,7 +118,7 @@ const getProducts = async (req, res) => {
       newarrival,
       wishlist,
       category_id,
-      subcategory_id, // can be repeated in query
+      subcategory_id,
       author_id,
       publisher_id,
       search,
@@ -169,8 +169,8 @@ const getProducts = async (req, res) => {
           subcategory: { id: { in: subcategoryIds } },
         }),
 
-      ...(authorIds.length > 0 && { authorId: { in: authorIds } }),
-      ...(publisherIds.length > 0 && { publisherId: { in: publisherIds } }),
+      ...(authorIds.length > 0 && { author_id: { in: authorIds } }),
+      ...(publisherIds.length > 0 && { publisher_id: { in: publisherIds } }),
 
       ...(search && {
         OR: [
@@ -246,7 +246,7 @@ const updateProduct = async (req, res) => {
       condition,
       description,
       authorId,
-      publisherId,
+      publisher_id,
       subcategory_id,
       subject,
       featured,
@@ -308,8 +308,8 @@ const updateProduct = async (req, res) => {
       productData.author = { connect: { id: authorId } };
     }
 
-    if (publisherId) {
-      productData.publisher = { connect: { id: publisherId } };
+    if (publisher_id) {
+      productData.publisher = { connect: { id: publisher_id } };
     }
 
     // Update the product
