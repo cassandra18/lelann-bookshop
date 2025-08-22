@@ -25,7 +25,7 @@ const BookCard: React.FC<BookCardProps> = ({
     : 0;
 
   return (
-   <div className="bg-white shadow-md rounded-2xl overflow-hidden transform  transition-transform duration-300 hover:scale-105 flex flex-col h-full">
+   <div className="bg-white shadow-md rounded-2xl overflow-hidden transform  transition-transform duration-300 hover:scale-105 flex flex-col h-64">
   <div className="relative">
     <Link to={`/books/${id}`}>
       <img
@@ -36,8 +36,8 @@ const BookCard: React.FC<BookCardProps> = ({
     </Link>
 
     {hasDiscount && (
-      <span className="absolute top-2 right-2 bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full shadow-sm z-10">
-        -{discountPercent}% OFF
+      <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full shadow-sm z-10">
+        {discountPercent}% OFF
       </span>
     )}
   </div>

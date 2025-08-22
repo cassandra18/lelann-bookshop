@@ -16,11 +16,12 @@ const BookGrid: React.FC<BookGridProps> = ({ filters, category_id }) => {
       setLoading(true);
       try {
         const response = await fetchProducts(category_id, filters);
-        // Assuming the array of products is in response.products
-        if (!Array.isArray(response)) {
-            throw new Error("API did not return an array of products.");
+        // The API returns an object with a 'products' key.
+        // We need to access that key to get the array.
+        if (!response.products || !Array.isArray(response.products)) {
+            throw new Error("API response is not in the expected format.");
         }
-        setBooks(response);
+        setBooks(response.products);
       } catch (err) {
         console.error("Failed to fetch books", err);
         setBooks([]);

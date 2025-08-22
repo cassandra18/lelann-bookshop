@@ -46,6 +46,12 @@ export interface Product {
   };
 }
 
+export interface FetchProductsResponse {
+  products: Product[];
+  totalProducts: number;
+  totalPages: number;
+  currentPage: number;
+}
 export interface FilterOptions {
   authors: { id: string; name: string }[];
   publishers: { id: string; name: string }[];
@@ -65,7 +71,7 @@ export const fetchProducts = async (
   category_id: string,
   filters: SelectedFilters = {},
   page: number = 1
-): Promise<Product[]> => {
+): Promise<ProductApiResponse> => {
   const params = new URLSearchParams();
   params.append("category_id", category_id);
   params.append("page", page.toString());

@@ -118,16 +118,37 @@ const getProducts = async (req, res) => {
       newarrival,
       wishlist,
       category_id,
-      subcategory_ids,
+      subcategory_id, // can be repeated in query
+      author_id,
+      publisher_id,
+      search,
+      page = 1,
+      limit = 10,
     } = req.query;
 
-    // Ensure subcategory_ids is always an array if provided
-    const parsedsubcategory_ids = Array.isArray(subcategory_ids)
-      ? subcategory_ids
-      : subcategory_ids
-      ? [subcategory_ids]
-      : undefined;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const take = parseInt(limit);
 
+    // Normalize into arrays if multiple provided
+    const subcategoryIds = Array.isArray(subcategory_id)
+      ? subcategory_id
+      : subcategory_id
+      ? [subcategory_id]
+      : [];
+
+    const authorIds = Array.isArray(author_id)
+      ? author_id
+      : author_id
+      ? [author_id]
+      : [];
+
+    const publisherIds = Array.isArray(publisher_id)
+      ? publisher_id
+      : publisher_id
+      ? [publisher_id]
+      : [];
+
+    // Build where condition
     const whereCondition = {
       ...(featured === "true" && { featured: true }),
       ...(bestseller === "true" && { bestseller: true }),
@@ -137,41 +158,54 @@ const getProducts = async (req, res) => {
 
       ...(category_id && {
         subcategory: {
-          category_id: category_id,
-          ...(parsedsubcategory_ids && {
-            id: { in: parsedsubcategory_ids },
-          }),
+          category_id,
+          ...(subcategoryIds.length > 0 && { id: { in: subcategoryIds } }),
         },
       }),
 
-      // If no category_id, but subcategory filter exists
+      // If only subcategories without category_id
       ...(!category_id &&
-        parsedsubcategory_ids && {
-          subcategory: {
-            id: { in: parsedsubcategory_ids },
-          },
+        subcategoryIds.length > 0 && {
+          subcategory: { id: { in: subcategoryIds } },
         }),
+
+      ...(authorIds.length > 0 && { authorId: { in: authorIds } }),
+      ...(publisherIds.length > 0 && { publisherId: { in: publisherIds } }),
+
+      ...(search && {
+        OR: [
+          { name: { contains: search, mode: "insensitive" } },
+          { description: { contains: search, mode: "insensitive" } },
+        ],
+      }),
     };
 
-    const products = await prisma.product.findMany({
-      where: whereCondition,
-      include: {
-        author: true,
-        publisher: true,
-        subcategory: {
-          include: {
-            category: true,
-          },
+    const [products, totalProducts] = await Promise.all([
+      prisma.product.findMany({
+        where: whereCondition,
+        skip,
+        take,
+        include: {
+          author: true,
+          publisher: true,
+          subcategory: { include: { category: true } },
         },
-      },
-    });
+      }),
+      prisma.product.count({ where: whereCondition }),
+    ]);
 
-    res.status(200).json(products);
+    res.status(200).json({
+      products,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / take),
+      currentPage: parseInt(page),
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 // Get a product by ID
 const getProductById = async (req, res) => {
