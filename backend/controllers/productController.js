@@ -248,7 +248,7 @@ const updateProduct = async (req, res) => {
       price,
       condition,
       description,
-      authorId,
+      author_id,
       publisher_id,
       subcategory_ids,
       subject,
@@ -274,52 +274,61 @@ const updateProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Prepare the product data object for update
-    const productData = {
-      name,
-      price: price !== undefined ? parseFloat(price) : existingProduct.price,
-      condition,
-      description,
-      subject,
-      featured:
-        featured !== undefined ? featured === "true" : existingProduct.featured,
-      company,
-      // Now existingProduct.subcategories will be a valid array
-      subcategories: subcategory_ids
-        ? {
-            disconnect: existingProduct.subcategories.map(sub => ({ id: sub.id })),
-            connect: subcategory_ids.map(id => ({ id })),
-          }
-        : undefined,
-      image: req.file
-        ? `https://lelann-bookshop.onrender.com/uploads/${req.file.filename}`
-        : existingProduct.image,
-      cta,
-      oldPrice:
-        oldPrice !== undefined
-          ? parseFloat(oldPrice)
-          : existingProduct.oldPrice,
-      promotion:
-        promotion !== undefined
-          ? promotion === "true"
-          : existingProduct.promotion,
-      bestseller:
-        bestseller !== undefined
-          ? bestseller === "true"
-          : existingProduct.bestseller,
-      newarrival:
-        newarrival !== undefined
-          ? newarrival === "true"
-          : existingProduct.newarrival,
-      wishlist:
-        wishlist !== undefined ? wishlist === "true" : existingProduct.wishlist,
-    };
+    // Convert subcategory_ids to an array if it's a comma-separated string
+    const subcategoryIdsArray =
+      typeof subcategory_ids === "string"
+        ? subcategory_ids.split(",").map((id) => id.trim())
+        : Array.isArray(subcategory_ids)
+        ? subcategory_ids
+        : undefined;
 
-    // Conditionally add author and publisher if IDs are provided
-    if (authorId) {
-      productData.author = { connect: { id: authorId } };
+    // Prepare the product data object for update
+    const productData = {};
+
+    // Conditionally add fields to the update object if they are present in the request body
+    if (name !== undefined) productData.name = name;
+    if (price !== undefined) productData.price = parseFloat(price);
+    if (condition !== undefined) productData.condition = condition;
+    if (description !== undefined) productData.description = description;
+    if (subject !== undefined) productData.subject = subject;
+    if (company !== undefined) productData.company = company;
+    if (cta !== undefined) productData.cta = cta;
+    if (oldPrice !== undefined) productData.oldPrice = parseFloat(oldPrice);
+
+    // Conditionally add image URL if a new file is uploaded
+    if (req.file) {
+      productData.image = `https://lelann-bookshop.onrender.com/uploads/${req.file.filename}`;
     }
 
+    // Conditionally update boolean fields, ensuring they are parsed correctly
+    if (featured !== undefined) productData.featured = featured === "true";
+    if (promotion !== undefined) productData.promotion = promotion === "true";
+    if (bestseller !== undefined) productData.bestseller = bestseller === "true";
+    if (newarrival !== undefined) productData.newarrival = newarrival === "true";
+    if (wishlist !== undefined) productData.wishlist = wishlist === "true";
+
+    // Conditionally update subcategories, handling disconnect and connect
+    if (subcategoryIdsArray) {
+      const currentSubcategoryIds = existingProduct.subcategories.map(
+        (sub) => sub.id
+      );
+      const subcategoriesToDisconnect = currentSubcategoryIds.filter(
+        (id) => !subcategoryIdsArray.includes(id)
+      );
+      const subcategoriesToConnect = subcategoryIdsArray.filter(
+        (id) => !currentSubcategoryIds.includes(id)
+      );
+
+      productData.subcategories = {
+        disconnect: subcategoriesToDisconnect.map((id) => ({ id })),
+        connect: subcategoriesToConnect.map((id) => ({ id })),
+      };
+    }
+
+    // Conditionally update author and publisher relationships
+    if (author_id) {
+      productData.author = { connect: { id: author_id } };
+    }
     if (publisher_id) {
       productData.publisher = { connect: { id: publisher_id } };
     }
@@ -336,6 +345,7 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 // Delete a product
 const deleteProduct = async (req, res) => {
