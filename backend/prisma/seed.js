@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 
 async function main() {
   try {
-    // Seed Super Admin
+    // Seed Super Adminstudio
     const hashedPassword = await bcrypt.hash('SuperSecureAdmin123', 10);
 
     const existingAdmin = await prisma.user.findUnique({

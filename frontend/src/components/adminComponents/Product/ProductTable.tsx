@@ -14,7 +14,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
 }) => (
   <div className="overflow-x-auto">
     <table className="min-w-full divide-y divide-gray-200 bg-white">
-      <thead className="bg-lapis text-white"> {/* Darker background for header */}
+      <thead className="bg-lapis text-white">
         <tr>
           <th className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider rounded-tl-lg">ID</th>
           <th className="px-4 py-3 text-center text-sm font-semibold uppercase tracking-wider">Image</th>
@@ -28,14 +28,14 @@ const ProductTable: React.FC<ProductTableProps> = ({
       </thead>
       <tbody className="divide-y divide-gray-200">
         {Array.isArray(products) && products.map((book, index) => (
-          <tr key={book.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors duration-200 ease-in-out`}> {/* Alternating row colors */}
+          <tr key={book.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors duration-200 ease-in-out`}>
             <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-800 font-bold">{index  + 1}</td>
             <td className="px-4 py-3 whitespace-nowrap text-center">
               <img
-                src={book.image || '[https://placehold.co/40x40/E0E0E0/808080?text=No+Img](https://placehold.co/40x40/E0E0E0/808080?text=No+Img)'} // Placeholder for missing image
+                src={book.image || '[https://placehold.co/40x40/E0E0E0/808080?text=No+Img](https://placehold.co/40x40/E0E0E0/808080?text=No+Img)'}
                 alt={book.name}
                 className="h-10 w-10 object-cover rounded-md mx-auto border border-gray-200"
-                onError={(e) => { e.currentTarget.src = '[https://placehold.co/40x40/E0E0E0/808080?text=No+Img](https://placehold.co/40x40/E0E0E0/808080?text=No+Img)'; }} // Fallback image on error
+                onError={(e) => { e.currentTarget.src = '[https://placehold.co/40x40/E0E0E0/808080?text=No+Img](https://placehold.co/40x40/E0E0E0/808080?text=No+Img)'; }}
               />
             </td>
             <td className="px-4 py-3 text-left font-medium text-gray-900">{book.name}</td>
