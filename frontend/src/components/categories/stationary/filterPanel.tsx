@@ -125,14 +125,14 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
       {renderFilterGroup(
         "Subcategories",
         "subcategory_ids",
-        filterData.subcategories || [], // Ensure it's an array
+        filterData.subcategories || [],
         isSubcategoriesCollapsed,
         () => setIsSubcategoriesCollapsed(!isSubcategoriesCollapsed)
       )}
       {renderFilterGroup(
         "Companies",
         "company_ids",
-        filterData.companies || [], // Assuming the API will return 'companies'
+        filterData.companies || [],
         isCompaniesCollapsed,
         () => setIsCompaniesCollapsed(!isCompaniesCollapsed)
       )}
