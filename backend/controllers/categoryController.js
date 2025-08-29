@@ -32,11 +32,50 @@ const createCategory = async (req, res) => {
 // Function to get all categories
 const getCategories = async (req, res) => {
     try {
-        const categories = await prisma.category.findMany()
-        res.status(200).json(categories)
+        const { name } = req.query;
+
+        if (name) {
+            // Case 1: Fetch a single category by its unique name
+            const category = await prisma.category.findUnique({
+                where: { name: name },
+            });
+
+            if (!category) {
+                return res.status(404).json({ message: 'Category not found' });
+            }
+            return res.status(200).json(category); // Return a single object
+        } else {
+            // Case 2: Fetch all categories
+            const categories = await prisma.category.findMany();
+            return res.status(200).json(categories); // Return an array of objects
+        }
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ message: 'Internal server error' })
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+// Function to get category by name
+const getCategoryByName = async (req, res) => {
+    try {
+        const { name } = req.query; // Get the 'name' from the query parameters
+        
+        if (!name) {
+            return res.status(400).json({ message: 'Category name is required' });
+        }
+
+        const existingCategory = await prisma.category.findUnique({
+            where: { name: name }, // Query by the unique name field
+        });
+
+        if (!existingCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+        res.status(200).json(existingCategory);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -119,4 +158,4 @@ const deleteCategory = async (req, res) => {
     }
 };
 
-module.exports = { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory };
+module.exports = { createCategory, getCategories, getCategoryByName, getCategoryById, updateCategory, deleteCategory };

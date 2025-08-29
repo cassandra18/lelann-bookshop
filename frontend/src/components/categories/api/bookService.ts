@@ -109,3 +109,15 @@ export const fetchFilterOptions = async (
 
   return await res.json();
 };
+
+export const fetchCategoryIdByName = async (categoryName: string): Promise<string | null> => {
+  const res = await fetch(`http://localhost:5000/api/categories?name=${encodeURIComponent(categoryName)}`);
+  
+  if (!res.ok) {
+    console.error("Failed to fetch category ID:", res.statusText);
+    return null;
+  }
+  
+  const data = await res.json();
+  return data.id || null;
+};

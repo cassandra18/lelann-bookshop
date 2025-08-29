@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { fetchFilterOptions } from "../api/bookService";
-import type { FilterOptions, SelectedFilters } from "../api/bookService";
+import { fetchFilterOptions } from "./api/bookService";
+import type { FilterOptions, SelectedFilters } from "./api/bookService";
 
 interface FilterPanelStationeryProps {
   category_id: string;
   onFilterChange: (filters: SelectedFilters) => void;
 }
 
-// Reusing the generic FilterOptionGroup
 type FilterOptionGroup = {
   id: string;
   name: string;
+  children?: FilterOptionGroup[];
 };
 
-const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_id, onFilterChange }) => {
-  // Initialize filterData with expected stationery-specific keys
+const FilterPanel: React.FC<FilterPanelStationeryProps> = ({ category_id, onFilterChange }) => {
   const [filterData, setFilterData] = useState<FilterOptions>({
     companies: [],
     subcategories: [],
   });
 
-  // Initialize selectedFilters with stationery-specific keys
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     company_ids: [],
     subcategory_ids: [],
   });
 
-  // State to manage the collapsed/expanded state of each filter group
   const [isCompaniesCollapsed, setIsCompaniesCollapsed] = useState(false);
   const [isSubcategoriesCollapsed, setIsSubcategoriesCollapsed] = useState(false);
 
+  // State to manage the collapsed state of individual nested subcategories
+  const [collapsedSubcategories, setCollapsedSubcategories] = useState<Record<string, boolean>>({});
+
   useEffect(() => {
     if (!category_id) return;
-
     const fetchFilters = async () => {
       try {
         const data = await fetchFilterOptions(category_id);
@@ -41,7 +40,6 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
         console.error("Failed to load filters:", error);
       }
     };
-
     fetchFilters();
   }, [category_id]);
 
@@ -49,21 +47,14 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
     onFilterChange(selectedFilters);
   }, [selectedFilters, onFilterChange]);
 
-  const handleCheckboxChange = (
-    type: string,
-    id: string
-  ) => {
+  const handleCheckboxChange = (type: string, id: string) => {
     setSelectedFilters((prev) => {
       const current = (prev[type] as string[] | undefined) || [];
-      const updated = current.includes(id)
-        ? current.filter((item: string) => item !== id)
-        : [...current, id];
-
+      const updated = current.includes(id) ? current.filter((item: string) => item !== id) : [...current, id];
       return { ...prev, [type]: updated };
     });
   };
 
-  // Resets all selected filters to empty arrays for stationery
   const handleClearFilters = () => {
     setSelectedFilters({
       company_ids: [],
@@ -71,9 +62,64 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
     });
   };
 
+  // Function to toggle the collapse state of a specific subcategory
+  const toggleSubcategoryCollapse = (id: string) => {
+    setCollapsedSubcategories(prevState => ({
+      ...prevState,
+      [id]: !prevState[id]
+    }));
+  };
+
+  // Recursive function to render nested filter options with collapse functionality
+  const renderOptions = (options: FilterOptionGroup[], type: string, depth: number = 0) => {
+    return options.map((option) => {
+      const hasChildren = option.children && option.children.length > 0;
+      const isCollapsed = collapsedSubcategories[option.id];
+
+      return (
+        <div key={option.id} className={`flex flex-col ${depth > 0 ? "ml-4" : ""}`}>
+          <div className="flex items-center justify-between py-1">
+            <div className="flex items-center hover:text-yellow-300 transition-colors duration-200">
+              <input
+                type="checkbox"
+                id={`${type}-${option.id}`}
+                checked={(selectedFilters[type] as string[] | undefined)?.includes(option.id) || false}
+                onChange={() => handleCheckboxChange(type, option.id)}
+                className="mr-3 w-3 h-3 accent-blue-400 cursor-pointer rounded-sm"
+              />
+              <label htmlFor={`${type}-${option.id}`} className="text-base cursor-pointer">
+                {option.name}
+              </label>
+            </div>
+            {hasChildren && (
+              <span 
+                className="text-xl cursor-pointer text-yellow-100 hover:text-blue-300 transition-colors duration-200 ml-2"
+                onClick={() => toggleSubcategoryCollapse(option.id)}
+              >
+                {isCollapsed ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </span>
+            )}
+          </div>
+          {hasChildren && !isCollapsed && (
+            // Recursively call renderOptions for nested children
+            renderOptions(option.children!, type, depth + 1)
+          )}
+        </div>
+      );
+    });
+  };
+
   const renderFilterGroup = (
     label: string,
-    type: string, // Changed to string to be fully generic
+    type: string,
     options: FilterOptionGroup[],
     isCollapsed: boolean,
     toggleCollapse: () => void
@@ -84,7 +130,6 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
         onClick={toggleCollapse}
       >
         <h3 className="font-bold text-lg">{label}</h3>
-        {/* Arrow icon indicating collapsed/expanded state */}
         <span className="text-xl">
           {isCollapsed ? (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,20 +144,7 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
       </div>
       {!isCollapsed && (
         <div className="mt-3 space-y-2">
-          {options.map((option) => (
-            <div key={option.id} className="flex items-center hover:text-yellow-300 transition-colors duration-200">
-              <input
-                type="checkbox"
-                id={`${type}-${option.id}`}
-                checked={(selectedFilters[type] as string[] | undefined)?.includes(option.id) || false}
-                onChange={() => handleCheckboxChange(type, option.id)}
-                className="mr-3 w-3 h-3 accent-blue-400 cursor-pointer rounded-sm"
-              />
-              <label htmlFor={`${type}-${option.id}`} className="text-base cursor-pointer">
-                {option.name}
-              </label>
-            </div>
-          ))}
+          {renderOptions(options, type)}
         </div>
       )}
     </div>
@@ -120,8 +152,6 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
 
   return (
     <aside className="w-full md:w-64 p-6 text-white rounded-xl shadow-2xl font-inter">
-      <h2 className="text-2xl font-bold mb-6 text-yellow-300">Filters</h2>
-
       {renderFilterGroup(
         "Subcategories",
         "subcategory_ids",
@@ -136,8 +166,6 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
         isCompaniesCollapsed,
         () => setIsCompaniesCollapsed(!isCompaniesCollapsed)
       )}
-
-      {/* Clear Filters Button */}
       <button
         onClick={handleClearFilters}
         className="mt-8 w-full py-3 bg-yellow-200 text-prussian-blue hover:bg-yellow-400 transition-colors duration-300 rounded-full font-semibold shadow-md"
@@ -148,4 +176,4 @@ const FilterPanelStationery: React.FC<FilterPanelStationeryProps> = ({ category_
   );
 };
 
-export default FilterPanelStationery;
+export default FilterPanel;

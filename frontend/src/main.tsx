@@ -27,7 +27,7 @@ import Stationary from "./pages/categories/Stationary.tsx";
 import ArtSupplies from "./pages/categories/ArtSupplies.tsx";
 import Toys from "./pages/categories/Toys&Games.tsx";
 import Electronics from "./pages/categories/Electronics.tsx";
-
+import Sports from "./pages/categories/Sports.tsx";
 
 // Importing admin components
 import Layout from "./pages/admin/adminDashboard.tsx";
@@ -83,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: "/electronics",
         element: <Electronics />,
+      },
+      {
+        path: "/sports-fitness",
+        element: <Sports />,
       },
       {
         path: "/basket",

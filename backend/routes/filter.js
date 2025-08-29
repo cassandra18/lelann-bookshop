@@ -4,6 +4,16 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const router = express.Router();
 
+const buildSubcategoryTree = (flatList, parentId = null) => {
+  return flatList
+    .filter(item => item.parent_id === parentId)
+    .map(item => ({
+      ...item,
+      // Recursively find and attach children
+      children: buildSubcategoryTree(flatList, item.id),
+    }));
+};
+
 router.get("/", async (req, res) => {
   const category_id = req.query.categoryId;
 
@@ -12,14 +22,16 @@ router.get("/", async (req, res) => {
   }
 
   try {
-    const subcategories = await prisma.subcategory.findMany({
+    const allSubcategories = await prisma.subcategory.findMany({
       where: { category_id },
       select: {
         id: true,
         name: true,
-        category_id: true,
+        parent_id: true,
       },
     });
+
+    const subcategories = buildSubcategoryTree(allSubcategories);
 
     const authors = await prisma.author.findMany({
       where: {
@@ -59,7 +71,25 @@ router.get("/", async (req, res) => {
       distinct: ['id'],
     });
 
-    res.json({ authors, publishers, subcategories });
+    const companies = await prisma.product.findMany({
+      where: {
+        company: { not: ''},
+        subcategories: {
+          some: {
+            category_id: category_id,
+          },
+        },
+      },
+      select: {
+        company: true,
+      },
+      distinct: ['company'],
+    });
+
+    // Map companies to the desired format { id: string, name: string }
+    const companyOptions = companies.map(c => ({ id: c.company, name: c.company }));
+
+    res.json({ authors, publishers, subcategories, companies: companyOptions });
   } catch (error) {
     console.error("Error fetching filter options:", error);
     res.status(500).json({ error: "Server error fetching filters" });
