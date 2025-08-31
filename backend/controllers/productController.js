@@ -130,7 +130,7 @@ const getProducts = async (req, res) => {
       publisher_id,
       search,
       page = 1,
-      limit = 10,
+      limit = 40,
     } = req.query;
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
