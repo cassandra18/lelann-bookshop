@@ -86,10 +86,113 @@ router.get("/", async (req, res) => {
       distinct: ['company'],
     });
 
-    // Map companies to the desired format { id: string, name: string }
-    const companyOptions = companies.map(c => ({ id: c.company, name: c.company }));
+    const conditions = await prisma.product.findMany({
+        where: {
+            condition: { not: '' },
+            subcategories: {
+                some: {
+                    category_id: category_id,
+                },
+            },
+        },
+        select: {
+            condition: true,
+        },
+        distinct: ['condition'],
+    });
 
-    res.json({ authors, publishers, subcategories, companies: companyOptions });
+    const ageRanges = await prisma.product.findMany({
+        where: {
+            ageRange: { not: '' },
+            subcategories: {
+                some: {
+                    category_id: category_id,
+                },
+            },
+        },
+        select: {
+            ageRange: true,
+        },
+        distinct: ['ageRange'],
+    });
+
+    const levels = await prisma.product.findMany({
+        where: {
+            level: { not: '' },
+            subcategories: {
+                some: {
+                    category_id: category_id,
+                },
+            },
+        },
+        select: {
+            level: true,
+        },
+        distinct: ['level'],
+    });
+
+    const subjects = await prisma.product.findMany({
+        where: {
+            subject: { not: '' },
+            subcategories: {
+                some: {
+                    category_id: category_id,
+                },
+            },
+        },
+        select: {
+            subject: true,
+        },
+        distinct: ['subject'],
+    });
+
+    const editions = await prisma.product.findMany({
+        where: {
+            edition: { not: '' },
+            subcategories: {
+                some: {
+                    category_id: category_id,
+                },
+            },
+        },
+        select: {
+            edition: true,
+        },
+        distinct: ['edition'],
+    });
+
+    const yearsPublished = await prisma.product.findMany({
+      where: {
+          yearPublished: { not: null },
+          subcategories: {
+              some: {
+                  category_id: category_id,
+              },
+          },
+      },
+      select: {
+          yearPublished: true,
+      },
+      distinct: ['yearPublished'],
+      orderBy: {
+        yearPublished: 'desc', // Optional: Sort years in descending order
+      },
+    });
+
+    const formatFilterOptions = (arr, key) => arr.map(item => ({ id: item[key], name: item[key] }));
+
+    res.json({ 
+      authors, 
+      publishers, 
+      subcategories, 
+      companies: formatFilterOptions(companies, 'company'),
+      conditions: formatFilterOptions(conditions, 'condition'),
+      ageRanges: formatFilterOptions(ageRanges, 'ageRange'),
+      levels: formatFilterOptions(levels, 'level'),
+      subjects: formatFilterOptions(subjects, 'subject'),
+      editions: formatFilterOptions(editions, 'edition'),
+      yearsPublished: formatFilterOptions(yearsPublished, 'yearPublished'),
+    });
   } catch (error) {
     console.error("Error fetching filter options:", error);
     res.status(500).json({ error: "Server error fetching filters" });

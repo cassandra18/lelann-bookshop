@@ -21,6 +21,7 @@ export interface Product {
   yearPublished?: number;
   curriculum?: string;
   level?: string;
+  ageRange?: string;
   availability?: boolean;
   rating?: number;
   featured: boolean;

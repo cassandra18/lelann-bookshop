@@ -55,6 +55,7 @@ model Product {
   stock          Int?
   curriculum     String?
   level          String?
+  ageRange       String?
   availability   Boolean?    @default(true)
   rating         Float?
   author_id      String?
