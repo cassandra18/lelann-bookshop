@@ -16,7 +16,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ categoryName, emoji }) => {
         category_id,
         loading,
         error,
-        totalPages, // Destructure totalPages from the hook
+        totalPages,
         setTotalPages,
     } = useCategoryData(categoryName);
 
