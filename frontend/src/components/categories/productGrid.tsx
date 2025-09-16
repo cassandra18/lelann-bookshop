@@ -6,7 +6,7 @@ export interface ProductGridProps {
     category_id: string;
     filters: SelectedFilters;
     setTotalPages: React.Dispatch<React.SetStateAction<number>>; // Prop to update total pages
-    currentPage: number; // Prop for the current page
+    currentPage: number;
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ 
@@ -22,17 +22,13 @@ const ProductGrid: React.FC<ProductGridProps> = ({
     const getBooks = async () => {
       setLoading(true);
       try {
-        // Pass currentPage to fetchProducts to get the correct page of data
         const response = await fetchProducts(category_id, filters, currentPage);
         
         if (!response.products || !Array.isArray(response.products)) {
             throw new Error("API response is not in the expected format.");
         }
-        
-        // Update the products state
         setBooks(response.products);
         
-        // Use the setTotalPages prop to update the totalPages state in the parent component
         setTotalPages(response.totalPages);
         
       } catch (err) {
@@ -43,7 +39,6 @@ const ProductGrid: React.FC<ProductGridProps> = ({
       }
     };
 
-    // The effect now depends on currentPage, in addition to filters and category_id
     getBooks();
   }, [filters, category_id, currentPage, setTotalPages]);
 
