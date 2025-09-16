@@ -7,13 +7,15 @@ export interface ProductGridProps {
     filters: SelectedFilters;
     setTotalPages: React.Dispatch<React.SetStateAction<number>>; // Prop to update total pages
     currentPage: number;
+    priceSortOrder: string;
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ 
     filters, 
     category_id, 
     currentPage, 
-    setTotalPages 
+    setTotalPages,
+    priceSortOrder
 }) => {
   const [books, setBooks] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -22,7 +24,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
     const getBooks = async () => {
       setLoading(true);
       try {
-        const response = await fetchProducts(category_id, filters, currentPage);
+        const response = await fetchProducts(category_id, filters, currentPage, priceSortOrder);
         
         if (!response.products || !Array.isArray(response.products)) {
             throw new Error("API response is not in the expected format.");
@@ -40,7 +42,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
     };
 
     getBooks();
-  }, [filters, category_id, currentPage, setTotalPages]);
+  }, [filters, category_id, currentPage, setTotalPages, priceSortOrder]);
 
   if (loading) return <p className="text-center text-gray-500 mt-10">Loading products...</p>;
   if (books.length === 0) return <p className="text-center text-gray-500 mt-10">No products found.</p>;

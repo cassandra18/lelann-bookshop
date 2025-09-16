@@ -15,14 +15,22 @@ const OtherBooks: React.FC = () => {
   });
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState<boolean>(false);
-  
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState<boolean>(false);
+  const [priceSortOrder, setPriceSortOrder] = useState<string>(''); // Initialize as empty string
+
   const handleFilterChange = (filters: SelectedFilters) => {
     setSelectedFilters(filters);
+    setCurrentPage(1); // Reset page to 1 when filters change
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+  
+  // New handler for price sorting
+  const handlePriceSortChange = (sortOrder: string) => {
+    setPriceSortOrder(sortOrder);
+    setCurrentPage(1); // Reset page to 1 when sort order changes
   };
 
   if (loading) return <div>Loading...</div>;
@@ -33,30 +41,54 @@ const OtherBooks: React.FC = () => {
     <div className="px-4 sm:px-8 lg:px-16 py-4">
       <CategoryHeader title="Other Books" emoji="📚" />
 
-      {/* Hamburger menu button for mobile */}
-      <div className="md:hidden mt-4">
+      {/* Mobile-only controls for filters and sorting */}
+      <div className="md:hidden flex items-center justify-between gap-4 mt-4">
         <button
           onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-          className="p-2 bg-slate-800 text-yellow-300 rounded-lg flex items-center justify-center space-x-2"
+          className="flex-1 py-2 bg-slate-800 text-yellow-300 rounded-lg flex items-center justify-center space-x-2 font-bold"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
           </svg>
           <span>{isFilterPanelOpen ? "Hide Filters" : "Show Filters"}</span>
         </button>
+        
+        <select
+          value={priceSortOrder}
+          onChange={(e) => handlePriceSortChange(e.target.value)}
+          className="flex-1 bg-slate-800 text-gray-300 p-2 rounded-lg text-sm"
+        >
+          <option value="">Sort by Price</option>
+          <option value="asc">Price: Low to High</option>
+          <option value="desc">Price: High to Low</option>
+        </select>
       </div>
 
       <div className="flex flex-col md:flex-row gap-6 mt-6">
         {/* Filter Panel (conditionally rendered) */}
-        <div className={`md:block ${isFilterPanelOpen ? 'block' : 'hidden'}`}>
+        <div className={`w-full md:w-auto ${isFilterPanelOpen ? 'block' : 'hidden'} md:block`}>
           <FilterPanel category_id={category_id} onFilterChange={handleFilterChange} />
         </div>
-
+        
+        <div className="flex-1">
+          {/* Price sorting dropdown for desktop */}
+          <div className="hidden md:flex justify-end mb-4">
+            <select
+              value={priceSortOrder}
+              onChange={(e) => handlePriceSortChange(e.target.value)}
+              className="bg-slate-800 text-gray-300 p-2 rounded-lg text-sm md:text-base"
+            >
+              <option value="">Sort by Price</option>
+              <option value="asc">Price: Low to High</option>
+              <option value="desc">Price: High to Low</option>
+            </select>
+          </div>
           <ProductGrid
             filters={selectedFilters}
             category_id={category_id}
             currentPage={currentPage}
             setTotalPages={setTotalPages}
+            priceSortOrder={priceSortOrder}
           />
           <Pagination
             currentPage={currentPage}
@@ -64,6 +96,7 @@ const OtherBooks: React.FC = () => {
             onPageChange={handlePageChange}
           />
         </div>
+      </div>
     </div>
   );
 };

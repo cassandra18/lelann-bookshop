@@ -131,6 +131,7 @@ const getProducts = async (req, res) => {
       search,
       page = 1,
       limit = 40,
+      sort,
     } = req.query;
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -183,11 +184,19 @@ const getProducts = async (req, res) => {
       }),
     };
 
+    let orderByCondition = {};
+    if (sort === "asc") {
+      orderByCondition = { price: 'asc' };
+    } else if (sort === "desc") {
+      orderByCondition = { price: 'desc' };
+    }
+
     const [products, totalProducts] = await Promise.all([
       prisma.product.findMany({
         where: whereCondition,
         skip,
         take,
+        orderBy: orderByCondition,
         include: {
           author: true,
           publisher: true,

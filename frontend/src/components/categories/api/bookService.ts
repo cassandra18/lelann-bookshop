@@ -72,11 +72,15 @@ export interface ProductApiResponse {
 export const fetchProducts = async (
   category_id: string,
   filters: SelectedFilters = {},
-  page: number = 1
+  page: number = 1,
+  priceSortOrder: string = ''
 ): Promise<ProductApiResponse> => {
   const params = new URLSearchParams();
   params.append("category_id", category_id);
   params.append("page", page.toString());
+  if (priceSortOrder) {
+    params.append("sort", priceSortOrder);
+  }
 
   for (const key in filters) {
     const value = filters[key];
