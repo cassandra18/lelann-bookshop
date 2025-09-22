@@ -9,7 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./components/context/AuthContext.tsx";
 import Homepage from "./pages/homepage.tsx";
 import OtherBooks from "./pages/categories/OtherBooks.tsx";
-import BookDetails from "./components/bookdetails.tsx";
+import BookDetails from "./components/categories/productDetails.tsx";
 import Basket from "./pages/basket.tsx";
 import CheckoutPage from "./pages/checkoutpage.tsx";
 import ShippingAddress from "./pages/shipping-address.tsx";
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
         element: <Stationary />,
       },
       {
-        path: "/otherbooks/:bookId",
+        path: "/product/:id",
         element: <BookDetails />,
       },
       {
