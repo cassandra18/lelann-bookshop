@@ -25,7 +25,13 @@ const ProductPage: React.FC<ProductPageProps> = ({ book }) => {
   const handleAddToCart = () => {
     dispatch({
       type: "ADD_ITEM",
-      payload: { id: book.id, name: book.name, price: book.price, quantity: count, image: book.image },
+      payload: {
+        id: book.id,
+        name: book.name,
+        price: book.price,
+        quantity: count,
+        image: book.image,
+      },
     });
     alert(`Added ${count} item(s) to basket`);
   };
@@ -48,27 +54,38 @@ const ProductPage: React.FC<ProductPageProps> = ({ book }) => {
         <h1 className="text-4xl font-extrabold text-[#ffea00]">{book.name}</h1>
 
         {/* Author / Publisher */}
-{(book.author || book.publisher) && (
-  <div className="text-gray-400 text-sm space-y-1">
-    {book.author && (
-      <p>
-        <span className="font-medium text-gray-300">Author:</span>{" "}
-        {typeof book.author === "object" ? book.author.name : book.author}
-      </p>
-    )}
-    {book.publisher && (
-      <p>
-        <span className="font-medium text-gray-300">Publisher:</span>{" "}
-        {typeof book.publisher === "object" ? book.publisher.name : book.publisher}
-      </p>
-    )}
-  </div>
-)}
+        {(book.author || book.publisher) && (
+          <div className="text-gray-400 text-sm space-y-1">
+            {book.author && (
+              <p>
+                <span className="font-medium text-gray-300">Author:</span>{" "}
+                {typeof book.author === "object"
+                  ? book.author.name
+                  : book.author}
+              </p>
+            )}
+            {book.publisher && (
+              <p>
+                <span className="font-medium text-gray-300">Publisher:</span>{" "}
+                {typeof book.publisher === "object"
+                  ? book.publisher.name
+                  : book.publisher}
+              </p>
+            )}
+          </div>
+        )}
 
-
-        {book.serial && <p className="text-gray-400 text-sm">Serial: {book.serial}</p>}
-        {book.description && <p className="text-base text-gray-300 leading-relaxed">{book.description}</p>}
-        <p className="text-3xl font-bold text-gray-300">Ksh {book.price.toFixed(2)}</p>
+        {book.serial && (
+          <p className="text-gray-400 text-sm">Serial: {book.serial}</p>
+        )}
+        {book.description && (
+          <p className="text-base text-gray-300 leading-relaxed">
+            {book.description}
+          </p>
+        )}
+        <p className="text-3xl font-bold text-gray-300">
+          Ksh {book.price.toFixed(2)}
+        </p>
 
         {/* Quantity Selector */}
         <div className="flex items-center space-x-4">
@@ -113,7 +130,11 @@ const ProductPage: React.FC<ProductPageProps> = ({ book }) => {
           </h3>
           <div className="flex space-x-4">
             <img src="/images/visa.svg" alt="Visa" className="h-8" />
-            <img src="/images/mastercard.svg" alt="Mastercard" className="h-8" />
+            <img
+              src="/images/mastercard.svg"
+              alt="Mastercard"
+              className="h-8"
+            />
             <img src="/images/mpesalogo.png" alt="M-Pesa" className="h-8" />
           </div>
         </div>
@@ -126,7 +147,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ book }) => {
           <ul className="space-y-2 text-gray-400 text-sm">
             <li className="flex items-center space-x-2">
               <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
-              <span>Same-day delivery within Nairobi</span>
+              <span>Same day delivery for orders done before 4pm</span>
             </li>
             <li className="flex items-center space-x-2">
               <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
