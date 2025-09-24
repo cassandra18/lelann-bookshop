@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+interface OrderSummaryProps {
+  items: { id: string; name: string; price: number; quantity: number }[];
+  subtotal: number;
+  deliveryFee?: number | null; // allow null
+}
 
-const OrderSummary: React.FC<{ items: any[]; subtotal: number }> = ({
+const OrderSummary: React.FC<OrderSummaryProps> = ({
   items,
   subtotal,
+  deliveryFee,
 }) => {
   const [showSummary, setShowSummary] = useState(true);
+
+  const total = deliveryFee != null ? subtotal + deliveryFee : subtotal;
 
   return (
     <div className="bg-slate-800 rounded-2xl shadow-lg mb-8">
@@ -34,12 +42,37 @@ const OrderSummary: React.FC<{ items: any[]; subtotal: number }> = ({
             </div>
           ))}
 
-          <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-600">
+          {/* Subtotal */}
+          <div className="flex justify-between items-center mt-4">
             <span className="text-lg font-semibold text-gray-300">Subtotal</span>
-            <span className="text-xl font-bold text-gray-200">
-              KES {subtotal.toFixed(2)}
-            </span>
+            <span className="text-gray-200">KES {subtotal.toFixed(2)}</span>
           </div>
+
+          {/* Delivery Fee */}
+          {deliveryFee != null ? (
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-lg font-semibold text-gray-300">
+                Delivery Fee
+              </span>
+              <span className="text-gray-200">
+                {deliveryFee === 0 ? "Free" : `KES ${deliveryFee.toFixed(2)}`}
+              </span>
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-yellow-300">
+              🚚 Select your county to see delivery charges.
+            </p>
+          )}
+
+          {/* Total */}
+          {deliveryFee != null && (
+            <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-600">
+              <span className="text-lg font-bold text-gray-300">Total</span>
+              <span className="text-xl font-bold text-[#ffea00]">
+                KES {total.toFixed(2)}
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -15,7 +15,7 @@ const PlaceOrderButton: React.FC<PlaceOrderButtonProps> = ({
     <button
       onClick={onClick}
       disabled={loading || disabled}
-      className={`w-full bg-gradient-to-r from-yellow-200 to-yellow-400 
+      className={`w-full bg-yellow-200 
         text-slate-900 font-extrabold py-3 rounded-xl shadow-lg tracking-wide
         transition transform hover:scale-105
         ${

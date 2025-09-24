@@ -30,7 +30,7 @@ const PickUpForm: React.FC<PickUpFormProps> = ({ formData, errors, handleChange 
               onChange={handleChange}
               className={`w-full border ${
                 errors[field.name] ? "border-red-500" : "border-slate-600"
-              } bg-slate-900 text-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-yellow-400`}
+              } bg-slate-900 text-gray-200 p-3 rounded-lg `}
             />
             {errors[field.name] && (
               <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
@@ -44,14 +44,13 @@ const PickUpForm: React.FC<PickUpFormProps> = ({ formData, errors, handleChange 
             name="store"
             value={formData.store}
             onChange={handleChange}
-            className={`w-full border ${
+            className={`w-full border  ${
               errors.store ? "border-red-500" : "border-slate-600"
-            } bg-slate-900 text-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-yellow-400`}
+            } bg-slate-900 text-gray-200 p-3 rounded-lg `}
           >
             <option value="">-- Select Pickup Location --</option>
-            <option value="Main Shop – Nairobi CBD">Main Shop – Nairobi CBD</option>
-            <option value="Westlands Pickup Point">Westlands Pickup Point</option>
-            <option value="Thika Road Pickup Point">Thika Road Pickup Point</option>
+            <option value="Main Shop – Nairobi Chokaa-Njiru">Main Shop – Nairobi Chokaa - Njiru</option>
+            <option value="Kericho CBD Store">Kericho CBD Store</option>
           </select>
           {errors.store && (
             <p className="text-red-500 text-sm mt-1">{errors.store}</p>

@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { counties } from "../../assets/counties";
-
-// ShippingForm.tsx
 
 interface ShippingFormProps {
   formData: {
@@ -12,7 +10,6 @@ interface ShippingFormProps {
     apartment: string;
     city: string;
     county: string;
-    store?: string;
   };
   errors: { [key: string]: string };
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
@@ -20,49 +17,33 @@ interface ShippingFormProps {
   onDataChange: (formData: any, deliveryFee: number | null) => void;
 }
 
-const ShippingForm: React.FC<ShippingFormProps> = ({ subtotal, onDataChange }) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    county: "",
-    city: "",
-    street: "",
-    apartment: "",
-  });
-
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+const ShippingForm: React.FC<ShippingFormProps> = ({
+  formData,
+  errors,
+  handleChange,
+  subtotal,
+  onDataChange,
+}) => {
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
-
-  // handle input change
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
 
   // calculate delivery fee when county changes
   useEffect(() => {
-    if (!formData.county) {
-      setDeliveryFee(null);
-      onDataChange(formData, null);
-      return;
-    }
+  if (!formData.county) {
+    setDeliveryFee(null);
+    onDataChange(formData, null);
+    return;
+  }
 
-    if (subtotal >= 3000) {
-      setDeliveryFee(0);
-      onDataChange(formData, 0);
-      return;
-    }
+  const selectedCounty = counties.find((c) => c.name === formData.county);
+  let fee = selectedCounty ? selectedCounty.fee : 0;
 
-    if (formData.county.toLowerCase() === "nairobi") {
-      setDeliveryFee(150);
-      onDataChange(formData, 150);
-    } else {
-      setDeliveryFee(250);
-      onDataChange(formData, 250);
-    }
-  }, [formData.county, subtotal]);
+  // free delivery above 3000
+  if (subtotal >= 3000) fee = 0;
+
+  setDeliveryFee(fee);
+  onDataChange(formData, fee);
+}, [formData.county, subtotal]);
+
 
   return (
     <div className="mb-8">
@@ -84,7 +65,7 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ subtotal, onDataChange }) =
               onChange={handleChange}
               className={`w-full border ${
                 errors[field.name] ? "border-red-500" : "border-slate-600"
-              } bg-slate-900 text-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-yellow-400`}
+              } bg-slate-900 text-gray-200 p-3 rounded-lg `}
             />
             {errors[field.name] && (
               <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
@@ -100,12 +81,12 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ subtotal, onDataChange }) =
             onChange={handleChange}
             className={`w-full border ${
               errors.county ? "border-red-500" : "border-slate-600"
-            } bg-slate-900 text-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-yellow-400`}
+            } bg-slate-900 text-gray-200 p-3 rounded-lg `}
           >
             <option value="">-- Select County --</option>
             {counties.map((county) => (
-              <option key={county} value={county}>
-                {county}
+              <option key={county.name} value={county.name}>
+                {county.name}
               </option>
             ))}
           </select>
@@ -142,8 +123,13 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ subtotal, onDataChange }) =
             placeholder="Street address"
             value={formData.street}
             onChange={handleChange}
-            className="w-full border border-slate-600 bg-slate-900 text-gray-200 p-3 rounded-lg"
+            className={`w-full border ${
+              errors.street ? "border-red-500" : "border-slate-600"
+            } bg-slate-900 text-gray-200 p-3 rounded-lg`}
           />
+          {errors.street && (
+            <p className="text-red-500 text-sm mt-1">{errors.street}</p>
+          )}
         </div>
 
         <div className="md:col-span-2">
@@ -159,9 +145,9 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ subtotal, onDataChange }) =
       </form>
 
       {/* Delivery Fee Notice */}
-      <div className="mt-4 text-gray-300 text-sm">
+      <div className="mt-4 text-yellow-200 text-sm">
         {!formData.county
-          ? "Delivery fee will be displayed after you select your county."
+          ? "Delivery fee will be displayed in the order summary after you select your county."
           : deliveryFee === 0
           ? "Free delivery for orders above Ksh 3000!"
           : `Delivery fee: Ksh ${deliveryFee}`}

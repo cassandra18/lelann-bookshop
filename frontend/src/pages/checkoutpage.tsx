@@ -11,6 +11,7 @@ const CheckoutPage: React.FC = () => {
   const { state } = useCart();
 
   // states
+  const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
   const [deliveryOption, setDeliveryOption] = useState<"delivery" | "pickup">(
     "delivery"
   );
@@ -103,6 +104,7 @@ const CheckoutPage: React.FC = () => {
             (acc, item) => acc + item.price * item.quantity,
             0
           )}
+          deliveryFee={deliveryFee ?? undefined }
         />
 
         {/* Checkout Form Container */}
@@ -120,15 +122,19 @@ const CheckoutPage: React.FC = () => {
           {/* Conditional Shipping or Pickup Form */}
           {deliveryOption === "delivery" ? (
             <ShippingForm
-              formData={formData}
-              errors={errors}
-              handleChange={handleChange}
-              subtotal={state.items.reduce(
-                (acc, item) => acc + item.price * item.quantity,
-                0
-              )}
-              onDataChange={setFormData}
-            />
+  formData={formData}
+  errors={errors}
+  handleChange={handleChange}
+  subtotal={state.items.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  )}
+  onDataChange={(data, fee) => {
+    setFormData(data);
+    setDeliveryFee(fee); // update fee 
+  }}
+/>
+
           ) : (
             <PickUpForm
               formData={formData}
