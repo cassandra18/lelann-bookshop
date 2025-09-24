@@ -42,6 +42,7 @@ app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/paystack', require('./routes/paystackPaymentRoutes'));
 app.use('/api/mpesa', require('./routes/mpesaPaymentRoutes'));
 app.use('/api/filters', require('./routes/filter'));
+app.use('/api/orders', require('./routes/orderRoutes'));
 app.use(errorHanlder);
 
 // Show incoming requests
@@ -52,7 +53,7 @@ app.use((req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-// ✅ Connect to PostgreSQL via Prisma before starting server
+// Connect to PostgreSQL via Prisma before starting server
 async function startServer() {
   try {
     await prisma.$connect();
