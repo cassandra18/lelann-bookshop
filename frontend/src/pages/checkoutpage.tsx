@@ -1,39 +1,49 @@
 import React, { useState } from "react";
 import { useCart } from "../components/cart-functionality";
-import { ChevronDown, ChevronUp } from "lucide-react"; // icons
+import OrderSummary from "../components/checkout/orderSummary";
+import DeliveryOptions from "../components/checkout/deliveryOptions";
+import ShippingForm from "../components/checkout/shippingForm";
+import PickUpForm from "../components/checkout/pickupForm";
+import PaymentOptions from "../components/checkout/paymentOptions";
+import PlaceOrderButton from "../components/checkout/placeOrderButton";
 
-const Checkout: React.FC = () => {
+const CheckoutPage: React.FC = () => {
   const { state } = useCart();
-  const [deliveryOption, setDeliveryOption] = useState("delivery");
-  const [paymentMethod, setPaymentMethod] = useState("mpesa");
-  const [showSummary, setShowSummary] = useState(true);
+
+  // states
+  const [deliveryOption, setDeliveryOption] = useState<"delivery" | "pickup">(
+    "delivery"
+  );
+  const [paymentMethod, setPaymentMethod] = useState<"mpesa" | "card">("mpesa");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     street: "",
-    apartment: "", // optional
+    apartment: "",
     city: "",
     county: "",
     store: "",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // handle input change
+  // handle input changes for forms
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" })); // clear error on typing
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // validate required fields
+  // validation
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.firstName) newErrors.firstName = "First name is required";
     if (!formData.lastName) newErrors.lastName = "Last name is required";
     if (!formData.phone) newErrors.phone = "Phone number is required";
+
     if (deliveryOption === "delivery") {
       if (!formData.street) newErrors.street = "Street address is required";
       if (!formData.city) newErrors.city = "City is required";
@@ -41,13 +51,16 @@ const Checkout: React.FC = () => {
     } else if (deliveryOption === "pickup") {
       if (!formData.store) newErrors.store = "Please select a store";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // handle submit
+  // submit handler
   const handleSubmit = async () => {
     if (!validateForm()) return;
+
+    setIsSubmitting(true);
 
     const subtotal = state.items.reduce(
       (acc, item) => acc + item.price * item.quantity,
@@ -62,208 +75,80 @@ const Checkout: React.FC = () => {
       subtotal,
     };
 
-    const response = await fetch("http://localhost:5000/api/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-    });
+    try {
+      const response = await fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
 
-    const data = await response.json();
-    console.log("Order response:", data);
+      const data = await response.json();
+      console.log("Order response:", data);
+      alert("✅ Order placed successfully!");
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("❌ Failed to place order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
-  // subtotal
-  const subtotal = state.items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
 
   return (
     <div className="min-h-screen py-10 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Order Summary Dropdown */}
-        <div className="bg-slate-800 rounded-2xl shadow-lg mb-8">
-          <button
-            className="w-full flex justify-between items-center px-6 py-4 text-[#ffea00] font-bold text-lg"
-            onClick={() => setShowSummary(!showSummary)}
-          >
-            <span>Order Summary</span>
-            {showSummary ? (
-              <ChevronUp className="w-5 h-5" />
-            ) : (
-              <ChevronDown className="w-5 h-5" />
-            )}
-          </button>
-
-          {showSummary && (
-            <div className="px-6 pb-6">
-              {state.items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex justify-between items-center mb-3 border-b border-slate-700 pb-2"
-                >
-                  <span className="text-gray-300">
-                    {item.name}{" "}
-                    <span className="text-sm text-gray-400">
-                      (x{item.quantity})
-                    </span>
-                  </span>
-                  <span className="text-gray-200 font-semibold">
-                    KES {item.price * item.quantity}
-                  </span>
-                </div>
-              ))}
-
-              {/* Subtotal */}
-              <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-600">
-                <span className="text-lg font-semibold text-gray-300">
-                  Subtotal
-                </span>
-                <span className="text-xl font-bold text-gray-200">
-                  KES {subtotal.toFixed(2)}
-                </span>
-              </div>
-            </div>
+        {/* Order Summary */}
+        <OrderSummary
+          items={state.items}
+          subtotal={state.items.reduce(
+            (acc, item) => acc + item.price * item.quantity,
+            0
           )}
-        </div>
+        />
 
-        {/* Checkout Form */}
+        {/* Checkout Form Container */}
         <div className="shadow-xl rounded-2xl p-6 md:p-10 border border-slate-700">
           <h1 className="text-2xl md:text-4xl font-bold text-[#ffea00] mb-6 text-center">
             Checkout
           </h1>
 
           {/* Delivery Options */}
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-200 mb-3">
-              Delivery Options
-            </h2>
-            <div className="space-y-3">
-              <label className="flex items-center gap-3 p-4 border border-slate-600 rounded-lg cursor-pointer hover:bg-slate-700 transition">
-                <input
-                  type="radio"
-                  name="delivery"
-                  value="delivery"
-                  checked={deliveryOption === "delivery"}
-                  onChange={() => setDeliveryOption("delivery")}
-                  className="accent-yellow-300"
-                />
-                <span className="text-gray-300">Deliver to my address</span>
-              </label>
-              <label className="flex items-center gap-3 p-4 border border-slate-600 rounded-lg cursor-pointer hover:bg-slate-700 transition">
-                <input
-                  type="radio"
-                  name="delivery"
-                  value="pickup"
-                  checked={deliveryOption === "pickup"}
-                  onChange={() => setDeliveryOption("pickup")}
-                  className="accent-yellow-300"
-                />
-                <span className="text-gray-300">Pick up at the store</span>
-              </label>
-            </div>
-          </div>
+          <DeliveryOptions
+            deliveryOption={deliveryOption}
+            setDeliveryOption={setDeliveryOption}
+          />
 
-          {/* Shipping / Pickup Info */}
+          {/* Conditional Shipping or Pickup Form */}
           {deliveryOption === "delivery" ? (
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-200 mb-3">
-                Shipping Address
-              </h2>
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { name: "firstName", placeholder: "First name" },
-                  { name: "lastName", placeholder: "Last name" },
-                  { name: "phone", placeholder: "Phone number", full: true },
-                  { name: "street", placeholder: "Street address", full: true },
-                  { name: "apartment", placeholder: "Apartment / Suite (optional)", full: true },
-                  { name: "city", placeholder: "City / Town" },
-                  { name: "county", placeholder: "County" },
-                ].map((field) => (
-                  <div
-                    key={field.name}
-                    className={field.full ? "md:col-span-2" : ""}
-                  >
-                    <input
-                      type="text"
-                      name={field.name}
-                      placeholder={field.placeholder}
-                      value={formData[field.name as keyof typeof formData]}
-                      onChange={handleChange}
-                      className={`w-full border ${
-                        errors[field.name]
-                          ? "border-red-500"
-                          : "border-slate-600"
-                      } bg-slate-900 text-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-yellow-400`}
-                    />
-                    {errors[field.name] && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors[field.name]}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </form>
-            </div>
-          ) : (
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-200 mb-3">
-                Select Store for Pickup
-              </h2>
-              <select
-                name="store"
-                value={formData.store}
-                onChange={handleChange}
-                className={`w-full border ${
-                  errors.store ? "border-red-500" : "border-slate-600"
-                } bg-slate-900 text-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-yellow-400`}
-              >
-                <option value="">-- Select Store --</option>
-                <option>Nairobi - Chokaa-Njiru</option>
-                <option>Nairobi - Kericho CBD</option>
-              </select>
-              {errors.store && (
-                <p className="text-red-500 text-sm mt-1">{errors.store}</p>
+            <ShippingForm
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+              subtotal={state.items.reduce(
+                (acc, item) => acc + item.price * item.quantity,
+                0
               )}
-            </div>
+              onDataChange={setFormData}
+            />
+          ) : (
+            <PickUpForm
+              formData={formData}
+              errors={errors}
+              handleChange={handleChange}
+            />
           )}
 
           {/* Payment Options */}
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-200 mb-3">
-              Payment Method
-            </h2>
-            <div className="space-y-3">
-              {["mpesa", "card"].map((method) => (
-                <label
-                  key={method}
-                  className="flex items-center gap-3 p-4 border border-slate-600 rounded-lg cursor-pointer hover:bg-slate-700 transition"
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    value={method}
-                    checked={paymentMethod === method}
-                    onChange={() => setPaymentMethod(method)}
-                    className="accent-yellow-400"
-                  />
-                  <span className="text-gray-300 capitalize">{method}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+          <PaymentOptions
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
+          />
 
           {/* Place Order Button */}
-          <button
-            onClick={handleSubmit}
-            className="w-full bg-gradient-to-r from-yellow-200 to-yellow-400 text-slate-900 font-extrabold py-3 rounded-xl shadow-lg tracking-wide hover:from-yellow-300 hover:to-yellow-500 transition transform hover:scale-105"
-          >
-            Make Payment
-          </button>
+          <PlaceOrderButton onClick={handleSubmit} loading={isSubmitting} />
         </div>
       </div>
     </div>
   );
 };
 
-export default Checkout;
+export default CheckoutPage;
