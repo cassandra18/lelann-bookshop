@@ -28,12 +28,7 @@ const DeliveryOptions: React.FC<DeliveryOptionsProps> = ({
       <div className="space-y-3">
         {/* Deliver to address */}
         <label
-          className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition
-            ${
-              selectedOption === "delivery"
-                ? "border-yellow-400 bg-slate-700"
-                : "border-slate-600 hover:bg-slate-700"
-            }`}
+          className= "flex items-center gap-3 p-4 border border-gray-700 rounded-lg cursor-pointer transition"
         >
           <input
             type="radio"
@@ -48,12 +43,7 @@ const DeliveryOptions: React.FC<DeliveryOptionsProps> = ({
 
         {/* Pick up at store */}
         <label
-          className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition
-            ${
-              selectedOption === "pickup"
-                ? "border-yellow-400 bg-slate-700"
-                : "border-slate-600 hover:bg-slate-700"
-            }`}
+          className=  "border border-gray-700 flex items-center gap-3 p-4 rounded-lg cursor-pointer transition"
         >
           <input
             type="radio"

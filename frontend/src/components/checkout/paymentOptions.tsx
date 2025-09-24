@@ -29,12 +29,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
         {["mpesa", "card"].map((method) => (
           <label
             key={method}
-            className={`flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition
-              ${
-                selectedMethod === method
-                  ? "border-yellow-400 bg-slate-700"
-                  : "border-slate-600 hover:bg-slate-700"
-              }`}
+            className="flex items-center gap-3 p-4 border border-gray-700 rounded-lg cursor-pointer transition"
           >
             <input
               type="radio"
