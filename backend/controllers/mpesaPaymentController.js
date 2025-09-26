@@ -49,8 +49,8 @@ const initiateSTKPush = async (orderId, phone, amount) => {
       PartyB: process.env.MPESA_SHORTCODE,
       PhoneNumber: phone,
       CallBackURL: process.env.MPESA_CALLBACK_URL,
-      AccountReference: orderId.toString(), // tie orderId to transaction
-      TransactionDesc: "Order payment",
+      AccountReference: "LelannBookshop", // tie orderId to transaction
+      TransactionDesc: `Payment for Lelann Bookshop Order #${orderId}`,
     };
 
     const response = await axios.post(

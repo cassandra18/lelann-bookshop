@@ -3,6 +3,8 @@ export const triggerMpesaPayment = async (
   amount: number,
   phone: string
 ) => {
+  console.log("STK PUSH DATA", orderId, amount, phone);
+
   const response = await fetch("http://localhost:5000/api/lelann/stkpush", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createOrder } from "../services/orderService";
 import { triggerMpesaPayment } from "../services/paymentService";
 
-export const useCheckout = (formData: any, state: any, deliveryOption: string, paymentMethod: string) => {
+export const useCheckout = (formData: any, state: any, deliveryOption: string, paymentMethod: string, deliveryFee: number | null = null) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -28,24 +28,23 @@ export const useCheckout = (formData: any, state: any, deliveryOption: string, p
     if (!validateForm()) return;
     setIsSubmitting(true);
 
-    const subtotal = state.items.reduce(
-      (acc: number, item: any) => acc + item.price * item.quantity,
-      0
-    );
-
-    const orderData = {
-      deliveryOption,
-      paymentMethod,
-      ...formData,
-      items: state.items,
-      subtotal,
-    };
+  const orderData = {
+    deliveryOption,
+    paymentMethod,
+    deliveryFee,
+    ...formData,
+    items: state.items.map((item: any) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      price: item.price,
+    })),
+  };
 
     try {
       const order = await createOrder(orderData);
 
       if (paymentMethod === "mpesa") {
-        await triggerMpesaPayment(order.id, subtotal, formData.phone);
+        await triggerMpesaPayment(order.id, order.total, formData.phone);
         alert("📲 Please check your phone and enter M-Pesa PIN to complete payment");
       } else {
         alert("✅ Order placed successfully!");

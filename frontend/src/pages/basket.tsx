@@ -100,9 +100,7 @@ const Basket: React.FC = () => {
                 🚚
               </span>
               <p>
-                Delivery fee will be{" "}
-                <span className="font-semibold">calculated at checkout</span>
-                based on your location.
+                Delivery fee will be calculated at checkout based on your location.
               </p>
             </div>
 

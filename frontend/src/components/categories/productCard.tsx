@@ -41,7 +41,7 @@ const BookCard: React.FC<BookCardProps> = ({
   const handleAddToCart = () => {
       dispatch({
           type: "ADD_ITEM",
-          payload: { id, name, price, quantity: count, image},
+          payload: { productId: id, name, price, quantity: count, image},
       });
       alert(`Added ${count} item(s) to basket`);
   }

@@ -32,7 +32,8 @@ const CheckoutPage: React.FC = () => {
     formData,
     state,
     deliveryOption,
-    paymentMethod
+    paymentMethod,
+    deliveryFee
   );
 
   // handle input changes for forms

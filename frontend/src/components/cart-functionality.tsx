@@ -33,30 +33,42 @@ const initialState: CartState = {
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case "ADD_ITEM": {
+      // normalize incoming product to always have productId
+      const incoming: CartItem = {
+        ...action.payload,
+        productId:
+          action.payload.productId ||
+          (action.payload as any).id || // handle case when API gives `id`
+          "",
+      };
+
       const existingItem = state.items.find(
-        (item) => item.productId === action.payload.productId
+        (item) => item.productId === incoming.productId
       );
+
       if (existingItem) {
         return {
           ...state,
           items: state.items.map((item) =>
-            item.productId === action.payload.productId
-              ? { ...item, quantity: item.quantity + action.payload.quantity }
+            item.productId === incoming.productId
+              ? { ...item, quantity: item.quantity + incoming.quantity }
               : item
           ),
         };
       } else {
         return {
           ...state,
-          items: [...state.items, { ...action.payload }],
+          items: [...state.items, incoming],
         };
       }
     }
+
     case "REMOVE_ITEM":
       return {
         ...state,
         items: state.items.filter((item) => item.productId !== action.payload),
       };
+
     case "UPDATE_QUANTITY":
       return {
         ...state,
@@ -66,12 +78,15 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             : item
         ),
       };
+
     case "CLEAR_CART":
-      return { items: [] }; // Clears all items from the cart
+      return { items: [] };
+
     default:
       return state;
   }
 };
+
 
 // Cart context
 const CartContext = createContext<{

@@ -7,5 +7,8 @@ export const createOrder = async (orderData: any) => {
   });
 
   if (!response.ok) throw new Error("Failed to create order");
-  return response.json();
+   const data = await response.json();
+  console.log("CREATE ORDER RESPONSE:", data); // 👈 check this
+  return data;
+
 };

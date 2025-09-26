@@ -26,7 +26,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ book }) => {
     dispatch({
       type: "ADD_ITEM",
       payload: {
-        id: book.id,
+        productId: book.id,
         name: book.name,
         price: book.price,
         quantity: count,

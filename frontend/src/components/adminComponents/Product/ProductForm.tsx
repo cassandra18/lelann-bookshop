@@ -73,7 +73,7 @@ export default function BookForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`bg-yellow-300 text-prussian-blue font-semibold hover:bg-yellow-100 px-4 py-2 rounded ${
+          className={`bg-yellow-200 text-prussian-blue font-semibold hover:bg-yellow-400 px-4 py-2 rounded ${
             isSubmitting ? "opacity-60 cursor-not-allowed" : ""
           }`}
         >

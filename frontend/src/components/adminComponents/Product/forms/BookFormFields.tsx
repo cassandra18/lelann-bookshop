@@ -11,7 +11,7 @@ interface Props {
   publishers: any[];
 }
 
-const inputStyle = "border bg-gray-300 text-gray-700 rounded px-3 py-2 w-full focus:outline-none";
+const inputStyle = "border border-slate-500 bg-slate-900 text-white rounded-lg px-3 py-2 w-full focus:border-white";
 
 
 export function BookFormFields({

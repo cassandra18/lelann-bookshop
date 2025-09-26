@@ -15,16 +15,22 @@ export const createOrder = async (req, res) => {
       city,
       apartment,
       county,
-      subtotal,
       deliveryFee = 0,
       items, // array of { productId, quantity, price }
     } = req.body;
 
-    const total = subtotal + deliveryFee;
-
     if (!items || items.length === 0) {
       return res.status(400).json({ success: false, message: "No items in the order" });
     }
+
+    const subtotal = items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
+    // Add delivery fee
+    const total = subtotal + deliveryFee;
+
     
     // create order with items
     const order = await prisma.order.create({
@@ -52,9 +58,7 @@ export const createOrder = async (req, res) => {
       include: { items: true }, 
     });
 
-    res.status(201).json({ success: true,
-      message: "Order created successfully. Awaiting payment.",
-      order });
+    res.status(201).json(order);
   } catch (error) {
     console.error("Error creating order:", error);
     res.status(500).json({ success: false, message: "Server error" });
