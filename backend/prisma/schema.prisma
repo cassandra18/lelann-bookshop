@@ -113,14 +113,17 @@ model Order {
   apartment     String?
   county        String
   subtotal      Float
+  total         Float
+  status        String    @default("pending")
   createdAt     DateTime  @default(now())
+  
   items         OrderItem[]
 }
 
 model OrderItem {
   id       Int    @id @default(autoincrement())
   orderId  Int
-  productId Int
+  productId String
   quantity Int
   price    Float
   order    Order @relation(fields: [orderId], references: [id])

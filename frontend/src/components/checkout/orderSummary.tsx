@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 interface OrderSummaryProps {
-  items: { id: string; name: string; price: number; quantity: number }[];
+  items: { productId: string; name: string; price: number; quantity: number }[];
   subtotal: number;
   deliveryFee?: number | null; // allow null
 }
@@ -27,14 +27,16 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
       {showSummary && (
         <div className="px-6 pb-6">
-          {items.map((item) => (
+          {items.map((item, index) => (
             <div
-              key={item.id}
+              key={`${item.productId}-${index}`}
               className="flex justify-between items-center mb-3 border-b border-slate-700 pb-2"
             >
               <span className="text-gray-300">
                 {item.name}{" "}
-                <span className="text-sm text-gray-400">(x{item.quantity})</span>
+                <span className="text-sm text-gray-400">
+                  (x{item.quantity})
+                </span>
               </span>
               <span className="text-gray-200 font-semibold">
                 KES {item.price * item.quantity}
@@ -44,7 +46,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
           {/* Subtotal */}
           <div className="flex justify-between items-center mt-4">
-            <span className="text-lg font-semibold text-gray-300">Subtotal</span>
+            <span className="text-lg font-semibold text-gray-300">
+              Subtotal
+            </span>
             <span className="text-gray-200">KES {subtotal.toFixed(2)}</span>
           </div>
 

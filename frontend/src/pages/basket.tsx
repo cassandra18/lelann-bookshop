@@ -46,7 +46,7 @@ const Basket: React.FC = () => {
         <div className="bg-slate-800 p-6 rounded-2xl shadow-2xl">
           {state.items.map((item) => (
             <div
-              key={item.id}
+              key={item.productId}
               className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 mb-4 bg-slate-700/50 rounded-xl hover:shadow-lg hover:scale-[1.01] transition-transform"
             >
               {/* Item details */}
@@ -72,7 +72,7 @@ const Basket: React.FC = () => {
                   KES {item.price * item.quantity}
                 </p>
                 <button
-                  onClick={() => handleRemoveItem(item.id)}
+                  onClick={() => handleRemoveItem(item.productId)}
                   className="ml-6 text-red-500 hover:text-red-400 transition"
                   aria-label={`Remove ${item.name}`}
                 >

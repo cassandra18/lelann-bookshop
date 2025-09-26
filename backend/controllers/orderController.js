@@ -16,9 +16,16 @@ export const createOrder = async (req, res) => {
       apartment,
       county,
       subtotal,
+      deliveryFee = 0,
       items, // array of { productId, quantity, price }
     } = req.body;
 
+    const total = subtotal + deliveryFee;
+
+    if (!items || items.length === 0) {
+      return res.status(400).json({ success: false, message: "No items in the order" });
+    }
+    
     // create order with items
     const order = await prisma.order.create({
       data: {
@@ -32,6 +39,8 @@ export const createOrder = async (req, res) => {
         apartment,
         county,
         subtotal,
+        status: "pending",
+        total,
         items: {
           create: items.map((item) => ({
             productId: item.productId,
@@ -40,15 +49,40 @@ export const createOrder = async (req, res) => {
           })),
         },
       },
-      include: { items: true }, // return items too
+      include: { items: true }, 
     });
 
-    res.status(201).json({ success: true, order });
+    res.status(201).json({ success: true,
+      message: "Order created successfully. Awaiting payment.",
+      order });
   } catch (error) {
     console.error("Error creating order:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+// Update order status
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, message } = req.body; // e.g. { status: "paid", message: "Payment successful" }
+
+    const order = await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { status },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: message || `Order updated to ${status}`,
+      order,
+    });
+  } catch (error) {
+    console.error("Error updating order:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 
 // Get all orders
 export const getOrders = async (req, res) => {
